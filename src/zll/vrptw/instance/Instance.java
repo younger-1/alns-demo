@@ -16,7 +16,7 @@ import java.util.Random;
  * </p>
  * 
  * @author zll_hust
- * @date 2020Äê3ÔÂ14ÈÕ
+ * @date 2020å¹´3æœˆ14æ—¥
  */
 public class Instance {
 
@@ -96,9 +96,9 @@ public class Instance {
         return this.name;
     }
 
-    // ! size ÊÇ²âÊÔÓÃÀıÎÄ¼şÃûÖĞµÄ½ÚµãÊı
+    // ! size æ˜¯æµ‹è¯•ç”¨ä¾‹æ–‡ä»¶åä¸­çš„èŠ‚ç‚¹æ•°
     public Instance(int size, String name, String instanceType) throws IOException {
-        // ¶ÁÈ¡ËãÀıÊı¾İ
+        // è¯»å–ç®—ä¾‹æ•°æ®
         this.name = name;
         this.type = instanceType;
         importVehicleData(size, name);
@@ -113,7 +113,7 @@ public class Instance {
         r.setSeed(-1);
     }
 
-    // ¶ÁÈ¡Êı¾İ¿Í»§µãÊı¾İ
+    // è¯»å–æ•°æ®å®¢æˆ·ç‚¹æ•°æ®
     public void importCustomerData(int size, String name) throws IOException {
 
         String dataFileName = "";
@@ -129,7 +129,7 @@ public class Instance {
         String line;
 
         while ((line = bReader.readLine()) != null) {
-            // ÒÔ¿Õ¸ñÎª¼ä¸ô·û¶ÁÈ¡Êı¾İ
+            // ä»¥ç©ºæ ¼ä¸ºé—´éš”ç¬¦è¯»å–æ•°æ®
             String datavalue[] = line.split("\\s+");
 
             if (datavalue.length > 0 && datavalue[0].equals("CUST")) {
@@ -157,7 +157,7 @@ public class Instance {
 
     }
 
-    // ¶ÁÈ¡Êı¾İ³µÁ¾ĞÅÏ¢
+    // è¯»å–æ•°æ®è½¦è¾†ä¿¡æ¯
     public void importVehicleData(int size, String name) throws IOException {
 
         String dataFileName = "";
@@ -175,9 +175,9 @@ public class Instance {
             String datavalue[] = line.split("\\s+");
 
             if (row == 4) {
-                // ¿ÉÓÃ³µÁ¾ÊıÁ¿
+                // å¯ç”¨è½¦è¾†æ•°é‡
                 this.vehicleNr = Integer.valueOf(datavalue[1]);
-                // ³µÁ¾ÈİÁ¿
+                // è½¦è¾†å®¹é‡
                 this.vehicleCapacity = Integer.valueOf(datavalue[2]);
                 break;
             }

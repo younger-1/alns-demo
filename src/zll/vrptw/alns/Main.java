@@ -17,7 +17,7 @@ import zll.vrptw.instance.Instance;
  * </p>
  * 
  * @author zll_hust
- * @date 2020Äê3ÔÂ14ÈÕ
+ * @date 2020å¹´3æœˆ14æ—¥
  */
 public class Main {
 
@@ -42,35 +42,35 @@ public class Main {
 	public static void main(String args[]) {
 
 		try {
-			solve("C104", // ĞèÒª²âÊÔµÄËãÀı
-					"Solomon", // ËãÀıÀàĞÍ,ÊäÈëHomberger»òSolomon£¬×¢Òâ´óĞ´
-					25, // ¿Í»§µãÊıÁ¿£¬Solomon¿ÉÑ¡Ôñ 25,50,100£¬Homberger¿ÉÑ¡Ôñ200£¬400
-					ALNSConfiguration.DEFAULT, // ALNSÏà¹Ø²ÎÊı
-					new ControlParameter(false, // ÀúÊ·ÂúÒâ½â¡¢µ±Ç°ÂúÒâ½â¡¢ĞÂ½âµÄÊ±ĞòÍ¼£¬ÊÕÁ²Ğ§¹ûÕ¹Ê¾
-							false, // ALNSËã×ÓÊ±ĞòÍ¼
-							false // Éú³É½â¶ÔÓ¦Ğ§¹ûÍ¼£¨Õë¶ÔÃ¿´Îµü´úµÄÀúÊ·ÂúÒâ½â£©
+			solve("C104", // éœ€è¦æµ‹è¯•çš„ç®—ä¾‹
+					"Solomon", // ç®—ä¾‹ç±»å‹,è¾“å…¥Hombergeræˆ–Solomonï¼Œæ³¨æ„å¤§å†™
+					25, // å®¢æˆ·ç‚¹æ•°é‡ï¼ŒSolomonå¯é€‰æ‹© 25,50,100ï¼ŒHombergerå¯é€‰æ‹©200ï¼Œ400
+					ALNSConfiguration.DEFAULT, // ALNSç›¸å…³å‚æ•°
+					new ControlParameter(false, // å†å²æ»¡æ„è§£ã€å½“å‰æ»¡æ„è§£ã€æ–°è§£çš„æ—¶åºå›¾ï¼Œæ”¶æ•›æ•ˆæœå±•ç¤º
+							false, // ALNSç®—å­æ—¶åºå›¾
+							false // ç”Ÿæˆè§£å¯¹åº”æ•ˆæœå›¾ï¼ˆé’ˆå¯¹æ¯æ¬¡è¿­ä»£çš„å†å²æ»¡æ„è§£ï¼‰
 					));
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
 	}
 
-	// solveº¯Êı£¬Êä³ö½â ÊäÈë±äÁ¿£ºËãÀıÃû£¬¿Í»§Êı£¬
+	// solveå‡½æ•°ï¼Œè¾“å‡ºè§£ è¾“å…¥å˜é‡ï¼šç®—ä¾‹åï¼Œå®¢æˆ·æ•°ï¼Œ
 	private static double[] solve(String name, String instanceType, int size, IALNSConfig c, ControlParameter cp)
 			throws Exception {
 
-		// ÊäÈëSolomonËãÀı
+		// è¾“å…¥Solomonç®—ä¾‹
 		Instance instance = new Instance(size, name, instanceType);
 		instance.setVehicleNr(150);
-		// ¼ì²é½á¹û
+		// æ£€æŸ¥ç»“æœ
 		CheckSolution checkSolution = new CheckSolution(instance);
-		// ½â¾ö²ßÂÔ
+		// è§£å†³ç­–ç•¥
 		Solver solver = new Solver();
-		// ³õÊ¼½â
+		// åˆå§‹è§£
 		Solution is = solver.getInitialSolution(instance);
 		// System.out.println(is);
 		System.out.println(checkSolution.Check(is));
-		// ÂúÒâ½â
+		// æ»¡æ„è§£
 		Solution ims = solver.improveSolution(is, c, cp, instance);
 		System.out.println(ims);
 		System.out.println(checkSolution.Check(ims));

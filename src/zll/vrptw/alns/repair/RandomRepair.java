@@ -7,87 +7,92 @@ import zll.vrptw.algrithm.MyALNSSolution;
 import zll.vrptw.instance.Node;
 import zll.vrptw.instance.Route;
 
-/**  
-* <p>Title: RandomRepair</p>  
-* <p>Description: </p>  
-* @author zll_hust  
-* @date 2020Äê3ÔÂ19ÈÕ  
-*/
+/**
+ * <p>
+ * Title: RandomRepair
+ * </p>
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * @author zll_hust
+ * @date 2020å¹´3æœˆ19æ—¥
+ */
 public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 	@Override
 	public MyALNSSolution repair(MyALNSSolution s) {
-		// Èç¹ûÃ»ÓÐÒÆ³ýµÄ¿Í»§£¬ÉÏÒ»²½´íÎó
-    	if(s.removalCustomers.size() == 0) {
+		// å¦‚æžœæ²¡æœ‰ç§»é™¤çš„å®¢æˆ·ï¼Œä¸Šä¸€æ­¥é”™è¯¯
+		if (s.removalCustomers.size() == 0) {
 			System.err.println("removalCustomers is empty!");
 			return s;
 		}
-    	
-    	// »ñÈ¡Ëæ»úÊý
-    	Random r = s.instance.getRandom();
-    	int insertCusNr = s.removalCustomers.size();	
-    	
-    	for (int i = 0; i < insertCusNr; i++) {
-    		
-    		Node insertNode = s.removalCustomers.remove(0);
-    		
-    		// Ëæ»ú¾ö¶¨²éÕÒ¶àÉÙÌõÂ·¾¶
-    		int randomRouteNr = r.nextInt(s.routes.size() - 1) + 1;
-    		
-    		// ×îÓÅ²åÈë·½°¸
-    		int bestRoutePosition = -1;
-    		int bestCusomerPosition = -1;
-    		Cost bestCost = new Cost();
-    		bestCost.total = Double.MAX_VALUE;
-    		
-    		ArrayList<Integer> routeList= new ArrayList<Integer>();
-            for(int j = 0; j < s.routes.size(); j++)
-                routeList.add(j);  
-            
-            Collections.shuffle(routeList);  
-            
-    		for (int j = 0; j < randomRouteNr; j++) {
-    			
-    			// Ëæ»úÑ¡ÔñÒ»Ìõroute
-    			int insertRoutePosition = routeList.remove(0);
-    			Route insertRoute = s.routes.get(insertRoutePosition);
-    			
-    			while(insertRoute.getRoute().size() < 1) {
-    				insertRoutePosition = routeList.remove(0);
-    				insertRoute = s.routes.get(insertRoutePosition);
-    			}
-    			
-    			// Ëæ»ú¾ö¶¨²éÕÒ¶àÉÙ¸öÎ»ÖÃ
-    			int insertTimes = r.nextInt(insertRoute.getRoute().size() - 1) + 1;
-    			
-        		ArrayList<Integer> customerList= new ArrayList<Integer>();
-                for(int k = 1; k < insertRoute.getRoute().size(); k++)
-                	customerList.add(k);  
-                
-                Collections.shuffle(customerList); 
-                
-                // Ëæ»úÑ¡ÔñÒ»ÌõÎ»ÖÃ
-    			for (int k = 0; k < insertTimes; k++) {
-    				
-    				int insertCusPosition = customerList.remove(0);
-    				
-    				// ÆÀ¼Û²åÈëÇé¿ö
-    				Cost newCost = new Cost(s.cost);
-    				s.evaluateInsertCustomer(insertRoutePosition, insertCusPosition, insertNode, newCost);
-                    
-    				// ¸üÐÂ×îÓÅ²åÈëÎ»ÖÃ
-    				if (newCost.total < bestCost.total) {
-    					bestRoutePosition = insertRoutePosition;
-    					bestCusomerPosition = insertCusPosition;
-    					bestCost = newCost;
-    				}
-    			}
-    			// Ö´ÐÐ²åÈë²Ù×÷
-    			s.insertCustomer(bestRoutePosition, bestCusomerPosition, insertNode);
-    		}
-    	}
-    	
+
+		// èŽ·å–éšæœºæ•°
+		Random r = s.instance.getRandom();
+		int insertCusNr = s.removalCustomers.size();
+
+		for (int i = 0; i < insertCusNr; i++) {
+
+			Node insertNode = s.removalCustomers.remove(0);
+
+			// éšæœºå†³å®šæŸ¥æ‰¾å¤šå°‘æ¡è·¯å¾„
+			int randomRouteNr = r.nextInt(s.routes.size() - 1) + 1;
+
+			// æœ€ä¼˜æ’å…¥æ–¹æ¡ˆ
+			int bestRoutePosition = -1;
+			int bestCusomerPosition = -1;
+			Cost bestCost = new Cost();
+			bestCost.total = Double.MAX_VALUE;
+
+			ArrayList<Integer> routeList = new ArrayList<Integer>();
+			for (int j = 0; j < s.routes.size(); j++)
+				routeList.add(j);
+
+			Collections.shuffle(routeList);
+
+			for (int j = 0; j < randomRouteNr; j++) {
+
+				// éšæœºé€‰æ‹©ä¸€æ¡route
+				int insertRoutePosition = routeList.remove(0);
+				Route insertRoute = s.routes.get(insertRoutePosition);
+
+				while (insertRoute.getRoute().size() < 1) {
+					insertRoutePosition = routeList.remove(0);
+					insertRoute = s.routes.get(insertRoutePosition);
+				}
+
+				// éšæœºå†³å®šæŸ¥æ‰¾å¤šå°‘ä¸ªä½ç½®
+				int insertTimes = r.nextInt(insertRoute.getRoute().size() - 1) + 1;
+
+				ArrayList<Integer> customerList = new ArrayList<Integer>();
+				for (int k = 1; k < insertRoute.getRoute().size(); k++)
+					customerList.add(k);
+
+				Collections.shuffle(customerList);
+
+				// éšæœºé€‰æ‹©ä¸€æ¡ä½ç½®
+				for (int k = 0; k < insertTimes; k++) {
+
+					int insertCusPosition = customerList.remove(0);
+
+					// è¯„ä»·æ’å…¥æƒ…å†µ
+					Cost newCost = new Cost(s.cost);
+					s.evaluateInsertCustomer(insertRoutePosition, insertCusPosition, insertNode, newCost);
+
+					// æ›´æ–°æœ€ä¼˜æ’å…¥ä½ç½®
+					if (newCost.total < bestCost.total) {
+						bestRoutePosition = insertRoutePosition;
+						bestCusomerPosition = insertCusPosition;
+						bestCost = newCost;
+					}
+				}
+				// æ‰§è¡Œæ’å…¥æ“ä½œ
+				s.insertCustomer(bestRoutePosition, bestCusomerPosition, insertNode);
+			}
+		}
+
 		return s;
 	}
-   
+
 }

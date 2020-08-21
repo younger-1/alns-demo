@@ -1,7 +1,5 @@
 package zll.vrptw.algrithm;
 
-import java.util.Arrays;
-
 import zll.vrptw.instance.Route;
 import zll.vrptw.instance.Instance;
 

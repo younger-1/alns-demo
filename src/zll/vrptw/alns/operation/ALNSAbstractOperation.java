@@ -7,8 +7,8 @@ public abstract class ALNSAbstractOperation implements IALNSOperation {
     // ALNSStrategieVisualizationManager();
     private final Random r = new Random();
     private int pi;
-    private double p; // ! Ëã×Ó´ÎÊı·ÖÖ®1£¬ÂÖÅÌÑ¡ÔñÓÃ
-    private int draws; // ! ±»Ê¹ÓÃµÄ´ÎÊı
+    private double p; // ! ç®—å­æ¬¡æ•°åˆ†ä¹‹1ï¼Œè½®ç›˜é€‰æ‹©ç”¨
+    private int draws; // ! è¢«ä½¿ç”¨çš„æ¬¡æ•°
     private double w;
 
     /*
@@ -22,7 +22,7 @@ public abstract class ALNSAbstractOperation implements IALNSOperation {
     }
 
     @Override
-    // ÓÅ»¯×îÓÅÂúÒâ½â£¬ÔòÔö¼ÓpiÖµ
+    // ä¼˜åŒ–æœ€ä¼˜æ»¡æ„è§£ï¼Œåˆ™å¢åŠ piå€¼
     public void addToPi(int pi) {
         this.pi += pi;
     }

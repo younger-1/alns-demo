@@ -16,12 +16,12 @@ import zll.vrptw.alns.repair.RegretRepair;
 import zll.vrptw.instance.Instance;
 
 public class MyALNSProcess {
-    // ¿ÉÊÓ»¯
+    // å¯è§†åŒ–
     // private final ALNSObserver o = new ALNSObserver();
-    // ¿ÉÊÓ»¯£¬Õë¶Ôalns½ø³Ì
+    // å¯è§†åŒ–ï¼Œé’ˆå¯¹alnsè¿›ç¨‹
     // private final ALNSProcessVisualizationManager apvm = new
     // ALNSProcessVisualizationManager();
-    // ²ÎÊı
+    // å‚æ•°
     private final IALNSConfig config;
     private final IALNSDestroy[] destroy_ops = new IALNSDestroy[] {
             // new ProximityZoneDestroy(),
@@ -33,9 +33,9 @@ public class MyALNSProcess {
             new RandomRepair() };
 
     private final double T_end_t = 0.01;
-    // È«¾ÖÂúÒâ½â
+    // å…¨å±€æ»¡æ„è§£
     private MyALNSSolution s_g = null;
-    // ¾Ö²¿ÂúÒâ½â
+    // å±€éƒ¨æ»¡æ„è§£
     private MyALNSSolution s_c = null;
     private boolean cpng = false;
     private int i = 0;
@@ -50,17 +50,17 @@ public class MyALNSProcess {
     public MyALNSProcess(Solution s_, Instance instance, IALNSConfig c, ControlParameter cp)
             throws InterruptedException {
 
-        // Éú³Épng
+        // ç”Ÿæˆpng
         cpng = cp.isSolutionImages();
 
         config = c;
         s_g = new MyALNSSolution(s_, instance);
         s_c = new MyALNSSolution(s_g);
 
-        // ³õÊ¼»¯alns²ÎÊı
+        // åˆå§‹åŒ–alnså‚æ•°
         initStrategies();
 
-        // ¿ÉÊÓ»¯
+        // å¯è§†åŒ–
         if (cp.isSolutionsLinechart()) {
             // o.add(new SolutionsLinechart(this));
         }
@@ -69,7 +69,7 @@ public class MyALNSProcess {
         }
     }
 
-    // ! ALNS¿ò¼Ü
+    // ! ALNSæ¡†æ¶
     public Solution improveSolution() throws Exception {
         // o.onThreadStart(this);
 
@@ -77,18 +77,18 @@ public class MyALNSProcess {
         T = T_s;
         T_end = T_end_t * T_s;
 
-        // ¼ÆÊ±¿ªÊ¼
+        // è®¡æ—¶å¼€å§‹
         t_start = System.currentTimeMillis();
         // o.onStartConfigurationObtained(this);
 
         while (true) {
 
-            // sc¾Ö²¿×îÓÅ½â£¬´Ó¾Ö²¿×îÓÅÖĞÉú³ÉĞÂ½â
+            // scå±€éƒ¨æœ€ä¼˜è§£ï¼Œä»å±€éƒ¨æœ€ä¼˜ä¸­ç”Ÿæˆæ–°è§£
             MyALNSSolution s_c_new = new MyALNSSolution(s_c);
-            // ! qÎªĞèÒªÒÆ³ıµÄ½ÚµãÊı£¬´ó¸Å10-30Ö®¼äËæ»úÖµ
+            // ! qä¸ºéœ€è¦ç§»é™¤çš„èŠ‚ç‚¹æ•°ï¼Œå¤§æ¦‚10-30ä¹‹é—´éšæœºå€¼
             int q = getQ(s_c_new);
 
-            // ÂÖÅÌ¶ÄÕÒ³ö×îÓÅdestroy¡¢repair·½·¨
+            // è½®ç›˜èµŒæ‰¾å‡ºæœ€ä¼˜destroyã€repairæ–¹æ³•
             IALNSDestroy destroyOperator = getALNSDestroyOperator();
             IALNSRepair repairOperator = getALNSRepairOperator();
             // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
@@ -98,24 +98,24 @@ public class MyALNSProcess {
             MyALNSSolution s_destroy = destroyOperator.destroy(s_c_new, q);
             // o.onSolutionDestroy(this, s_destroy);
 
-            // repair solution£¬ÖØ×éºóĞÂ½âst
+            // repair solutionï¼Œé‡ç»„åæ–°è§£st
             MyALNSSolution s_t = repairOperator.repair(s_destroy);
             // o.onSolutionRepaired(this, s_t);
 
-            System.out.println("µü´ú´ÎÊı £º" + i + "µ±Ç°½â £º" + Math.round(s_t.cost.total * 100) / 100.0);
+            System.out.println("è¿­ä»£æ¬¡æ•° ï¼š" + i + "å½“å‰è§£ ï¼š" + Math.round(s_t.cost.total * 100) / 100.0);
 
-            // ¸üĞÂ¾Ö²¿ÂúÒâ½â
+            // æ›´æ–°å±€éƒ¨æ»¡æ„è§£
             if (s_t.cost.total < s_c.cost.total) {
                 s_c = s_t;
-                // ¸üĞÂÈ«¾ÖÂúÒâ½â£¬sgÈ«¾ÖÂúÒâ½â
+                // æ›´æ–°å…¨å±€æ»¡æ„è§£ï¼Œsgå…¨å±€æ»¡æ„è§£
                 if (s_t.cost.total < s_g.cost.total) {
                     handleNewGlobalMinimum(destroyOperator, repairOperator, s_t);
                 } else {
-                    // ¸üĞÂ¾Ö²¿ÂúÒâ½â
+                    // æ›´æ–°å±€éƒ¨æ»¡æ„è§£
                     handleNewLocalMinimum(destroyOperator, repairOperator);
                 }
             } else {
-                // ¸ÅÂÊ½ÓÊÜ½Ï²î½â
+                // æ¦‚ç‡æ¥å—è¾ƒå·®è§£
                 handleWorseSolution(destroyOperator, repairOperator, s_t);
             }
             // o.onAcceptancePhaseFinsihed(this, s_t);
@@ -137,24 +137,24 @@ public class MyALNSProcess {
 
         Solution solution = s_g.toSolution();
 
-        // Êä³ö³ÌĞòºÄÊ±s
+        // è¾“å‡ºç¨‹åºè€—æ—¶s
         double s = Math.round((System.currentTimeMillis() - t_start) * 1000) / 1000000.;
         System.out.println("\nALNS progress cost " + s + "s.");
 
-        // Êä³öËã×ÓÊ¹ÓÃÇé¿ö
+        // è¾“å‡ºç®—å­ä½¿ç”¨æƒ…å†µ
         for (IALNSDestroy destroy : destroy_ops) {
-            System.out.println(destroy.getClass().getName() + " ±»Ê¹ÓÃ " + destroy.getDraws() + "´Î.");
+            System.out.println(destroy.getClass().getName() + " è¢«ä½¿ç”¨ " + destroy.getDraws() + "æ¬¡.");
         }
 
         for (IALNSRepair repair : repair_ops) {
-            System.out.println(repair.getClass().getName() + " ±»Ê¹ÓÃ " + repair.getDraws() + "´Î.");
+            System.out.println(repair.getClass().getName() + " è¢«ä½¿ç”¨ " + repair.getDraws() + "æ¬¡.");
         }
         solution.testTime = s;
         return solution;
     }
 
     private void handleWorseSolution(IALNSDestroy destroyOperator, IALNSRepair repairOperator, MyALNSSolution s_t) {
-        // ¸ÅÂÊ½ÓÊÜ½Ï²î½â
+        // æ¦‚ç‡æ¥å—è¾ƒå·®è§£
         double p_accept = calculateProbabilityToAcceptTempSolutionAsNewCurrent(s_t);
         if (Math.random() < p_accept) {
             s_c = s_t;
@@ -176,7 +176,7 @@ public class MyALNSProcess {
         if (this.cpng) {
             // TODO OutputUtil.createPNG(s_t, i);
         }
-        // ½ÓÊÜÈ«¾Ö½ÏÓÅ
+        // æ¥å—å…¨å±€è¾ƒä¼˜
         if (s_t.feasible())
             s_g = s_t;
         destroyOperator.addToPi(config.getSigma_1());

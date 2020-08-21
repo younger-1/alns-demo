@@ -1,22 +1,21 @@
 package zll.vrptw.alns.config;
 
-
 public enum ALNSConfiguration implements IALNSConfig {
 
     DEFAULT(5000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5);
 
-
-    private final int omega;//µü´ú´ÎÊı
-    private final int tau;//¸üĞÂËã×ÓÑ¡Ôñ¸ÅÂÊµÄ¼ä¸ôµü´ú´ÎÊı
-    private final double r_p;//¼ÆËã¸ÅÂÊ
-    private final int sigma_1;//·¢ÏÖÈ«¾Ö×îÓÅ£¬add
-    private final int sigma_2;//·¢ÏÖ¾Ö²¿×îÓÅ£¬add
-    private final int sigma_3;//·¢ÏÖ½Ï²î£¬add
+    private final int omega;// è¿­ä»£æ¬¡æ•°
+    private final int tau;// æ›´æ–°ç®—å­é€‰æ‹©æ¦‚ç‡çš„é—´éš”è¿­ä»£æ¬¡æ•°
+    private final double r_p;// è®¡ç®—æ¦‚ç‡
+    private final int sigma_1;// å‘ç°å…¨å±€æœ€ä¼˜ï¼Œadd
+    private final int sigma_2;// å‘ç°å±€éƒ¨æœ€ä¼˜ï¼Œadd
+    private final int sigma_3;// å‘ç°è¾ƒå·®ï¼Œadd
     private final double c;
     private final double delta;
     private final double big_omega;
 
-    ALNSConfiguration(int omega, int tau, double r_p, int sigma_1, int sigma_2, int sigma_3, double c, double delta, double big_omega) {
+    ALNSConfiguration(int omega, int tau, double r_p, int sigma_1, int sigma_2, int sigma_3, double c, double delta,
+            double big_omega) {
         this.omega = omega;
         this.tau = tau;
         this.r_p = r_p;

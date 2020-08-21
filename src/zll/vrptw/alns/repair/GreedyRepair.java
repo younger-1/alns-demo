@@ -16,13 +16,13 @@ import zll.vrptw.instance.Node;
  * </p>
  * 
  * @author zll_hust
- * @date 2020Äê3ÔÂ20ÈÕ
+ * @date 2020å¹´3æœˆ20æ—¥
  */
 public class GreedyRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 	@Override
 	public MyALNSSolution repair(MyALNSSolution s) {
-		// Èç¹ûÃ»ÓĞÒÆ³ıµÄ¿Í»§£¬ÉÏÒ»²½´íÎó
+		// å¦‚æœæ²¡æœ‰ç§»é™¤çš„å®¢æˆ·ï¼Œä¸Šä¸€æ­¥é”™è¯¯
 		if (s.removalCustomers.size() == 0) {
 			System.err.println("removalCustomers is empty!");
 			return s;
@@ -45,10 +45,10 @@ public class GreedyRepair extends ALNSAbstractRepair implements IALNSRepair {
 					continue;
 				}
 
-				// Ñ°ÕÒ×îÓÅ²åÈëÎ»ÖÃ
+				// å¯»æ‰¾æœ€ä¼˜æ’å…¥ä½ç½®
 				for (int i = 1; i < s.routes.get(j).getRoute().size() - 1; ++i) {
 
-					// ÆÀ¼Û²åÈëÇé¿ö
+					// è¯„ä»·æ’å…¥æƒ…å†µ
 					Cost newCost = new Cost(s.cost);
 					s.evaluateInsertCustomer(j, i, insertNode, newCost);
 

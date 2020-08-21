@@ -16,7 +16,7 @@ import zll.vrptw.instance.Instance;
  * </p>
  * 
  * @author zll_hust
- * @date 2020Äê3ÔÂ18ÈÕ
+ * @date 2020å¹´3æœˆ18æ—¥
  */
 public class MyALNSSolution {
 
@@ -25,8 +25,8 @@ public class MyALNSSolution {
 	public int vehicleNr;
 	public Instance instance;
 
-	public double alpha; // ¦Á
-	public double beta; // ¦Â
+	public double alpha; // Î±
+	public double beta; // Î²
 
 	public static final double punish = 1000;
 
@@ -79,7 +79,7 @@ public class MyALNSSolution {
 	}
 
 	public void removeCustomer(int routePosition, int cusPosition) {
-		// TODO Î´½øĞĞÊ±¼ä´°È¥ÖØ´¦Àí
+		// TODO æœªè¿›è¡Œæ—¶é—´çª—å»é‡å¤„ç†
 
 		double[][] distance = instance.getDistanceMatrix();
 
@@ -105,19 +105,19 @@ public class MyALNSSolution {
 	}
 
 	public void insertCustomer(int routePosition, int insertCusPosition, Node insertCustomer) {
-		// TODO Ê±¼ä´°È¥ÖØÎ´´¦Àí
+		// TODO æ—¶é—´çª—å»é‡æœªå¤„ç†
 		double[][] distance = instance.getDistanceMatrix();
 
 		Route insertRoute = this.routes.get(routePosition);
 
-		// ¼ÆËãloadºÍcostµÄ±ä»¯Á¿
+		// è®¡ç®—loadå’Œcostçš„å˜åŒ–é‡
 		double load = +insertCustomer.getDemand();
 		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
 				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
 				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
 						.get(insertCusPosition).getId()];
 
-		// ¸üĞÂµ±Ç°Â·¾¶¡¢×ÜÂ·¾¶µÄcost¡¢load¡¢load violation
+		// æ›´æ–°å½“å‰è·¯å¾„ã€æ€»è·¯å¾„çš„costã€loadã€load violation
 		this.cost.cost += cost;
 		this.routes.get(routePosition).getCost().cost += cost;
 		this.routes.get(routePosition).getCost().load += load;
@@ -128,7 +128,7 @@ public class MyALNSSolution {
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
 		;
 
-		// ¼ÆËãµ±Ç°Â·¾¶µÄtime windows violation¡¢time
+		// è®¡ç®—å½“å‰è·¯å¾„çš„time windows violationã€time
 		double time = 0;
 		double timeWindowViolation = 0;
 		for (int i = 1; i < insertRoute.getRoute().size(); i++) {
@@ -141,7 +141,7 @@ public class MyALNSSolution {
 			time += insertRoute.getRoute().get(i).getServiceTime();
 		}
 
-		// ¼ÆËãµ±Ç°Â·¾¶¡¢×ÜÂ·¾¶µÄtime windows violation¡¢time
+		// è®¡ç®—å½“å‰è·¯å¾„ã€æ€»è·¯å¾„çš„time windows violationã€time
 		this.routes.get(routePosition).getCost().time = time;
 		this.routes.get(routePosition).getCost().timeViolation = timeWindowViolation;
 		this.cost.timeViolation += timeWindowViolation;
@@ -150,7 +150,7 @@ public class MyALNSSolution {
 	}
 
 	public void evaluateInsertCustomer(int routePosition, int insertCusPosition, Node insertCustomer, Cost newCost) {
-		// TODO Ê±¼ä´°È¥ÖØÎ´´¦Àí
+		// TODO æ—¶é—´çª—å»é‡æœªå¤„ç†
 		double[][] distance = instance.getDistanceMatrix();
 
 		Route insertRoute = this.routes.get(routePosition).cloneRoute();

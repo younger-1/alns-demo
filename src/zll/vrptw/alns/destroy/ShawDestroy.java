@@ -18,7 +18,7 @@ import zll.vrptw.instance.Route;
  * </p>
  * 
  * @author zll_hust
- * @date 2020Äê3ÔÂ20ÈÕ
+ * @date 2020å¹´3æœˆ20æ—¥
  */
 public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 	/*
@@ -43,7 +43,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 
 		Collections.shuffle(routeList);
 
-		// Ñ¡Ôñ±»ÒÆ³ı¿Í»§ËùÔÚµÄÂ·¾¶
+		// é€‰æ‹©è¢«ç§»é™¤å®¢æˆ·æ‰€åœ¨çš„è·¯å¾„
 		int removenRoutePosition = routeList.remove(0);
 		Route removenRoute = s.routes.get(removenRoutePosition);
 
@@ -52,7 +52,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 			removenRoute = s.routes.get(removenRoutePosition);
 		}
 
-		// Ñ¡Ôñ±»ÒÆ³ı¿Í»§
+		// é€‰æ‹©è¢«ç§»é™¤å®¢æˆ·
 		ArrayList<Integer> cusList = new ArrayList<Integer>();
 		for (int j = 1; j < removenRoute.getRoute().size() - 1; j++)
 			cusList.add(j);
@@ -62,7 +62,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 		Node removenCus = removenRoute.getRoute().get(removenCusPosition);
 		s.removeCustomer(removenRoutePosition, removenCusPosition);
 
-		// !¼ÇÂ¼±»ÒÆ³ıµÄµã
+		// !è®°å½•è¢«ç§»é™¤çš„ç‚¹
 		lastRemove = removenCus;
 		lastRoute = removenRoute;
 		lastRemovePos = -1;
@@ -86,7 +86,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 
 					if (minRelate > fitness) {
 						minRelate = fitness;
-						// !Ã»±ØÒª£¬»ù½ÚµãµÃ¹Ì¶¨
+						// !æ²¡å¿…è¦ï¼ŒåŸºèŠ‚ç‚¹å¾—å›ºå®š
 						// lastRemove = relatedNode;
 						// lastRoute = s.routes.get(j);
 						lastRemovePos = i;
@@ -94,7 +94,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 					}
 				}
 			}
-			// !lastRemovePosÊÇ½ÚµãÔÚÂ·¾¶ÖĞµÄÎ»ÖÃ£¬²»ÊÇid
+			// !lastRemovePosæ˜¯èŠ‚ç‚¹åœ¨è·¯å¾„ä¸­çš„ä½ç½®ï¼Œä¸æ˜¯id
 			s.removeCustomer(lastRoutePos, lastRemovePos);
 		}
 

@@ -17,7 +17,7 @@ import zll.vrptw.instance.Route;
  * </p>
  * 
  * @author zll_hust
- * @date 2020Äê3ÔÂ19ÈÕ
+ * @date 2020å¹´3æœˆ19æ—¥
  */
 
 public class RandomDestroy extends ALNSAbstractOperation implements IALNSDestroy {
@@ -41,7 +41,7 @@ public class RandomDestroy extends ALNSAbstractOperation implements IALNSDestroy
 
 			Collections.shuffle(routeList);
 
-			// Ñ¡Ôñ±»ÒÆ³ý¿Í»§ËùÔÚµÄÂ·¾¶
+			// é€‰æ‹©è¢«ç§»é™¤å®¢æˆ·æ‰€åœ¨çš„è·¯å¾„
 			int removenRoutePosition = routeList.remove(0);
 			Route removenRoute = s.routes.get(removenRoutePosition);
 
@@ -50,7 +50,7 @@ public class RandomDestroy extends ALNSAbstractOperation implements IALNSDestroy
 				removenRoute = s.routes.get(removenRoutePosition);
 			}
 
-			// Ñ¡Ôñ±»ÒÆ³ýµÄ¿Í»§
+			// é€‰æ‹©è¢«ç§»é™¤çš„å®¢æˆ·
 			Random r = s.instance.getRandom();
 			int removenCustomerPosition = r.nextInt(removenRoute.getRoute().size() - 2) + 1;
 
