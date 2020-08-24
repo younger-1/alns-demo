@@ -42,9 +42,9 @@ public class Main {
 	public static void main(String args[]) {
 
 		try {
-			solve("C104", // 需要测试的算例
-					"Solomon", // 算例类型,输入Homberger或Solomon，注意大写
-					25, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
+			solve("RC2_2_1", // 需要测试的算例
+					"Homberger", // 算例类型,输入 Homberger 或 Solomon ，注意大写
+					200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
 					ALNSConfiguration.DEFAULT, // ALNS相关参数
 					new ControlParameter(false, // 历史满意解、当前满意解、新解的时序图，收敛效果展示
 							false, // ALNS算子时序图

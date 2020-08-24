@@ -66,13 +66,14 @@ public class GreedyVRP {
         // The final Solution
         Solution solution = new Solution();
 
-        // Fetch the depot node.
+        // ! 节点中取取第一个为仓库，并移除
         Node depot = this.customers.remove(0);
 
         // Fetch the first available vehicle
         Route currentVehicle = this.vehicles.remove(0);
 
         // Add the depot to the vehicle.
+        // ! 把仓库放入第一条路径的第一个位置
         currentVehicle.addNodeToRoute(depot);
 
         // Repeat until all customers are routed or if we run out vehicles.
@@ -144,6 +145,7 @@ public class GreedyVRP {
                 // Terminate current route by adding the depot as a final destination
                 currentVehicle.addNodeToRoute(depot);
 
+                // !路径结束，计算这条路径的 total cost
                 currentVehicle.getCost().calculateTotalCost();
 
                 // Add the finalized route to the solution

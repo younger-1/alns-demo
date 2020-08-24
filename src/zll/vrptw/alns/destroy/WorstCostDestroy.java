@@ -1,10 +1,7 @@
 package zll.vrptw.alns.destroy;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import zll.vrptw.algrithm.MyALNSSolution;
 import zll.vrptw.alns.operation.ALNSAbstractOperation;
@@ -78,8 +75,8 @@ public class WorstCostDestroy extends ALNSAbstractOperation implements IALNSDest
 		// });
 		Arrays.sort(removeList);
 
-		// System.out.println(removeList);
 		// System.out.println(Arrays.toString(removeList));
+
 		// 移除
 		for (int i = removeNr - 1; i >= 0; i--) {
 			s.removeCustomer(customList.get(removeList[i]).routeNo, customList.get(removeList[i]).customerNo);
