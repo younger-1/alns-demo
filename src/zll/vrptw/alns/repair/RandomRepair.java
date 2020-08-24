@@ -37,7 +37,7 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 			Node insertNode = s.removalCustomers.remove(0);
 
 			// 随机决定查找多少条路径
-			int randomRouteNr = r.nextInt(s.routes.size() - 1) + 1;
+			int randomRouteNr = r.nextInt(s.routes.size()) + 1;
 
 			// 最优插入方案
 			int bestRoutePosition = -1;
