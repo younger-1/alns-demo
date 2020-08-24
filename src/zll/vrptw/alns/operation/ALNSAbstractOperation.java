@@ -7,7 +7,7 @@ public abstract class ALNSAbstractOperation implements IALNSOperation {
     // ALNSStrategieVisualizationManager();
     private final Random r = new Random();
     private int pi;
-    private double p; // ! 算子次数分之1，轮盘选择用
+    private double p; // ! 初始值算子次数分之1，轮盘选择用。归一化的概率.
     private int draws; // ! 被使用的次数
     private double w;
 
