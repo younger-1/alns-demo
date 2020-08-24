@@ -100,12 +100,7 @@ public class GreedyVRP {
 
                 // If we found a customer with closer that the value of "smallestDistance"
                 // ,store him temporarily
-                if (distance < smallestDistance && (currentVehicle.getCost().load + n.getDemand()) <= vehicleCapacity
-                        && (currentVehicle.getCost().time + distanceMatrix[currentVehicle.getId()][n.getId()]) < n
-                                .getTimeWindow()[1]
-                        && (currentVehicle.getCost().time + distanceMatrix[currentVehicle.getId()][n.getId()]
-                                + n.getServiceTime()
-                                + distanceMatrix[n.getId()][depot.getId()]) < depot.getTimeWindow()[1]) {
+                if (isAddThisNodeToRoute(depot, currentVehicle, smallestDistance, n, distance)) {
                     smallestDistance = distance;
                     closestNode = n;
                 }
@@ -182,5 +177,16 @@ public class GreedyVRP {
         solution.setTotalCost((double) (Math.round(solution.getTotalCost() * 1000) / 1000.0));
 
         return solution;
+    }
+
+    private boolean isAddThisNodeToRoute(Node depot, Route currentVehicle, double smallestDistance, Node n,
+            double distance) {
+        boolean isSatisfyCapacity = (currentVehicle.getCost().load + n.getDemand()) <= vehicleCapacity;
+        boolean isSatisfyTimeWindow = (currentVehicle.getCost().time
+                + distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][n.getId()]) < n.getTimeWindow()[1];
+        boolean isSatisfyDepotTimeWindow = (currentVehicle.getCost().time
+                + distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][n.getId()] + n.getServiceTime()
+                + distanceMatrix[n.getId()][depot.getId()]) < depot.getTimeWindow()[1];
+        return distance < smallestDistance && isSatisfyCapacity && isSatisfyTimeWindow && isSatisfyDepotTimeWindow;
     }
 }
