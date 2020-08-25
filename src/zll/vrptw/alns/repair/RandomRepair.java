@@ -37,7 +37,7 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 			Node insertNode = s.removalCustomers.remove(0);
 
-			// 随机决定查找多少条路径
+			// ! 随机决定查找多少条路径
 			int randomRouteNr = r.nextInt(s.routes.size()) + 1;
 
 			// 最优插入方案
@@ -64,12 +64,12 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 				// insertRoute = s.routes.get(insertRoutePosition);
 				// }
 
-				// 随机决定查找多少个位置
+				// ! 随机决定查找多少个位置
 				int insertTimes = r.nextInt(insertRoute.getRoute().size() - 1) + 1;
 
 				ArrayList<Integer> customerList = new ArrayList<Integer>();
 				for (int k = 1; k < insertRoute.getRoute().size(); k++)
-					customerList.add(k);
+					customerList.add(k); // 1,2,3,..,N-1
 
 				Collections.shuffle(customerList);
 

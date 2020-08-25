@@ -1,8 +1,5 @@
 package zll.vrptw.alns.repair;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import zll.vrptw.algrithm.Cost;
 import zll.vrptw.algrithm.MyALNSSolution;
 import zll.vrptw.instance.Node;
@@ -28,9 +25,9 @@ public class GreedyRepair extends ALNSAbstractRepair implements IALNSRepair {
 			return s;
 		}
 
-		int removeNr = s.removalCustomers.size();
+		int insertCusNr = s.removalCustomers.size();
 
-		for (int k = 0; k < removeNr; k++) {
+		for (int k = 0; k < insertCusNr; k++) {
 
 			Node insertNode = s.removalCustomers.remove(0);
 
@@ -45,7 +42,7 @@ public class GreedyRepair extends ALNSAbstractRepair implements IALNSRepair {
 					continue;
 				}
 
-				// 寻找最优插入位置
+				// ! 寻找最优插入位置 1 ~ N-1
 				for (int i = 1; i < s.routes.get(j).getRoute().size() - 1; ++i) {
 
 					// 评价插入情况

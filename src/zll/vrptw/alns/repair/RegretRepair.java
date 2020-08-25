@@ -30,9 +30,9 @@ public class RegretRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 		ArrayList<BestPos> bestPoses = new ArrayList<BestPos>();
 
-		int removeNr = s.removalCustomers.size();
+		int insertCusNr = s.removalCustomers.size();
 
-		for (int k = 0; k < removeNr; k++) {
+		for (int k = 0; k < insertCusNr; k++) {
 
 			Node insertNode = s.removalCustomers.remove(0);
 
@@ -76,7 +76,7 @@ public class RegretRepair extends ALNSAbstractRepair implements IALNSRepair {
 		Collections.sort(bestPoses);
 
 		for (BestPos bp : bestPoses) {
-			s.insertCustomer(bp.bestCustomerPosition, bp.bestRroutePosition, bp.insertNode);
+			s.insertCustomer(bp.bestRroutePosition, bp.bestCustomerPosition, bp.insertNode);
 		}
 
 		return s;
@@ -95,8 +95,8 @@ class BestPos implements Comparable<BestPos> {
 
 	public BestPos(Node insertNode, int customer, int route, double f) {
 		this.insertNode = insertNode;
-		this.bestRroutePosition = customer;
-		this.bestCustomerPosition = route;
+		this.bestRroutePosition = route;
+		this.bestCustomerPosition = customer;
 		this.deltaCost = f;
 	}
 
