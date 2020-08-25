@@ -108,6 +108,7 @@ public class MyALNSSolution {
 		// TODO 时间窗去重未处理
 		double[][] distance = instance.getDistanceMatrix();
 
+		// ! 无需clone
 		Route insertRoute = this.routes.get(routePosition);
 
 		// 计算load和cost的变化量
@@ -126,7 +127,6 @@ public class MyALNSSolution {
 					- this.instance.getVehicleCapacity();
 
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
-		;
 
 		// 计算当前路径的time windows violation、time
 		double time = 0;
