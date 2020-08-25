@@ -103,12 +103,19 @@ class BestPos implements Comparable<BestPos> {
 	@Override
 	public int compareTo(BestPos o) {
 		BestPos s = (BestPos) o;
-		if (s.deltaCost > this.deltaCost) {
-			return 1;
-		} else if (this.deltaCost == s.deltaCost) {
-			return 0;
-		} else {
+		if (this.bestCustomerPosition > s.bestCustomerPosition) {
 			return -1;
+		} else if (this.bestCustomerPosition < s.bestCustomerPosition) {
+			return 1;
+		} else {
+			return 0;
 		}
+		// if (s.deltaCost > this.deltaCost) {
+		// return 1;
+		// } else if (this.deltaCost == s.deltaCost) {
+		// return 0;
+		// } else {
+		// return -1;
+		// }
 	}
 }
