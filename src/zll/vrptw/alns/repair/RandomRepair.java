@@ -32,6 +32,7 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 		Random r = s.instance.getRandom();
 		int insertCusNr = s.removalCustomers.size();
 
+		// ! 插入节点循环
 		for (int i = 0; i < insertCusNr; i++) {
 
 			Node insertNode = s.removalCustomers.remove(0);
@@ -51,16 +52,17 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 			Collections.shuffle(routeList);
 
+			// ! 询问路径循环
 			for (int j = 0; j < randomRouteNr; j++) {
 
 				// 随机选择一条route
 				int insertRoutePosition = routeList.remove(0);
 				Route insertRoute = s.routes.get(insertRoutePosition);
 
-				while (insertRoute.getRoute().size() < 1) {
-					insertRoutePosition = routeList.remove(0);
-					insertRoute = s.routes.get(insertRoutePosition);
-				}
+				// while (insertRoute.getRoute().size() < 1) {
+				// insertRoutePosition = routeList.remove(0);
+				// insertRoute = s.routes.get(insertRoutePosition);
+				// }
 
 				// 随机决定查找多少个位置
 				int insertTimes = r.nextInt(insertRoute.getRoute().size() - 1) + 1;
@@ -71,13 +73,14 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 				Collections.shuffle(customerList);
 
-				// 随机选择一条位置
+				// ! 询问节点循环
 				for (int k = 0; k < insertTimes; k++) {
 
 					int insertCusPosition = customerList.remove(0);
 
-					// 评价插入情况
+					// ! 拷贝一份 s 的 cost
 					Cost newCost = new Cost(s.cost);
+					// ! 插入节点给 newCost 的变化
 					s.evaluateInsertCustomer(insertRoutePosition, insertCusPosition, insertNode, newCost);
 
 					// 更新最优插入位置

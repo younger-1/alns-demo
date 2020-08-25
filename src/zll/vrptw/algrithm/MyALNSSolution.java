@@ -164,10 +164,9 @@ public class MyALNSSolution {
 		newCost.load += load;
 		newCost.cost += cost;
 		if (newCost.load > this.instance.getVehicleCapacity())
-			newCost.loadViolation += this.cost.load - this.instance.getVehicleCapacity();
+			newCost.loadViolation += newCost.load - this.instance.getVehicleCapacity();
 
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
-		;
 
 		double time = 0;
 		double timeWindowViolation = 0;
