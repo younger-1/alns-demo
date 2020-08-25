@@ -155,16 +155,17 @@ public class MyALNSSolution {
 
 		Route insertRoute = this.routes.get(routePosition).cloneRoute();
 
-		double load = +insertCustomer.getDemand();
 		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
 				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
 				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
 						.get(insertCusPosition).getId()];
-
-		newCost.load += load;
 		newCost.cost += cost;
-		if (newCost.load > this.instance.getVehicleCapacity())
-			newCost.loadViolation += newCost.load - this.instance.getVehicleCapacity();
+
+		double load = +insertCustomer.getDemand();
+		double routeLoad = this.routes.get(routePosition).getCost().load;
+		routeLoad += load;
+		if (routeLoad > this.instance.getVehicleCapacity())
+			newCost.loadViolation += routeLoad - this.instance.getVehicleCapacity();
 
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
 
