@@ -75,7 +75,6 @@ public class MyALNSProcess {
 
         T_s = -(config.getDelta() / Math.log(config.getBig_omega())) * s_c.cost.total;
         T = T_s;
-        T_end = T_end_t * T_s;
 
         // 计时开始
         t_start = System.currentTimeMillis();
