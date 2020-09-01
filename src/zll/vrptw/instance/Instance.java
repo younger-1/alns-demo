@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -96,7 +97,7 @@ public class Instance {
         return this.name;
     }
 
-    // ! size 是测试用例文件名中的节点数
+    // size 是测试用例文件名中的节点数
     public Instance(int size, String name, String instanceType) throws IOException {
         // 读取算例数据
         this.name = name;
@@ -106,55 +107,62 @@ public class Instance {
         this.customers = new ArrayList<Node>();
         importCustomerData(size, name);
 
-        this.distanceMatrix = new double[size + 5][size + 5];
-        createDistanceMatrix();
-
         r = new Random();
         r.setSeed(-1);
     }
 
     // 读取数据客户点数据
     public void importCustomerData(int size, String name) throws IOException {
+        this.distanceMatrix = new double[150][150];
 
-        String dataFileName = "";
-        if (type.equals("Solomon"))
-            dataFileName = "./instances" + "/solomon" + "/solomon_" + size + "/" + name + ".txt";
-        else if (type.equals("Homberger"))
-            dataFileName = "./instances" + "/homberger" + "/homberger_" + size + "/" + name + ".txt";
-
-        BufferedReader bReader = new BufferedReader(new FileReader(dataFileName));
-
-        int data_in_x_lines = Integer.MAX_VALUE;
-
+        String dataFileName = "C:/Users/didi/Downloads/distance_sample.csv";
         String line;
-
-        while ((line = bReader.readLine()) != null) {
-            // 以空格为间隔符读取数据
-            String datavalue[] = line.split("\\s+");
-
-            if (datavalue.length > 0 && datavalue[0].equals("CUST")) {
-                data_in_x_lines = 2;
+        boolean is_first_line_skiped = false;
+        HashMap<Long, Integer> my = new HashMap<>();
+        BufferedReader bReaders = new BufferedReader(new FileReader(dataFileName));
+        while ((line = bReaders.readLine()) != null) {
+            if (false == is_first_line_skiped) {
+                is_first_line_skiped = true;
+                continue;
             }
+            String[] dataLine = line.split(",");
 
-            if (data_in_x_lines < 1 && datavalue.length > 0) {
+            // set distance matrix
+            Long id_1 = Long.parseLong(dataLine[0]);
+            Long id_2 = Long.parseLong(dataLine[1]);
+            boolean is_add_this_customer = (null == my.get(id_1));
+            Integer distance = Integer.parseInt(dataLine[6]);
+            Integer[] index = convert_id_to_index(my, id_1, id_2);
+            distanceMatrix[index[0]][index[1]] = distance;
 
+            // set customer
+            if (is_add_this_customer) {
                 Node customer = new Node();
-                customer.setId(Integer.parseInt(datavalue[1]));
-                customer.setX(Double.parseDouble(datavalue[2]));
-                customer.setY(Double.parseDouble(datavalue[3]));
-                customer.setDemand(Double.parseDouble(datavalue[4]));
-                customer.setTimeWindow(Double.parseDouble(datavalue[5]), Double.parseDouble(datavalue[6]));
-                customer.setServiceTime(Double.parseDouble(datavalue[7]));
+                customer.setId(index[0]);
+                customer.setDemand(1);
+                customer.setTimeWindow(0, 999999);
+                customer.setServiceTime(10);
                 this.customers.add(customer);
             }
-            data_in_x_lines--;
+
         }
-        bReader.close();
+        bReaders.close();
 
         numberOfNodes = customers.size();
-
         System.out.println("Input customers success !");
 
+    }
+
+    private Integer[] convert_id_to_index(HashMap<Long, Integer> my, Long id_1, Long id_2) {
+        Integer index_1 = my.get(id_1);
+        Integer index_2 = my.get(id_2);
+        if (null == index_1) {
+            my.put(id_1, my.size());
+        }
+        if (null == index_2) {
+            my.put(id_2, my.size());
+        }
+        return new Integer[] { my.get(id_1), my.get(id_2) };
     }
 
     // 读取数据车辆信息
