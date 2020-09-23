@@ -95,11 +95,11 @@ public class MyALNSSolution {
 						.get(cusPosition + 1).getId()];
 
 		this.cost.cost += cost;
-		this.routes.get(routePosition).getCost().cost += cost;
-		this.routes.get(routePosition).getCost().load += load;
+		removenRoute.getCost().cost += cost;
+		removenRoute.getCost().load += load;
 
-		this.cost.loadViolation -= this.routes.get(routePosition).getCost().loadViolation;
-		this.cost.timeViolation -= this.routes.get(routePosition).getCost().timeViolation;
+		this.cost.loadViolation -= removenRoute.getCost().loadViolation;
+		this.cost.timeViolation -= removenRoute.getCost().timeViolation;
 
 		removalCustomers.add(removenRoute.removeNode(cusPosition));
 	}
@@ -120,10 +120,10 @@ public class MyALNSSolution {
 
 		// 更新当前路径、总路径的cost、load、load violation
 		this.cost.cost += cost;
-		this.routes.get(routePosition).getCost().cost += cost;
-		this.routes.get(routePosition).getCost().load += load;
-		if (this.routes.get(routePosition).getCost().load > this.instance.getVehicleCapacity())
-			this.cost.loadViolation += this.routes.get(routePosition).getCost().load
+		insertRoute.getCost().cost += cost;
+		insertRoute.getCost().load += load;
+		if (insertRoute.getCost().load > this.instance.getVehicleCapacity())
+			this.cost.loadViolation += insertRoute.getCost().load
 					- this.instance.getVehicleCapacity();
 
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
@@ -142,8 +142,8 @@ public class MyALNSSolution {
 		}
 
 		// 计算当前路径、总路径的time windows violation、time
-		this.routes.get(routePosition).getCost().time = time;
-		this.routes.get(routePosition).getCost().timeViolation = timeWindowViolation;
+		insertRoute.getCost().time = time;
+		insertRoute.getCost().timeViolation = timeWindowViolation;
 		this.cost.timeViolation += timeWindowViolation;
 
 		this.cost.calculateTotalCost(this.alpha, this.beta);
@@ -162,7 +162,7 @@ public class MyALNSSolution {
 		newCost.cost += cost;
 
 		double load = +insertCustomer.getDemand();
-		double routeLoad = this.routes.get(routePosition).getCost().load;
+		double routeLoad = insertRoute.getCost().load;
 		routeLoad += load;
 		if (routeLoad > this.instance.getVehicleCapacity())
 			newCost.loadViolation += routeLoad - this.instance.getVehicleCapacity();
