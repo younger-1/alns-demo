@@ -41,7 +41,6 @@ public class Route {
         Route clone = new Route(this.id);
         clone.cost = new Cost(this.cost);
         clone.route = new ArrayList<>(this.route);
-
         return clone;
     }
 
@@ -91,7 +90,7 @@ public class Route {
 
     @Override
     public String toString() {
-        String result = "Route{" + "cost = " + this.cost + ", route = [";
+        String result = "Route{" + "customerNum = " + getCustomerNum() + ", " + "cost = " + this.cost + ", route = [";
 
         for (Node customer : this.route) {
             result += "\n\t\t" + customer;
@@ -112,6 +111,10 @@ public class Route {
      */
     public void setCost(Cost cost) {
         this.cost = cost;
+    }
+
+    public int getCustomerNum() {
+        return this.route.size() - 2;
     }
 
 }
