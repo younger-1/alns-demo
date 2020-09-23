@@ -102,10 +102,15 @@ public class Instance {
         // 读取算例数据
         this.name = name;
         this.type = instanceType;
-        importVehicleData(size, name);
+        // importVehicleData(size, name);
 
         this.customers = new ArrayList<Node>();
         importCustomerData(size, name);
+
+        this.vehicleNr = 25;
+        this.vehicleCapacity = 40;
+        // this.distanceMatrix = new double[size + 5][size + 5];
+        // createDistanceMatrix();
 
         r = new Random();
         r.setSeed(-1);
@@ -131,6 +136,7 @@ public class Instance {
             Long id_1 = Long.parseLong(dataLine[0]);
             Long id_2 = Long.parseLong(dataLine[1]);
             boolean is_add_this_customer = (null == my.get(id_1));
+            boolean is_add_that_customer = (null == my.get(id_2));
             Integer distance = Integer.parseInt(dataLine[6]);
             Integer[] index = convert_id_to_index(my, id_1, id_2);
             distanceMatrix[index[0]][index[1]] = distance;
@@ -139,6 +145,14 @@ public class Instance {
             if (is_add_this_customer) {
                 Node customer = new Node();
                 customer.setId(index[0]);
+                customer.setDemand(1);
+                customer.setTimeWindow(0, 999999);
+                customer.setServiceTime(20);
+                this.customers.add(customer);
+            }
+            if (is_add_that_customer) {
+                Node customer = new Node();
+                customer.setId(index[1]);
                 customer.setDemand(1);
                 customer.setTimeWindow(0, 999999);
                 customer.setServiceTime(10);

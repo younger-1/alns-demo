@@ -61,7 +61,7 @@ public class Main {
 
 		// 输入Solomon算例
 		Instance instance = new Instance(size, name, instanceType);
-		instance.setVehicleNr(150);
+		// instance.setVehicleNr(150);
 		// 检查结果
 		CheckSolution checkSolution = new CheckSolution(instance);
 		// 解决策略
