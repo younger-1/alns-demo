@@ -101,8 +101,10 @@ public class MyALNSProcess {
             MyALNSSolution s_t = repairOperator.repair(s_destroy);
             // o.onSolutionRepaired(this, s_t);
 
-            System.out.println("迭代次数 ：" + i + "当前解 ：" + Math.round(s_t.cost.total * 100) / 100.0);
+            if (0 == i % 100) {
 
+                System.out.println("迭代次数 ：" + i + "当前解 ：" + Math.round(s_t.cost.total * 100) / 100.0);
+            }
             // 更新局部满意解
             if (s_t.cost.total < s_c.cost.total) {
                 s_c = s_t;
