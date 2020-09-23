@@ -108,7 +108,7 @@ public class Instance {
         importCustomerData(size, name);
 
         this.vehicleNr = 25;
-        this.vehicleCapacity = 40;
+        this.vehicleCapacity = 24;
         // this.distanceMatrix = new double[size + 5][size + 5];
         // createDistanceMatrix();
 
@@ -141,11 +141,22 @@ public class Instance {
             Integer[] index = convert_id_to_index(my, id_1, id_2);
             distanceMatrix[index[0]][index[1]] = distance;
 
+            // add depot
+            if (index[0] == 0 && is_add_this_customer) {
+                Node depot = new Node();
+                depot.setId(0);
+                depot.setDemand(0);
+                depot.setTimeWindow(0, 999999);
+                depot.setServiceTime(0);
+                this.customers.add(depot);
+                is_add_this_customer = false;
+            }
+
             // set customer
             if (is_add_this_customer) {
                 Node customer = new Node();
                 customer.setId(index[0]);
-                customer.setDemand(1);
+                customer.setDemand(2);
                 customer.setTimeWindow(0, 999999);
                 customer.setServiceTime(20);
                 this.customers.add(customer);
@@ -153,7 +164,7 @@ public class Instance {
             if (is_add_that_customer) {
                 Node customer = new Node();
                 customer.setId(index[1]);
-                customer.setDemand(1);
+                customer.setDemand(2);
                 customer.setTimeWindow(0, 999999);
                 customer.setServiceTime(10);
                 this.customers.add(customer);
