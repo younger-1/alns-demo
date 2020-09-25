@@ -8,6 +8,7 @@ public class Cost {
 
 	public double loadViolation;
 	public double timeViolation;
+	public int maxCustomerNumViolation;
 
 	public Cost() {
 		total = 0;
@@ -17,6 +18,7 @@ public class Cost {
 
 		loadViolation = 0;
 		timeViolation = 0;
+		maxCustomerNumViolation = 0;
 	}
 
 	public Cost(Cost cost) {
@@ -27,12 +29,14 @@ public class Cost {
 
 		this.loadViolation = cost.loadViolation;
 		this.timeViolation = cost.timeViolation;
+		this.maxCustomerNumViolation = cost.maxCustomerNumViolation;
 	}
 
 	@Override
 	public String toString() {
-		String result = "[ total =" + total + ", cost =" + cost + ", load =" + load + ", time =" + time
-				+ ", time windows violation =" + timeViolation + ", load violation =" + loadViolation;
+		String result = "[ total=" + total + ", cost=" + cost + ", load=" + load + ", time=" + time
+				+ ", customerNum violation=" + maxCustomerNumViolation + ", time windows violation=" + timeViolation
+				+ ", load violation=" + loadViolation;
 		return result + " ]";
 	}
 
@@ -44,6 +48,10 @@ public class Cost {
 	 */
 	public void calculateTotalCost(double alpha, double beta) {
 		total = cost + alpha * loadViolation + beta * timeViolation;
+	}
+
+	public void calculateTotalCost(double alpha, double beta, double gamma) {
+		total = cost + alpha * loadViolation + beta * timeViolation + gamma * maxCustomerNumViolation;
 	}
 
 	public void calculateTotalCost() {

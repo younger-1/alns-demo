@@ -27,6 +27,7 @@ public class MyALNSSolution {
 
 	public double alpha; // α
 	public double beta; // β
+	public final double gamma = 10000;
 
 	public static final double punish = 1000;
 
@@ -46,6 +47,7 @@ public class MyALNSSolution {
 
 	public MyALNSSolution(Solution sol, Instance instance) {
 		this.cost = new Cost();
+		// ! this.cost.cost: sum distance of all routes
 		cost.cost = sol.getTotalCost();
 		cost.calculateTotalCost();
 		this.vehicleNr = sol.getVehicleNr();
@@ -79,8 +81,6 @@ public class MyALNSSolution {
 	}
 
 	public void removeCustomer(int routePosition, int cusPosition) {
-		// TODO 未进行时间窗去重处理
-
 		double[][] distance = instance.getDistanceMatrix();
 
 		Route removenRoute = this.routes.get(routePosition);
@@ -98,14 +98,60 @@ public class MyALNSSolution {
 		removenRoute.getCost().cost += cost;
 		removenRoute.getCost().load += load;
 
-		this.cost.loadViolation -= removenRoute.getCost().loadViolation;
-		this.cost.timeViolation -= removenRoute.getCost().timeViolation;
+		// * 1.计算当前路径、总路径的 load violation
+		double routeLoad = removenRoute.getCost().load;
+		if (routeLoad > this.instance.getVehicleCapacity()) {
+			double violaton = routeLoad - this.instance.getVehicleCapacity();
+			this.cost.loadViolation += violaton - removenRoute.getCost().loadViolation;
+			removenRoute.getCost().loadViolation = violaton;
+		} else if (removenRoute.getCost().loadViolation > 0) {
+			this.cost.loadViolation -= removenRoute.getCost().loadViolation;
+			removenRoute.getCost().loadViolation = 0;
+		}
 
+		// ! 移除节点
 		removalCustomers.add(removenRoute.removeNode(cusPosition));
+
+		// 计算当前路径的time windows，time
+		double time = 0;
+		double timeWindowViolation = 0;
+		for (int i = 1; i < removenRoute.getRoute().size(); i++) {
+			time += distance[removenRoute.getRoute().get(i - 1).getId()][removenRoute.getRoute().get(i).getId()];
+			if (time < removenRoute.getRoute().get(i).getTimeWindow()[0])
+				time = removenRoute.getRoute().get(i).getTimeWindow()[0];
+			else if (time > removenRoute.getRoute().get(i).getTimeWindow()[1])
+				timeWindowViolation += time - removenRoute.getRoute().get(i).getTimeWindow()[1];
+
+			time += removenRoute.getRoute().get(i).getServiceTime();
+		}
+		removenRoute.getCost().time = time;
+
+		// * 2. 计算当前路径、总路径的 time windows violation
+		if (timeWindowViolation > 0) {
+			double violationDiff = timeWindowViolation - removenRoute.getCost().timeViolation;
+			removenRoute.getCost().timeViolation = timeWindowViolation;
+			this.cost.timeViolation += violationDiff;
+		} else if (removenRoute.getCost().timeViolation > 0) {
+			this.cost.timeViolation -= removenRoute.getCost().timeViolation;
+			removenRoute.getCost().timeViolation = 0;
+		}
+
+		// * 3. 计算当前路径、总路径的 maxCustomerNumViolation
+		// removenRoute.getCustomerNum() > instance.getMaxCustomerNum();
+		if (removenRoute.getCost().maxCustomerNumViolation > 0) {
+			removenRoute.getCost().maxCustomerNumViolation -= 1;
+			this.cost.maxCustomerNumViolation -= 1;
+		}
+
+		// * 4.计算 total
+		// removenRoute.getCost().calculateTotalCost(this.alpha, this.beta);
+		removenRoute.getCost().calculateTotalCost(this.alpha, this.beta, this.gamma);
+		// this.cost.calculateTotalCost(this.alpha, this.beta);
+		this.cost.calculateTotalCost(this.alpha, this.beta, this.gamma);
 	}
 
 	public void insertCustomer(int routePosition, int insertCusPosition, Node insertCustomer) {
-		// TODO 时间窗去重未处理
+		// * this.cost 只需存储 this.cost.cost, this.cost.loadViolation, this.cost.timeViolation
 		double[][] distance = instance.getDistanceMatrix();
 
 		// ! 无需clone
@@ -118,17 +164,23 @@ public class MyALNSSolution {
 				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
 						.get(insertCusPosition).getId()];
 
-		// 更新当前路径、总路径的cost、load、load violation
+		// 更新当前路径、总路径的cost、load
 		this.cost.cost += cost;
 		insertRoute.getCost().cost += cost;
 		insertRoute.getCost().load += load;
-		if (insertRoute.getCost().load > this.instance.getVehicleCapacity())
-			this.cost.loadViolation += insertRoute.getCost().load
-					- this.instance.getVehicleCapacity();
 
+		// * 1.计算 load violation
+		double routeLoad = insertRoute.getCost().load;
+		if (routeLoad > this.instance.getVehicleCapacity()) {
+			double violaton = routeLoad - this.instance.getVehicleCapacity();
+			this.cost.loadViolation += violaton - insertRoute.getCost().loadViolation;
+			insertRoute.getCost().loadViolation = violaton;
+		}
+
+		// ! 插入节点
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
 
-		// 计算当前路径的time windows violation、time
+		// 计算当前路径的time windows，time
 		double time = 0;
 		double timeWindowViolation = 0;
 		for (int i = 1; i < insertRoute.getRoute().size(); i++) {
@@ -140,33 +192,53 @@ public class MyALNSSolution {
 
 			time += insertRoute.getRoute().get(i).getServiceTime();
 		}
-
-		// 计算当前路径、总路径的time windows violation、time
 		insertRoute.getCost().time = time;
-		insertRoute.getCost().timeViolation = timeWindowViolation;
-		this.cost.timeViolation += timeWindowViolation;
 
-		this.cost.calculateTotalCost(this.alpha, this.beta);
+		// * 2. 计算当前路径、总路径的time windows violation
+		if (timeWindowViolation > 0) {
+			double violationDiff = timeWindowViolation - insertRoute.getCost().timeViolation;
+			insertRoute.getCost().timeViolation = timeWindowViolation;
+			this.cost.timeViolation += violationDiff;
+		}
+
+		// * 3. 计算 maxCustomerNumViolation
+		if (insertRoute.getCustomerNum() > instance.getMaxCustomerNum()) {
+			insertRoute.getCost().maxCustomerNumViolation += 1;
+			this.cost.maxCustomerNumViolation += 1;
+		}
+
+		// * 4.计算 total
+		// insertRoute.getCost().calculateTotalCost(this.alpha, this.beta);
+		insertRoute.getCost().calculateTotalCost(this.alpha, this.beta, this.gamma);
+		// this.cost.calculateTotalCost(this.alpha, this.beta);
+		this.cost.calculateTotalCost(this.alpha, this.beta, this.gamma);
 	}
 
 	public void evaluateInsertCustomer(int routePosition, int insertCusPosition, Node insertCustomer, Cost newCost) {
-		// TODO 时间窗去重未处理
+		// * this.cost, insertRoute.getCost 不应该在这里变化
+		// * newCost 代替 this.cost 变化
 		double[][] distance = instance.getDistanceMatrix();
 
+		// ! 这是条 clone 路径
 		Route insertRoute = this.routes.get(routePosition).cloneRoute();
 
 		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
 				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
 				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
 						.get(insertCusPosition).getId()];
+
+		// 更新总路径 cost
 		newCost.cost += cost;
 
-		double load = +insertCustomer.getDemand();
+		// * 1.计算 load violation
+		insertRoute.getCost().load += insertCustomer.getDemand();
 		double routeLoad = insertRoute.getCost().load;
-		routeLoad += load;
-		if (routeLoad > this.instance.getVehicleCapacity())
-			newCost.loadViolation += routeLoad - this.instance.getVehicleCapacity();
-
+		if (routeLoad > this.instance.getVehicleCapacity()) {
+			double violaton = routeLoad - this.instance.getVehicleCapacity();
+			newCost.loadViolation += violaton - insertRoute.getCost().loadViolation;
+		}
+		
+		// ! 插入节点
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
 
 		double time = 0;
@@ -181,10 +253,19 @@ public class MyALNSSolution {
 			time += insertRoute.getRoute().get(i).getServiceTime();
 		}
 
-		newCost.time = time;
-		newCost.timeViolation = timeWindowViolation;
+		// * 2. 计算总路径的time windows violation
+		if (timeWindowViolation > 0) {
+			newCost.timeViolation += timeWindowViolation - insertRoute.getCost().timeViolation;
+		}
 
-		newCost.calculateTotalCost(this.alpha, this.beta);
+		// * 3. 计算 maxCustomerNumViolation
+		if (insertRoute.getCustomerNum() > instance.getMaxCustomerNum()) {
+			newCost.maxCustomerNumViolation += 1;
+		}
+
+		// * 4.计算 total
+		// newCost.calculateTotalCost(this.alpha, this.beta);
+		newCost.calculateTotalCost(this.alpha, this.beta, this.gamma);
 	}
 
 	public boolean feasible() {

@@ -29,6 +29,7 @@ public class GreedyVRP {
     private double[][] distanceMatrix;
 
     private int vehicleCapacity;
+    private int maxCustomerNum;
 
     /**
      * Constructor
@@ -38,6 +39,7 @@ public class GreedyVRP {
         this.initialCustomerNr = instance.getCustomerNr();
         this.distanceMatrix = instance.getDistanceMatrix();
         this.vehicleCapacity = instance.getVehicleCapacity();
+        this.maxCustomerNum = instance.getMaxCustomerNum();
 
         int vehicleNr = instance.getVehicleNr();
         this.vehicles = new ArrayList<Route>();
@@ -100,7 +102,9 @@ public class GreedyVRP {
 
                 // If we found a customer with closer that the value of "smallestDistance"
                 // ,store him temporarily
-                if (isAddThisNodeToRoute(depot, currentVehicle, smallestDistance, n, distance)) {
+                boolean isAddThisNodeToRoute = currentVehicle.getCustomerNum() + 1 < this.maxCustomerNum
+                        && distance < smallestDistance && isSatisfyConstraint(depot, currentVehicle, n);
+                if (isAddThisNodeToRoute) {
                     smallestDistance = distance;
                     closestNode = n;
                 }
@@ -179,14 +183,13 @@ public class GreedyVRP {
         return solution;
     }
 
-    private boolean isAddThisNodeToRoute(Node depot, Route currentVehicle, double smallestDistance, Node n,
-            double distance) {
+    private boolean isSatisfyConstraint(Node depot, Route currentVehicle, Node n) {
         boolean isSatisfyCapacity = (currentVehicle.getCost().load + n.getDemand()) <= vehicleCapacity;
         boolean isSatisfyTimeWindow = (currentVehicle.getCost().time
                 + distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][n.getId()]) < n.getTimeWindow()[1];
         boolean isSatisfyDepotTimeWindow = (currentVehicle.getCost().time
                 + distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][n.getId()] + n.getServiceTime()
                 + distanceMatrix[n.getId()][depot.getId()]) < depot.getTimeWindow()[1];
-        return distance < smallestDistance && isSatisfyCapacity && isSatisfyTimeWindow && isSatisfyDepotTimeWindow;
+        return isSatisfyCapacity && isSatisfyTimeWindow && isSatisfyDepotTimeWindow;
     }
 }
