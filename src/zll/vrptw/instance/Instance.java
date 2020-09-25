@@ -118,7 +118,12 @@ public class Instance {
 
     // 读取数据客户点数据
     public void importCustomerData(int size, String name) throws IOException {
-        this.distanceMatrix = new double[150][150];
+        this.distanceMatrix = new double[110][110];
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = 0; j < distanceMatrix[i].length; j++) {
+                distanceMatrix[i][j] = 60000;
+            }
+        }
 
         String dataFileName = "C:/Users/didi/Downloads/distance_sample.csv";
         String line;
@@ -140,7 +145,7 @@ public class Instance {
             Integer distance = Integer.parseInt(dataLine[6]);
             Integer[] index = convert_id_to_index(my, id_1, id_2);
             distanceMatrix[index[0]][index[1]] = distance;
-
+            distanceMatrix[index[1]][index[0]] = distance;
             // add depot
             if (index[0] == 0 && is_add_this_customer) {
                 Node depot = new Node();
