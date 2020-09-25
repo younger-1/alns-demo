@@ -51,9 +51,14 @@ public class Instance {
      * The total number of customers.
      */
     private int numberOfNodes;
+    private int maxCustomerNum;
 
     public Random getRandom() {
         return r;
+    }
+
+    public int getMaxCustomerNum() {
+        return maxCustomerNum;
     }
 
     public void setR(Random r) {
@@ -108,7 +113,7 @@ public class Instance {
 
         this.distanceMatrix = new double[size + 5][size + 5];
         createDistanceMatrix();
-
+        this.maxCustomerNum = 30;
         r = new Random();
         r.setSeed(-1);
     }

@@ -23,14 +23,16 @@ public class MyALNSProcess {
     // ALNSProcessVisualizationManager();
     // 参数
     private final IALNSConfig config;
-    private final IALNSDestroy[] destroy_ops = new IALNSDestroy[] {
-            // new ProximityZoneDestroy(),
-            // new ZoneDestroy(),
-            // new NodesCountDestroy(false),
-            // new SubrouteDestroy(),
-            new ShawDestroy(), new RandomDestroy(), new WorstCostDestroy() };
-    private final IALNSRepair[] repair_ops = new IALNSRepair[] { new RegretRepair(), new GreedyRepair(),
-            new RandomRepair() };
+
+    // new ProximityZoneDestroy(),
+    // new ZoneDestroy(),
+    // new NodesCountDestroy(false),
+    // new SubrouteDestroy(),
+    private final IALNSDestroy[] destroy_ops = new IALNSDestroy[] { new ShawDestroy(), new WorstCostDestroy() };
+    // new RandomDestroy,
+
+    private final IALNSRepair[] repair_ops = new IALNSRepair[] { new RegretRepair(), new GreedyRepair(), };
+    // new RandomRepair,
 
     private final double T_end_t = 0.01;
     // 全局满意解
