@@ -75,8 +75,7 @@ public class MyALNSProcess {
     public Solution improveSolution() throws Exception {
         // o.onThreadStart(this);
 
-        T_s = -(config.getDelta() / Math.log(config.getBig_omega())) * s_c.cost.total;
-        T = T_s;
+        T = 0.004 * s_g.cost.total;
 
         // 计时开始
         t_start = System.currentTimeMillis();
