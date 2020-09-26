@@ -90,9 +90,9 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 						bestCost = newCost;
 					}
 				}
-				// 执行插入操作
-				s.insertCustomer(bestRoutePosition, bestCusomerPosition, insertNode);
 			}
+			// 执行插入操作
+			s.insertCustomer(bestRoutePosition, bestCusomerPosition, insertNode);
 		}
 
 		return s;

@@ -28,11 +28,13 @@ public class MyALNSProcess {
     // new ZoneDestroy(),
     // new NodesCountDestroy(false),
     // new SubrouteDestroy(),
-    private final IALNSDestroy[] destroy_ops = new IALNSDestroy[] { new ShawDestroy(), new WorstCostDestroy() };
-    // new RandomDestroy,
+    private final IALNSDestroy[] destroy_ops = new IALNSDestroy[] { new ShawDestroy(), new WorstCostDestroy(),
+            new RandomDestroy() };
+    // new RandomDestroy(),
 
-    private final IALNSRepair[] repair_ops = new IALNSRepair[] { new RegretRepair(), new GreedyRepair(), };
-    // new RandomRepair,
+    private final IALNSRepair[] repair_ops = new IALNSRepair[] { new RegretRepair(), new GreedyRepair(),
+            new RandomRepair() };
+    // new RandomRepair(),
 
     private final double T_end_t = 0.01;
     // 全局满意解
