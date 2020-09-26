@@ -59,6 +59,7 @@ public class MyALNSProcess {
 
         config = c;
         s_g = new MyALNSSolution(s_, instance);
+        s_g.cost.calculateTotalCost();
         s_c = new MyALNSSolution(s_g);
 
         // 初始化alns参数

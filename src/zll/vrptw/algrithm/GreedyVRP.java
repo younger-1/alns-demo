@@ -115,19 +115,25 @@ public class GreedyVRP {
                 // Increase the cost of the current route by the distance of the previous final
                 // node to the new one
                 currentVehicle.getCost().cost += smallestDistance;
+                solution.cost.cost += smallestDistance;
 
                 // Increase the time of the current route by the distance of the previous final
                 // node to the new one and serves time
                 currentVehicle.getCost().time += smallestDistance;
+                solution.cost.time += smallestDistance;
 
                 // waiting time windows open
-                if (currentVehicle.getCost().time < closestNode.getTimeWindow()[0])
+                if (currentVehicle.getCost().time < closestNode.getTimeWindow()[0]) {
+                    solution.cost.time += (closestNode.getTimeWindow()[0] - currentVehicle.getCost().time);
                     currentVehicle.getCost().time = closestNode.getTimeWindow()[0];
+                }
 
                 currentVehicle.getCost().time += closestNode.getServiceTime();
+                solution.cost.time += closestNode.getServiceTime();
 
                 // Increase the load of the vehicle by the demand of the new node-customer
                 currentVehicle.getCost().load += closestNode.getDemand();
+                solution.cost.load += closestNode.getDemand();
 
                 // Add the closest node to the route
                 currentVehicle.addNodeToRoute(closestNode);
@@ -140,6 +146,8 @@ public class GreedyVRP {
                 // Increase cost by the distance to travel from the last node back to depot
                 currentVehicle.getCost().cost += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
                 currentVehicle.getCost().time += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
+                solution.cost.cost += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
+                solution.cost.time += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
 
                 // Terminate current route by adding the depot as a final destination
                 currentVehicle.addNodeToRoute(depot);
@@ -149,9 +157,6 @@ public class GreedyVRP {
 
                 // Add the finalized route to the solution
                 solution.addRoute(currentVehicle);
-
-                // Increase the solution's total cost by the cost of the finalized route
-                solution.setTotalCost(solution.getTotalCost() + currentVehicle.getCost().cost);
 
                 // If we used all vehicles, exit.
                 if (this.vehicles.size() == 0) {
@@ -169,26 +174,26 @@ public class GreedyVRP {
         }
 
         // Now add the final route to the solution
-        currentVehicle.getCost().cost += this.distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][depot
-                .getId()];
-        currentVehicle.getCost().time += this.distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][depot
-                .getId()];
+        Node lastNode = currentVehicle.getLastNodeOfTheRoute();
+        currentVehicle.getCost().cost += this.distanceMatrix[lastNode.getId()][depot.getId()];
+        currentVehicle.getCost().time += this.distanceMatrix[lastNode.getId()][depot.getId()];
+        solution.cost.cost += this.distanceMatrix[lastNode.getId()][depot.getId()];
+        solution.cost.time += this.distanceMatrix[lastNode.getId()][depot.getId()];
+
         currentVehicle.addNodeToRoute(depot);
         currentVehicle.getCost().calculateTotalCost();
-
         solution.addRoute(currentVehicle);
-        solution.setTotalCost(solution.getTotalCost() + currentVehicle.getCost().cost);
-        solution.setTotalCost((double) (Math.round(solution.getTotalCost() * 1000) / 1000.0));
 
         return solution;
     }
 
     private boolean isSatisfyConstraint(Node depot, Route currentVehicle, Node n) {
+        Node lastNode = currentVehicle.getLastNodeOfTheRoute();
         boolean isSatisfyCapacity = (currentVehicle.getCost().load + n.getDemand()) <= vehicleCapacity;
         boolean isSatisfyTimeWindow = (currentVehicle.getCost().time
-                + distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][n.getId()]) < n.getTimeWindow()[1];
+                + distanceMatrix[lastNode.getId()][n.getId()]) < n.getTimeWindow()[1];
         boolean isSatisfyDepotTimeWindow = (currentVehicle.getCost().time
-                + distanceMatrix[currentVehicle.getLastNodeOfTheRoute().getId()][n.getId()] + n.getServiceTime()
+                + distanceMatrix[lastNode.getId()][n.getId()] + n.getServiceTime()
                 + distanceMatrix[n.getId()][depot.getId()]) < depot.getTimeWindow()[1];
         return isSatisfyCapacity && isSatisfyTimeWindow && isSatisfyDepotTimeWindow;
     }
