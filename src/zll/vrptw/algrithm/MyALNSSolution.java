@@ -33,23 +33,8 @@ public class MyALNSSolution {
 
 	public ArrayList<Node> removalCustomers;
 
-	public MyALNSSolution(Instance instance) {
-		this.routes = new ArrayList<>();
-		this.cost = new Cost();
-		this.vehicleNr = 0;
-		this.instance = instance;
-
-		this.alpha = punish;
-		this.beta = punish;
-
-		this.removalCustomers = new ArrayList<Node>();
-	}
-
 	public MyALNSSolution(Solution sol, Instance instance) {
-		this.cost = new Cost();
-		// ! this.cost.cost: sum distance of all routes
-		cost.cost = sol.getTotalCost();
-		cost.calculateTotalCost();
+		this.cost = new Cost(sol.cost);
 		this.vehicleNr = sol.getVehicleNr();
 		this.instance = instance;
 
@@ -95,6 +80,7 @@ public class MyALNSSolution {
 						.get(cusPosition + 1).getId()];
 
 		this.cost.cost += cost;
+		this.cost.load += load;
 		removenRoute.getCost().cost += cost;
 		removenRoute.getCost().load += load;
 
@@ -124,6 +110,7 @@ public class MyALNSSolution {
 
 			time += removenRoute.getRoute().get(i).getServiceTime();
 		}
+		this.cost.time += (time - removenRoute.getCost().time);
 		removenRoute.getCost().time = time;
 
 		// * 2. 计算当前路径、总路径的 time windows violation
@@ -166,6 +153,7 @@ public class MyALNSSolution {
 
 		// 更新当前路径、总路径的cost、load
 		this.cost.cost += cost;
+		this.cost.load += load;
 		insertRoute.getCost().cost += cost;
 		insertRoute.getCost().load += load;
 
@@ -192,6 +180,7 @@ public class MyALNSSolution {
 
 			time += insertRoute.getRoute().get(i).getServiceTime();
 		}
+		this.cost.time += (time - insertRoute.getCost().time);
 		insertRoute.getCost().time = time;
 
 		// * 2. 计算当前路径、总路径的time windows violation

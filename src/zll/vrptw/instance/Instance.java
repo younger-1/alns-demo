@@ -158,7 +158,7 @@ public class Instance {
                 depot.setId(0);
                 depot.setDemand(0);
                 depot.setTimeWindow(0, 999999);
-                depot.setServiceTime(0);
+                depot.setServiceTime(10);
                 this.customers.add(depot);
                 is_add_this_customer = false;
             }
@@ -169,7 +169,7 @@ public class Instance {
                 customer.setId(index[0]);
                 customer.setDemand(2);
                 customer.setTimeWindow(0, 999999);
-                customer.setServiceTime(20);
+                customer.setServiceTime(10);
                 this.customers.add(customer);
             }
             if (is_add_that_customer) {

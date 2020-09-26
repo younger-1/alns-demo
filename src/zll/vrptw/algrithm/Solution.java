@@ -19,22 +19,18 @@ public class Solution {
     private List<Route> routes;
 
     /**
-     * The total cost of the solution. It is calculated as the sum of the costs of
-     * all routes.
-     */
-    private double totalCost;
-
-    /**
      * The number of the vehicles.
      */
     private int vehicleNr;
+
+    public Cost cost;
 
     /**
      * Default constructor
      */
     public Solution() {
         this.routes = new ArrayList<>();
-        this.totalCost = 0;
+        this.cost = new Cost();
         this.vehicleNr = 0;
     }
 
@@ -51,11 +47,11 @@ public class Solution {
     }
 
     public double getTotalCost() {
-        return totalCost;
+        return this.cost.cost;
     }
 
     public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
+        this.cost.cost = totalCost;
     }
 
     public int getVehicleNr() {
@@ -66,27 +62,9 @@ public class Solution {
         this.vehicleNr = vehicleNr;
     }
 
-    /**
-     * This function creates and returns an exact copy of the current solution
-     *
-     * @return Solution, a copy of this solution.
-     */
-    public Solution clone() {
-        Solution clone = new Solution();
-
-        clone.totalCost = this.totalCost;
-        clone.vehicleNr = this.vehicleNr;
-
-        for (Route route : this.routes) {
-            clone.routes.add(route.cloneRoute());
-        }
-
-        return clone;
-    }
-
     @Override
     public String toString() {
-        String result = "Solution{" + "totalCost=" + Math.round(totalCost * 100) / 100.0 + ", routes=[";
+        String result = "Solution{" + "totalCost=" + Math.round(this.cost.cost * 100) / 100.0 + ", routes=[";
 
         for (Route vehicle : this.routes) {
             if (vehicle.getRoute().size() > 2)
