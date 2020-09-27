@@ -7,11 +7,16 @@ import zll.vrptw.alns.config.ControlParameter;
 import zll.vrptw.alns.config.IALNSConfig;
 import zll.vrptw.alns.destroy.IALNSDestroy;
 import zll.vrptw.alns.destroy.RandomDestroy;
+import zll.vrptw.alns.destroy.RandomFilter;
 import zll.vrptw.alns.destroy.ShawDestroy;
+import zll.vrptw.alns.destroy.ShawFilter;
 import zll.vrptw.alns.destroy.WorstCostDestroy;
+import zll.vrptw.alns.destroy.WorstTotalFilter;
+import zll.vrptw.alns.repair.GreedyBalance;
 import zll.vrptw.alns.repair.GreedyRepair;
 import zll.vrptw.alns.repair.IALNSRepair;
 import zll.vrptw.alns.repair.RandomRepair;
+import zll.vrptw.alns.repair.RegretBalance;
 import zll.vrptw.alns.repair.RegretRepair;
 import zll.vrptw.instance.Instance;
 
@@ -35,6 +40,11 @@ public class MyALNSProcess {
     private final IALNSRepair[] repair_ops = new IALNSRepair[] { new RegretRepair(), new GreedyRepair(),
             new RandomRepair() };
     // new RandomRepair(),
+
+    private final IALNSDestroy[] filter_ops = new IALNSDestroy[] { new ShawFilter(), new WorstTotalFilter(),
+            new RandomFilter() };
+
+    private final IALNSRepair[] balance_ops = new IALNSRepair[] { new RegretBalance(), new GreedyBalance(), };
 
     private final double T_end_t = 0.01;
     // 全局满意解
@@ -124,31 +134,31 @@ public class MyALNSProcess {
             for (int w = 0; w < config.getW(); w++) {
 
                 // 轮盘赌找出最优destroy、repair方法
-                IALNSDestroy destroyOperator = getALNSDestroyOperator();
-                IALNSRepair repairOperator = getALNSRepairOperator();
+                IALNSDestroy filterOperator = getALNSFilterOperator();
+                IALNSRepair balanceOperator = getALNSBalanceOperator();
                 // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
                 // s_c_new, q);
 
                 MyALNSSolution s_t = new MyALNSSolution(s_1);
                 // destroy solution
-                MyALNSSolution s_destroy = destroyOperator.destroy(s_t, q);
+                MyALNSSolution s_destroy = filterOperator.destroy(s_t, q);
                 // o.onSolutionDestroy(this, s_destroy);
 
                 // repair solution，重组后新解st
-                MyALNSSolution s_repair = repairOperator.repair(s_destroy);
+                MyALNSSolution s_repair = balanceOperator.repair(s_destroy);
                 // o.onSolutionRepaired(this, s_t);
                 if (s_2 == null) {
                     s_2 = s_repair;
                 } else if (s_repair.cost.total < s_2.cost.total) {
                     s_2 = s_repair;
                     if (s_2.cost.cost < s_g.cost.cost) {
-                        handleNewGlobalMinimum(destroyOperator, repairOperator, s_2);
+                        handleNewGlobalMinimum(filterOperator, balanceOperator, s_2);
                     } else {
                         // ?违约少，但路线差
-                        handleNewLocalMinimum(destroyOperator, repairOperator);
+                        handleNewLocalMinimum(filterOperator, balanceOperator);
                     }
                 } else {
-                    handleWorseSolution(destroyOperator, repairOperator, s_repair);
+                    handleWorseSolution(filterOperator, balanceOperator, s_repair);
                 }
 
                 T = config.getC() * T;
@@ -281,6 +291,28 @@ public class MyALNSProcess {
             // rpr.setDraws(0);
             // rpr.setPi(0);
         }
+
+        w_sum = 0;
+        for (IALNSDestroy fr : filter_ops) {
+            double recentFactor = fr.getDraws() < 1 ? 0 : (double) fr.getPi() / (double) fr.getDraws();
+            double w_new = (fr.getW() * (1 - config.getR_p())) + config.getR_p() * recentFactor;
+            w_sum += w_new;
+            fr.setW(w_new);
+        }
+        for (IALNSDestroy fr : filter_ops) {
+            fr.setP(fr.getW() / w_sum);
+        }
+
+        w_sum = 0;
+        for (IALNSRepair br : balance_ops) {
+            double recentFactor = br.getDraws() < 1 ? 0 : (double) br.getPi() / (double) br.getDraws();
+            double w_new = (br.getW() * (1 - config.getR_p())) + config.getR_p() * recentFactor;
+            w_sum += w_new;
+            br.setW(w_new);
+        }
+        for (IALNSRepair br : balance_ops) {
+            br.setP(br.getW() / w_sum);
+        }
     }
 
     private IALNSRepair getALNSRepairOperator() {
@@ -312,6 +344,35 @@ public class MyALNSProcess {
         return destroy_ops[destroy_ops.length - 1];
     }
 
+    private IALNSRepair getALNSBalanceOperator() {
+        double random = Math.random();
+        double threshold = 0.;
+        for (IALNSRepair br : balance_ops) {
+            threshold += br.getP();
+            if (random <= threshold) {
+                br.drawn();
+                return br;
+            }
+        }
+        balance_ops[balance_ops.length - 1].drawn();
+        return balance_ops[balance_ops.length - 1];
+    }
+
+    private IALNSDestroy getALNSFilterOperator() {
+        double random = Math.random();
+        double threshold = 0.;
+        for (IALNSDestroy fr : filter_ops) {
+            threshold += fr.getP();
+            if (random <= threshold) {
+                fr.drawn();
+                return fr;
+            }
+        }
+
+        filter_ops[filter_ops.length - 1].drawn();
+        return filter_ops[filter_ops.length - 1];
+    }
+
     private void initStrategies() {
         for (IALNSDestroy dstr : destroy_ops) {
             dstr.setDraws(0);
@@ -325,6 +386,19 @@ public class MyALNSProcess {
             rpr.setW(1.);
             rpr.setP(1 / (double) repair_ops.length);
         }
+        for (IALNSDestroy fr : filter_ops) {
+            fr.setDraws(0);
+            fr.setPi(0);
+            fr.setW(1.);
+            fr.setP(1 / (double) filter_ops.length);
+        }
+        for (IALNSRepair br : balance_ops) {
+            br.setDraws(0);
+            br.setPi(0);
+            br.setW(1.);
+            br.setP(1 / (double) balance_ops.length);
+        }
+
     }
 
     /*

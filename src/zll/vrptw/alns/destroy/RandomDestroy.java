@@ -8,18 +8,6 @@ import zll.vrptw.algrithm.MyALNSSolution;
 import zll.vrptw.alns.operation.ALNSAbstractOperation;
 import zll.vrptw.instance.Route;
 
-/**
- * <p>
- * Title: RandomDestroy
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月19日
- */
-
 public class RandomDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 	/*
 	 * @Override public ALNSStrategieVisualizationManager getVisualizationManager()

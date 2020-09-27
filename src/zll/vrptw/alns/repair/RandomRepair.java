@@ -7,17 +7,6 @@ import zll.vrptw.algrithm.MyALNSSolution;
 import zll.vrptw.instance.Node;
 import zll.vrptw.instance.Route;
 
-/**
- * <p>
- * Title: RandomRepair
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月19日
- */
 public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 	@Override
