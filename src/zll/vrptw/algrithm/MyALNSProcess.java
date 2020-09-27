@@ -84,6 +84,10 @@ public class MyALNSProcess {
         t_start = System.currentTimeMillis();
         // o.onStartConfigurationObtained(this);
 
+        int print_counter = 0;
+        int segment_counter = 0;
+        int segment_num = config.getTau();
+
         while (true) {
             MyALNSSolution s_c = null;
             if (s_2 != null) {
@@ -152,11 +156,13 @@ public class MyALNSProcess {
 
             i += config.getV() + config.getW();
 
-            String ss = String.format(
-                    "Iterations: %4d, Solution: { s_1:[cost:%.1f, total:%.1f], s_2:[cost:%.1f, total:%.1f]}", i,
-                    Math.round(s_1.cost.cost * 100) / 100.0, Math.round(s_1.cost.total * 100) / 100.0,
-                    Math.round(s_2.cost.cost * 100) / 100.0, Math.round(s_2.cost.total * 100) / 100.0);
-            if (0 == i % 100) {
+            if (print_counter == i / 100) {
+                print_counter += 1;
+                String ss = String.format(
+                        "Iterations: %4d, Solution: { s_1:[cost: %.1f, total: %.1f], s_2:[cost: %.1f, total: %.1f] }",
+                        i,
+                        Math.round(s_1.cost.cost * 100) / 100.0, Math.round(s_1.cost.total * 100) / 100.0,
+                        Math.round(s_2.cost.cost * 100) / 100.0, Math.round(s_2.cost.total * 100) / 100.0);
                 System.out.println(String.format(ss));
             }
 
@@ -171,7 +177,8 @@ public class MyALNSProcess {
             //     handleWorseSolution(destroyOperator, repairOperator, s_t);
             // }
 
-            if (i % config.getTau() == 0 && i > 0) {
+            if (i > 0 && segment_counter == i / segment_num) {
+                segment_counter += 1;
                 segmentFinsihed();
                 // o.onSegmentFinsihed(this, s_t);
             }
@@ -190,11 +197,11 @@ public class MyALNSProcess {
 
         // 输出算子使用情况
         for (IALNSDestroy destroy : destroy_ops) {
-            System.out.println(destroy.getClass().getName() + " 被使用 " + destroy.getDraws() + "次.");
+            System.out.println(destroy.getClass().getName() + " is used " + destroy.getDraws() + " times.");
         }
 
         for (IALNSRepair repair : repair_ops) {
-            System.out.println(repair.getClass().getName() + " 被使用 " + repair.getDraws() + "次.");
+            System.out.println(repair.getClass().getName() + " is used " + repair.getDraws() + " times.");
         }
         solution.testTime = s;
         return solution;
