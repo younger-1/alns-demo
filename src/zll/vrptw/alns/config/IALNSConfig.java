@@ -2,6 +2,10 @@ package zll.vrptw.alns.config;
 
 public interface IALNSConfig {
 
+    int getV();
+
+    int getW();
+
     int getOmega();
 
     int getTau();

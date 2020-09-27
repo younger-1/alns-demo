@@ -258,7 +258,7 @@ public class MyALNSSolution {
 	}
 
 	public boolean feasible() {
-		return (cost.timeViolation < 0.01 && cost.loadViolation < 0.01);
+		return cost.loadViolation < 0.01;
 	}
 
 	public Solution toSolution() {

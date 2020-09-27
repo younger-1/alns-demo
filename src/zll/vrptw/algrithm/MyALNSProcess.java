@@ -40,7 +40,8 @@ public class MyALNSProcess {
     // 全局满意解
     private MyALNSSolution s_g = null;
     // 局部满意解
-    private MyALNSSolution s_c = null;
+    private MyALNSSolution s_1 = null;
+    private MyALNSSolution s_2 = null;
     private boolean cpng = false;
     private int i = 0;
     // time
@@ -60,8 +61,7 @@ public class MyALNSProcess {
         config = c;
         s_g = new MyALNSSolution(s_, instance);
         s_g.cost.calculateTotalCost();
-        s_c = new MyALNSSolution(s_g);
-
+        s_1 = new MyALNSSolution(s_g);
         // 初始化alns参数
         initStrategies();
 
@@ -85,54 +85,96 @@ public class MyALNSProcess {
         // o.onStartConfigurationObtained(this);
 
         while (true) {
-
-            // sc局部最优解，从局部最优中生成新解
-            MyALNSSolution s_c_new = new MyALNSSolution(s_c);
-            // ! q为需要移除的节点数，大概10-30之间随机值
-            int q = getQ(s_c_new);
-
-            // 轮盘赌找出最优destroy、repair方法
-            IALNSDestroy destroyOperator = getALNSDestroyOperator();
-            IALNSRepair repairOperator = getALNSRepairOperator();
-            // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
-            // s_c_new, q);
-
-            // destroy solution
-            MyALNSSolution s_destroy = destroyOperator.destroy(s_c_new, q);
-            // o.onSolutionDestroy(this, s_destroy);
-
-            // repair solution，重组后新解st
-            MyALNSSolution s_t = repairOperator.repair(s_destroy);
-            // o.onSolutionRepaired(this, s_t);
-
-            if (0 == i % 100) {
-
-                System.out.println("迭代次数 ：" + i + "当前解 ：" + Math.round(s_t.cost.total * 100) / 100.0);
-            }
-            // 更新局部满意解
-            if (s_t.cost.total < s_c.cost.total) {
-                s_c = s_t;
-                // 更新全局满意解，sg全局满意解
-                if (s_t.cost.total < s_g.cost.total) {
-                    handleNewGlobalMinimum(destroyOperator, repairOperator, s_t);
-                } else {
-                    // 更新局部满意解
-                    handleNewLocalMinimum(destroyOperator, repairOperator);
-                }
+            MyALNSSolution s_c = null;
+            if (s_2 != null) {
+                s_c = new MyALNSSolution(s_2);
             } else {
-                // 概率接受较差解
-                handleWorseSolution(destroyOperator, repairOperator, s_t);
+                s_c = new MyALNSSolution(s_g);
             }
-            // o.onAcceptancePhaseFinsihed(this, s_t);
+            // ! q为需要移除的节点数，大概10-30之间随机值
+            int q = getQ(s_c);
+
+            for (int v = 0; v < config.getV(); v++) {
+
+                // 轮盘赌找出最优destroy、repair方法
+                IALNSDestroy destroyOperator = getALNSDestroyOperator();
+                IALNSRepair repairOperator = getALNSRepairOperator();
+                // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
+                // s_c_new, q);
+                MyALNSSolution s_t = new MyALNSSolution(s_c);
+                // destroy solution
+                MyALNSSolution s_destroy = destroyOperator.destroy(s_t, q);
+                // o.onSolutionDestroy(this, s_destroy);
+
+                // repair solution，重组后新解st
+                MyALNSSolution s_repair = repairOperator.repair(s_destroy);
+                // o.onSolutionRepaired(this, s_t);
+
+                if (s_repair.cost.cost < s_1.cost.cost) {
+                    s_1 = s_repair;
+                }
+
+                T = config.getC() * T;
+            }
+
+            for (int w = 0; w < config.getW(); w++) {
+
+                // 轮盘赌找出最优destroy、repair方法
+                IALNSDestroy destroyOperator = getALNSDestroyOperator();
+                IALNSRepair repairOperator = getALNSRepairOperator();
+                // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
+                // s_c_new, q);
+
+                MyALNSSolution s_t = new MyALNSSolution(s_1);
+                // destroy solution
+                MyALNSSolution s_destroy = destroyOperator.destroy(s_t, q);
+                // o.onSolutionDestroy(this, s_destroy);
+
+                // repair solution，重组后新解st
+                MyALNSSolution s_repair = repairOperator.repair(s_destroy);
+                // o.onSolutionRepaired(this, s_t);
+                if (s_2 == null) {
+                    s_2 = s_repair;
+                } else if (s_repair.cost.total < s_2.cost.total) {
+                    s_2 = s_repair;
+                    if (s_2.cost.cost < s_g.cost.cost) {
+                        handleNewGlobalMinimum(destroyOperator, repairOperator, s_2);
+                    } else {
+                        // ?违约少，但路线差
+                        handleNewLocalMinimum(destroyOperator, repairOperator);
+                    }
+                } else {
+                    handleWorseSolution(destroyOperator, repairOperator, s_repair);
+                }
+
+                T = config.getC() * T;
+            }
+
+            i += config.getV() + config.getW();
+
+            String ss = String.format(
+                    "Iterations: %4d, Solution: { s_1:[cost:%.1f, total:%.1f], s_2:[cost:%.1f, total:%.1f]}", i,
+                    Math.round(s_1.cost.cost * 100) / 100.0, Math.round(s_1.cost.total * 100) / 100.0,
+                    Math.round(s_2.cost.cost * 100) / 100.0, Math.round(s_2.cost.total * 100) / 100.0);
+            if (0 == i % 100) {
+                System.out.println(String.format(ss));
+            }
+
+            // if (s_t.cost.total < s_c.cost.total) {
+            //     s_c = s_t;
+            //     if (s_t.cost.total < s_g.cost.total) {
+            //         handleNewGlobalMinimum(destroyOperator, repairOperator, s_t);
+            //     } else {
+            //         handleNewLocalMinimum(destroyOperator, repairOperator);
+            //     }
+            // } else {
+            //     handleWorseSolution(destroyOperator, repairOperator, s_t);
+            // }
 
             if (i % config.getTau() == 0 && i > 0) {
                 segmentFinsihed();
                 // o.onSegmentFinsihed(this, s_t);
             }
-
-            T = config.getC() * T;
-            // o.onIterationFinished(this, s_t);
-            i++;
 
             if (i > config.getOmega() && s_g.feasible())
                 break;
@@ -158,11 +200,12 @@ public class MyALNSProcess {
         return solution;
     }
 
-    private void handleWorseSolution(IALNSDestroy destroyOperator, IALNSRepair repairOperator, MyALNSSolution s_t) {
+    private void handleWorseSolution(IALNSDestroy destroyOperator, IALNSRepair repairOperator,
+            MyALNSSolution s_repair) {
         // 概率接受较差解
-        double p_accept = calculateProbabilityToAcceptTempSolutionAsNewCurrent(s_t);
+        double p_accept = calculateProbabilityToAcceptTempSolutionAsNewCurrent(s_repair);
         if (Math.random() < p_accept) {
-            s_c = s_t;
+            s_2 = s_repair;
         }
         destroyOperator.addToPi(config.getSigma_3());
         repairOperator.addToPi(config.getSigma_3());
@@ -173,7 +216,7 @@ public class MyALNSProcess {
         repairOperator.addToPi(config.getSigma_2());
     }
 
-    private void handleNewGlobalMinimum(IALNSDestroy destroyOperator, IALNSRepair repairOperator, MyALNSSolution s_t)
+    private void handleNewGlobalMinimum(IALNSDestroy destroyOperator, IALNSRepair repairOperator, MyALNSSolution s_2)
             throws IOException {
         // System.out.println(String.format("[%d]: Found new global minimum: %.2f,
         // Required Vehicles: %d, I_uns: %d", i, s_t.getCostFitness(),
@@ -182,14 +225,14 @@ public class MyALNSProcess {
             // TODO OutputUtil.createPNG(s_t, i);
         }
         // 接受全局较优
-        if (s_t.feasible())
-            s_g = s_t;
+        if (s_2.feasible())
+            s_g = s_2;
         destroyOperator.addToPi(config.getSigma_1());
         repairOperator.addToPi(config.getSigma_1());
     }
 
     private double calculateProbabilityToAcceptTempSolutionAsNewCurrent(MyALNSSolution s_t) {
-        return Math.exp(-(s_t.cost.total - s_c.cost.total) / T);
+        return Math.exp(-(s_t.cost.total - s_2.cost.total) / T);
     }
 
     private int getQ(MyALNSSolution s_c2) {
@@ -296,10 +339,6 @@ public class MyALNSProcess {
 
     public MyALNSSolution getS_g() {
         return this.s_g;
-    }
-
-    public MyALNSSolution getS_c() {
-        return this.s_c;
     }
 
     public boolean isCpng() {

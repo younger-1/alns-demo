@@ -74,7 +74,7 @@ public class CheckSolution {
 		if (Math.abs(totalCost - solution.getTotalCost()) > 0.001)
 			checkTotalCost = false;
 
-		result += "\ncheck total cost = " + Math.round(totalCost * 100) / 100.0 + "  " + checkTotalCost;
+		result += "\ncheck total cost = " + Math.round(totalCost * 100) / 100.0 + "  " + checkTotalCost + "\n";
 
 		return result;
 	}
