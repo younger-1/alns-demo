@@ -78,17 +78,17 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 				for (int i = 1; i < s.routes.get(j).getRoute().size() - 1; ++i) {
 
 					Node relatedNode = s.routes.get(j).getRoute().get(i);
-					int l = (lastRoute.getId() == s.routes.get(j).getId()) ? -1 : 1;
-
-					double fitness = l * 2 + 3 * distance[lastRemove.getId()][relatedNode.getId()]
-							+ 2 * Math.abs(lastRemove.getTimeWindow()[0] - relatedNode.getTimeWindow()[0])
-							+ 2 * Math.abs(lastRemove.getDemand() - relatedNode.getDemand());
+					int l = (lastRoute.getId() == s.routes.get(j).getId()) ? 0 : 1;
+					
+					double d = distance[lastRemove.getId()][relatedNode.getId()];
+					double fitness = d * (1 + 0.5 * l
+							+ 0.0001 * Math.abs(lastRemove.getTimeWindow()[0] - relatedNode.getTimeWindow()[0])
+							+ 0.1 * Math.abs(lastRemove.getDemand() - relatedNode.getDemand()));
 
 					if (minRelate > fitness) {
 						minRelate = fitness;
-						// !没必要，基节点得固定
-						// lastRemove = relatedNode;
-						// lastRoute = s.routes.get(j);
+						lastRemove = relatedNode;
+						lastRoute = s.routes.get(j);
 						lastRemovePos = i;
 						lastRoutePos = j;
 					}
