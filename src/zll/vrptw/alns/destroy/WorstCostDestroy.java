@@ -8,17 +8,6 @@ import zll.vrptw.alns.operation.ALNSAbstractOperation;
 import zll.vrptw.instance.Route;
 import zll.vrptw.instance.Instance;
 
-/**
- * <p>
- * Title: WorstCostDestroy
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月19日
- */
 public class WorstCostDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 	/*
 	 * @Override public ALNSStrategieVisualizationManager getVisualizationManager()

@@ -9,17 +9,6 @@ import zll.vrptw.alns.operation.ALNSAbstractOperation;
 import zll.vrptw.instance.Node;
 import zll.vrptw.instance.Route;
 
-/**
- * <p>
- * Title: ShawDestroy
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月20日
- */
 public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 	/*
 	 * @Override public ALNSStrategieVisualizationManager getVisualizationManager()

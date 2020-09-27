@@ -7,17 +7,6 @@ import zll.vrptw.algrithm.Cost;
 import zll.vrptw.algrithm.MyALNSSolution;
 import zll.vrptw.instance.Node;
 
-/**
- * <p>
- * Title: RegretRepair
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月20日
- */
 public class RegretRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 	@Override
@@ -54,20 +43,16 @@ public class RegretRepair extends ALNSAbstractRepair implements IALNSRepair {
 					Cost newCost = new Cost(s.cost);
 					s.evaluateInsertCustomer(j, i, insertNode, newCost);
 
-					if (newCost.total > Double.MAX_VALUE) {
-						newCost.total = Double.MAX_VALUE;
-					}
-
 					// if a better insertion is found, set the position to insert in the move and
 					// update the minimum cost found
-					if (newCost.total < first) {
+					if (newCost.cost < first) {
 						// System.out.println(varCost.checkFeasible());
 						bestCusP = i;
 						bestRouteP = j;
 						second = first;
-						first = newCost.total;
-					} else if (newCost.total < second && newCost.total != first) {
-						second = newCost.total;
+						first = newCost.cost;
+					} else if (newCost.cost < second && newCost.cost != first) {
+						second = newCost.cost;
 					}
 				}
 			}
