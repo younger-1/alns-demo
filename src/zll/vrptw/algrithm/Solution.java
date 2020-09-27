@@ -64,7 +64,7 @@ public class Solution {
 
     @Override
     public String toString() {
-        String result = "Solution{" + "totalCost=" + Math.round(this.cost.cost * 100) / 100.0 + ", routes=[";
+        String result = "\nSolution { " + "totalCost = " + Math.round(this.cost.cost * 100) / 100.0 + ", routes = [";
 
         for (Route vehicle : this.routes) {
             if (vehicle.getRoute().size() > 2)
