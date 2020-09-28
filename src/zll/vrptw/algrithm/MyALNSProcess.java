@@ -216,6 +216,15 @@ public class MyALNSProcess {
         for (IALNSRepair repair : repair_ops) {
             System.out.println(repair.getClass().getName() + " is used " + repair.getDraws() + " times.");
         }
+
+        for (IALNSDestroy filter : filter_ops) {
+            System.out.println(filter.getClass().getName() + " is used " + filter.getDraws() + " times.");
+        }
+
+        for (IALNSRepair balance : balance_ops) {
+            System.out.println(balance.getClass().getName() + " is used " + balance.getDraws() + " times.");
+        }
+
         solution.testTime = s;
         return solution;
     }
