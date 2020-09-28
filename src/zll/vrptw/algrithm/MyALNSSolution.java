@@ -27,7 +27,7 @@ public class MyALNSSolution {
 
 	public double alpha; // α
 	public double beta; // β
-	public final double gamma = 10000;
+	public final double gamma = 2000;
 
 	public static final double punish = 1000;
 

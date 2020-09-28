@@ -5,7 +5,6 @@ import java.util.*;
 public abstract class ALNSAbstractOperation implements IALNSOperation {
     // protected final ALNSStrategieVisualizationManager asvm = new
     // ALNSStrategieVisualizationManager();
-    private final Random r = new Random();
     private int pi;
     private double p; // ! 初始值算子次数分之1，轮盘选择用。归一化的概率.
     private int draws; // ! 被使用的次数
