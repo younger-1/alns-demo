@@ -101,9 +101,9 @@ public class MyALNSProcess {
         while (true) {
             MyALNSSolution s_c = null;
             if (s_2 != null) {
-                s_c = new MyALNSSolution(s_2);
+                s_c = s_2;
             } else {
-                s_c = new MyALNSSolution(s_g);
+                s_c = s_g;
             }
             // ! q为需要移除的节点数，大概10-30之间随机值
             int q = getQ(s_c);
@@ -124,7 +124,8 @@ public class MyALNSProcess {
                 MyALNSSolution s_repair = repairOperator.repair(s_destroy);
                 // o.onSolutionRepaired(this, s_t);
 
-                if (s_repair.cost.cost < s_1.cost.cost) {
+                // if (s_repair.cost.cost < s_1.cost.cost) {
+                if (s_repair.cost.cost + s_repair.cost.total < s_1.cost.cost + s_1.cost.total) {
                     s_1 = s_repair;
                 }
 
@@ -149,8 +150,10 @@ public class MyALNSProcess {
                 // o.onSolutionRepaired(this, s_t);
                 if (s_2 == null) {
                     s_2 = s_repair;
+                    // } else if (s_repair.cost.cost + s_repair.cost.total < s_2.cost.cost + s_2.cost.total) {
                 } else if (s_repair.cost.total < s_2.cost.total) {
                     s_2 = s_repair;
+                    // if (s_2.cost.cost + s_2.cost.total < s_g.cost.cost + s_g.cost.total) {
                     if (s_2.cost.cost < s_g.cost.cost) {
                         handleNewGlobalMinimum(filterOperator, balanceOperator, s_2);
                     } else {
