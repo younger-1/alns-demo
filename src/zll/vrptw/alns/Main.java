@@ -46,10 +46,7 @@ public class Main {
 					"Homberger", // 算例类型,输入 Homberger 或 Solomon ，注意大写
 					200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
 					ALNSConfiguration.DEFAULT, // ALNS相关参数
-					new ControlParameter(false, // 历史满意解、当前满意解、新解的时序图，收敛效果展示
-							false, // ALNS算子时序图
-							false // 生成解对应效果图（针对每次迭代的历史满意解）
-					));
+					new ControlParameter(true, true, true, true));
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -74,8 +71,9 @@ public class Main {
 		Solution ims = solver.improveSolution(is, c, cp, instance);
 		System.out.println(ims);
 		System.out.println(checkSolution.Check(ims));
-
+		System.out.println("ALNS progress cost " + ims.testTime + "s.");
 		double[] result = new double[] { ims.getTotalCost(), ims.testTime };
+
 		return result;
 	}
 }
