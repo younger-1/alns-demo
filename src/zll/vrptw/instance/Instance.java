@@ -159,6 +159,8 @@ public class Instance {
                 depot.setDemand(0);
                 depot.setTimeWindow(0, 999999);
                 depot.setServiceTime(10);
+                depot.setX(Double.parseDouble(dataLine[2]));
+                depot.setY(Double.parseDouble(dataLine[3]));
                 this.customers.add(depot);
                 is_add_this_customer = false;
             }
@@ -170,6 +172,8 @@ public class Instance {
                 customer.setDemand(2);
                 customer.setTimeWindow(0, 999999);
                 customer.setServiceTime(10);
+                customer.setX(Double.parseDouble(dataLine[2]));
+                customer.setY(Double.parseDouble(dataLine[3]));
                 this.customers.add(customer);
             }
             if (is_add_that_customer) {
@@ -178,6 +182,8 @@ public class Instance {
                 customer.setDemand(2);
                 customer.setTimeWindow(0, 999999);
                 customer.setServiceTime(10);
+                customer.setX(Double.parseDouble(dataLine[4]));
+                customer.setY(Double.parseDouble(dataLine[5]));
                 this.customers.add(customer);
             }
 
