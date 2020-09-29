@@ -19,6 +19,7 @@ import zll.vrptw.alns.repair.RandomRepair;
 import zll.vrptw.alns.repair.RegretBalance;
 import zll.vrptw.alns.repair.RegretRepair;
 import zll.vrptw.instance.Instance;
+import zll.vrptw.visualization.LineDrawer;
 
 public class MyALNSProcess {
     // 可视化
@@ -65,8 +66,7 @@ public class MyALNSProcess {
     public MyALNSProcess(Solution s_, Instance instance, IALNSConfig c, ControlParameter cp)
             throws InterruptedException {
 
-        // 生成png
-        cpng = cp.isSolutionImages();
+        // cpng = cp.isGlobal_sol_chart();
 
         config = c;
         s_g = new MyALNSSolution(s_, instance);
@@ -76,11 +76,8 @@ public class MyALNSProcess {
         initStrategies();
 
         // 可视化
-        if (cp.isSolutionsLinechart()) {
-            // o.add(new SolutionsLinechart(this));
-        }
-        if (cp.isOperationsLinechart()) {
-            // o.add(new OperationsLinechart(this));
+        if (cp.isInit_sol_chart()) {
+            LineDrawer.draw_sol(s_g);
         }
     }
 
@@ -206,7 +203,8 @@ public class MyALNSProcess {
 
         // 输出程序耗时s
         double s = Math.round((System.currentTimeMillis() - t_start) * 1000) / 1000000.;
-        System.out.println("\nALNS progress cost " + s + "s.");
+        solution.testTime = s;
+        System.out.print("\n");
 
         // 输出算子使用情况
         for (IALNSDestroy destroy : destroy_ops) {
@@ -225,7 +223,9 @@ public class MyALNSProcess {
             System.out.println(balance.getClass().getName() + " is used " + balance.getDraws() + " times.");
         }
 
-        solution.testTime = s;
+        LineDrawer.draw_sol(s_1);
+        LineDrawer.draw_sol(s_2);
+        LineDrawer.draw_sol(s_g);
         return solution;
     }
 
