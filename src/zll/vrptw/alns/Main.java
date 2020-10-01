@@ -4,7 +4,7 @@ import zll.vrptw.algrithm.CheckSolution;
 import zll.vrptw.algrithm.Solution;
 import zll.vrptw.algrithm.Solver;
 import zll.vrptw.alns.config.ALNSConfiguration;
-import zll.vrptw.alns.config.ControlParameter;
+import zll.vrptw.alns.config.VisualizationControl;
 import zll.vrptw.alns.config.IALNSConfig;
 import zll.vrptw.instance.Instance;
 
@@ -46,14 +46,16 @@ public class Main {
 					"Homberger", // 算例类型,输入 Homberger 或 Solomon ，注意大写
 					200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
 					ALNSConfiguration.DEFAULT, // ALNS相关参数
-					new ControlParameter(true, true, true, true));
+					// new VisualizationControl(false, true, false, false));
+					new VisualizationControl(true, true, true, true));
+			// new VisualizationControl());
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
 	}
 
 	// solve函数，输出解 输入变量：算例名，客户数，
-	private static double[] solve(String name, String instanceType, int size, IALNSConfig c, ControlParameter cp)
+	private static double[] solve(String name, String instanceType, int size, IALNSConfig c, VisualizationControl cp)
 			throws Exception {
 
 		// 输入Solomon算例
