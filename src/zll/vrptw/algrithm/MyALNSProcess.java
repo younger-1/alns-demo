@@ -3,7 +3,7 @@ package zll.vrptw.algrithm;
 import java.io.IOException;
 import java.util.Random;
 
-import zll.vrptw.alns.config.ControlParameter;
+import zll.vrptw.alns.config.VisualizationControl;
 import zll.vrptw.alns.config.IALNSConfig;
 import zll.vrptw.alns.destroy.IALNSDestroy;
 import zll.vrptw.alns.destroy.RandomDestroy;
@@ -14,7 +14,7 @@ import zll.vrptw.alns.repair.IALNSRepair;
 import zll.vrptw.alns.repair.RandomRepair;
 import zll.vrptw.alns.repair.RegretRepair;
 import zll.vrptw.instance.Instance;
-import zll.vrptw.visualization.LineDrawer;
+import zll.vrptw.visualization.VRPDrawer;
 
 public class MyALNSProcess {
     // 可视化
@@ -52,7 +52,7 @@ public class MyALNSProcess {
     // time end
     private double T_end;
 
-    public MyALNSProcess(Solution s_, Instance instance, IALNSConfig c, ControlParameter cp)
+    public MyALNSProcess(Solution s_, Instance instance, IALNSConfig c, VisualizationControl vc)
             throws InterruptedException {
 
         // cpng = cp.isGlobal_sol_chart();
@@ -64,15 +64,13 @@ public class MyALNSProcess {
 
         // 初始化alns参数
         initStrategies();
-
-        // 可视化
-        if (cp.isInit_sol_chart()) {
-            LineDrawer.draw_sol(s_g);
+        if (vc.isInit_sol_chart()) {
+            VRPDrawer.draw_sol(s_g, 1);
         }
     }
 
     // ! ALNS框架
-    public Solution improveSolution() throws Exception {
+    public Solution improveSolution(VisualizationControl cp) throws Exception {
         // o.onThreadStart(this);
 
         T = 0.01 * s_g.cost.total;
@@ -154,9 +152,12 @@ public class MyALNSProcess {
         for (IALNSRepair repair : repair_ops) {
             System.out.println(repair.getClass().getName() + " 被使用 " + repair.getDraws() + "次.");
         }
+
         solution.testTime = s;
 
-        LineDrawer.draw_sol(s_g);
+        if (cp.isGlobal_sol_chart()) {
+            VRPDrawer.draw_sol(s_g, 2);
+        }
 
         return solution;
     }

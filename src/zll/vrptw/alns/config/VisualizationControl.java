@@ -1,13 +1,16 @@
 package zll.vrptw.alns.config;
 
-public class ControlParameter {
+public class VisualizationControl {
 
-    private final boolean init_sol_chart;
-    private final boolean s1_sol_chart;
-    private final boolean s2_sol_chart;
-    private final boolean global_sol_chart;
+    private boolean init_sol_chart;
+    private boolean s1_sol_chart;
+    private boolean s2_sol_chart;
+    private boolean global_sol_chart;
 
-    public ControlParameter(boolean init_sol_chart, boolean s1_sol_chart, boolean s2_sol_chart,
+    public VisualizationControl() {
+    }
+
+    public VisualizationControl(boolean init_sol_chart, boolean s1_sol_chart, boolean s2_sol_chart,
             boolean global_sol_chart) {
         this.init_sol_chart = init_sol_chart;
         this.s1_sol_chart = s1_sol_chart;
