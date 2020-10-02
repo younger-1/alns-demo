@@ -6,10 +6,10 @@ import java.util.List;
 import younger.vrp.algrithm.Cost;
 
 /**
- * @author zll_hust
- *
  *         Every instance of this class represents a Route (Vehicle) that will
  *         be used in order to serve a set of customers
+ * @author Xavier Young
+ *
  */
 public class Route {
 
