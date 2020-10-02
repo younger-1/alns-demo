@@ -11,8 +11,7 @@ import younger.vrp.instance.Instance;
  * Description:
  * </p>
  * 
- * @author zll_hust
- * @date 2020年3月1日
+ * @author Xavier Young
  */
 public class CheckSolution {
 

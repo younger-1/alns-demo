@@ -6,9 +6,9 @@ import java.util.List;
 import younger.vrp.instance.Route;
 
 /**
- * @author zll_hust
- *
  *         An instance of this class repserents a solution to the VRP problem.
+ * @author Xavier Young
+ *
  */
 public class Solution {
     public double testTime;

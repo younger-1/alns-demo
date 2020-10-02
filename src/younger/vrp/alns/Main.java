@@ -9,15 +9,7 @@ import younger.vrp.alns.config.IALNSConfig;
 import younger.vrp.instance.Instance;
 
 /**
- * <p>
- * Title: Main
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月14日
+ * @author Xavier Young
  */
 public class Main {
 
