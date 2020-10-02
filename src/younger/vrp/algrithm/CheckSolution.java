@@ -71,7 +71,7 @@ public class CheckSolution {
 		boolean checkTotalCost = true;
 		if (Math.abs(totalCost - solution.getTotalCost()) > 0.001)
 			checkTotalCost = false;
-
+			
 		result += String.format("\ncheck total cost = %.2f , %b \n", totalCost, checkTotalCost);
 		return result;
 	}
