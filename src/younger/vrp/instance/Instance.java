@@ -122,7 +122,7 @@ public class Instance {
                 distanceMatrix[i][j] = 60000;
             }
         }
-        String dataFileName = "C:/Users/didi/Downloads/distance_sample.csv";
+        String dataFileName = "./input/distance_sample.csv";
         String line;
         boolean is_first_line_skiped = false;
         HashMap<Long, Integer> my = new HashMap<>();
