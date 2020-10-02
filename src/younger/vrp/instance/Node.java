@@ -1,10 +1,10 @@
 package younger.vrp.instance;
 
 /**
- * @author zll_hust
- *
- *         Every instance of this class represents a Node (customer) of the VRP
- *         problem.
+ * 
+ * <p> Description: </p>
+ * Every instance of this class represents a Node (customer) of the VRP problem
+ * @author Xavier Young
  */
 public class Node {
 

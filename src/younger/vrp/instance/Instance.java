@@ -7,17 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-
 /**
- * <p>
- * Title: SolomnInstance
- * </p>
- * <p>
- * Description:
- * </p>
- * 
- * @author zll_hust
- * @date 2020年3月14日
+ * @author Xavier Young
  */
 public class Instance {
 
