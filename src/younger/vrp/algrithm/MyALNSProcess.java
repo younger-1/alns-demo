@@ -65,9 +65,6 @@ public class MyALNSProcess {
 
     public MyALNSProcess(Solution s_, Instance instance, IALNSConfig c, VisualizationControl vc)
             throws InterruptedException {
-
-        // cpng = cp.isGlobal_sol_chart();
-
         config = c;
         s_g = new MyALNSSolution(s_, instance);
         s_g.cost.calculateTotalCost();
@@ -81,18 +78,13 @@ public class MyALNSProcess {
 
     // ! ALNS框架
     public Solution improveSolution(VisualizationControl cp) throws Exception {
-        // o.onThreadStart(this);
-
         T = 0.01 * s_g.cost.total;
-
         // 计时开始
         t_start = System.currentTimeMillis();
-        // o.onStartConfigurationObtained(this);
 
         int print_counter = 0;
         int segment_counter = 0;
         int segment_num = config.getTau();
-
         while (true) {
             MyALNSSolution s_c = null;
             if (s_2 != null) {
@@ -102,47 +94,31 @@ public class MyALNSProcess {
             }
             // ! q为需要移除的节点数，大概10-30之间随机值
             int q = getQ(s_c);
-
             for (int v = 0; v < config.getV(); v++) {
-
                 // 轮盘赌找出最优destroy、repair方法
                 IALNSDestroy destroyOperator = getALNSDestroyOperator();
                 IALNSRepair repairOperator = getALNSRepairOperator();
-                // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
-                // s_c_new, q);
                 MyALNSSolution s_t = new MyALNSSolution(s_c);
                 // destroy solution
                 MyALNSSolution s_destroy = destroyOperator.destroy(s_t, q);
-                // o.onSolutionDestroy(this, s_destroy);
-
-                // repair solution，重组后新解st
+                // repair solution
                 MyALNSSolution s_repair = repairOperator.repair(s_destroy);
-                // o.onSolutionRepaired(this, s_t);
-
                 // if (s_repair.cost.cost < s_1.cost.cost) {
                 if (s_repair.cost.cost + s_repair.cost.total < s_1.cost.cost + s_1.cost.total) {
                     s_1 = s_repair;
                 }
-
                 T = config.getC() * T;
             }
 
             for (int w = 0; w < config.getW(); w++) {
-
                 // 轮盘赌找出最优destroy、repair方法
                 IALNSDestroy filterOperator = getALNSFilterOperator();
                 IALNSRepair balanceOperator = getALNSBalanceOperator();
-                // o.onDestroyRepairOperationsObtained(this, destroyOperator, repairOperator,
-                // s_c_new, q);
-
                 MyALNSSolution s_t = new MyALNSSolution(s_1);
                 // destroy solution
                 MyALNSSolution s_destroy = filterOperator.destroy(s_t, q);
-                // o.onSolutionDestroy(this, s_destroy);
-
-                // repair solution，重组后新解st
+                // repair solution
                 MyALNSSolution s_repair = balanceOperator.repair(s_destroy);
-                // o.onSolutionRepaired(this, s_t);
                 if (s_2 == null) {
                     s_2 = s_repair;
                     // } else if (s_repair.cost.cost + s_repair.cost.total < s_2.cost.cost + s_2.cost.total) {
@@ -158,12 +134,10 @@ public class MyALNSProcess {
                 } else {
                     handleWorseSolution(filterOperator, balanceOperator, s_repair);
                 }
-
                 T = config.getC() * T;
             }
 
             i += config.getV() + config.getW();
-
             if (print_counter == i / 100) {
                 print_counter += 1;
                 String ss = String.format(
@@ -172,7 +146,6 @@ public class MyALNSProcess {
                         Math.round(s_2.cost.cost * 100) / 100.0, Math.round(s_2.cost.total * 100) / 100.0);
                 System.out.println(ss);
             }
-
             // if (s_t.cost.total < s_c.cost.total) {
             //     s_c = s_t;
             //     if (s_t.cost.total < s_g.cost.total) {
@@ -183,13 +156,10 @@ public class MyALNSProcess {
             // } else {
             //     handleWorseSolution(destroyOperator, repairOperator, s_t);
             // }
-
             if (i > 0 && segment_counter == i / segment_num) {
                 segment_counter += 1;
                 segmentFinsihed();
-                // o.onSegmentFinsihed(this, s_t);
             }
-
             if (i > config.getOmega() && s_g.feasible())
                 break;
             if (i > config.getOmega() * 1.5)
@@ -219,6 +189,7 @@ public class MyALNSProcess {
         for (IALNSRepair balance : balance_ops) {
             System.out.println(balance.getClass().getName() + " is used " + balance.getDraws() + " times.");
         }
+
         if (cp.isS1_sol_chart()) {
             VRPDrawer.draw_sol(s_1, 2);
         }
@@ -249,9 +220,7 @@ public class MyALNSProcess {
 
     private void handleNewGlobalMinimum(IALNSDestroy destroyOperator, IALNSRepair repairOperator, MyALNSSolution s_2)
             throws IOException {
-        // System.out.println(String.format("[%d]: Found new global minimum: %.2f,
-        // Required Vehicles: %d, I_uns: %d", i, s_t.getCostFitness(),
-        // s_t.activeVehicles(), s_g.getUnscheduledJobs().size()));
+        // todo: System.out.println(String.format("[%d]: Found new global minimum: %.2f, Required Vehicles: %d, I_uns: %d", i, s_2.getCostFitness(), s_2.activeVehicles(), s_g.getUnscheduledJobs().size()));
         if (this.cpng) {
             // TODO OutputUtil.createPNG(s_t, i);
         }
@@ -276,7 +245,6 @@ public class MyALNSProcess {
 
     private void segmentFinsihed() {
         double w_sum = 0;
-        // Update neue Gewichtung der Destroy Operatoren
         for (IALNSDestroy dstr : destroy_ops) {
             double w_old1 = dstr.getW() * (1 - config.getR_p());
             double recentFactor = dstr.getDraws() < 1 ? 0 : (double) dstr.getPi() / (double) dstr.getDraws();
@@ -285,21 +253,19 @@ public class MyALNSProcess {
             w_sum += w_new;
             dstr.setW(w_new);
         }
-        // Update neue Wahrs. der Destroy Operatoren
         for (IALNSDestroy dstr : destroy_ops) {
             dstr.setP(dstr.getW() / w_sum);
             // dstr.setDraws(0);
             // dstr.setPi(0);
         }
+
         w_sum = 0;
-        // Update neue Gewichtung der Repair Operatoren
         for (IALNSRepair rpr : repair_ops) {
             double recentFactor = rpr.getDraws() < 1 ? 0 : (double) rpr.getPi() / (double) rpr.getDraws();
             double w_new = (rpr.getW() * (1 - config.getR_p())) + config.getR_p() * recentFactor;
             w_sum += w_new;
             rpr.setW(w_new);
         }
-        // Update neue Wahrs. der Repair Operatoren
         for (IALNSRepair rpr : repair_ops) {
             rpr.setP(rpr.getW() / w_sum);
             // rpr.setDraws(0);
@@ -415,11 +381,6 @@ public class MyALNSProcess {
 
     }
 
-    /*
-     * public ALNSObserver getO() { return this.o; }
-     * 
-     * public ALNSProcessVisualizationManager getApvm() { return this.apvm; }
-     */
     public IALNSConfig getConfig() {
         return this.config;
     }
