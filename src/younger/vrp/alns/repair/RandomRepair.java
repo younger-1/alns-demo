@@ -70,19 +70,13 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 				ArrayList<Integer> customerList = new ArrayList<Integer>();
 				for (int k = 1; k < insertRoute.getRoute().size(); k++)
 					customerList.add(k); // 1,2,3,..,N-1
-
 				Collections.shuffle(customerList);
 
 				// ! 询问节点循环
 				for (int k = 0; k < insertTimes; k++) {
-
 					int insertCusPosition = customerList.remove(0);
-
-					// ! 拷贝一份 s 的 cost
 					Cost newCost = new Cost(s.cost);
-					// ! 插入节点给 newCost 的变化
 					s.evaluateInsertCustomer(insertRoutePosition, insertCusPosition, insertNode, newCost);
-
 					// 更新最优插入位置
 					if (newCost.total < bestCost.total) {
 						bestRoutePosition = insertRoutePosition;
