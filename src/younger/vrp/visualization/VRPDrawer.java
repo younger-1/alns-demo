@@ -42,6 +42,12 @@ public class VRPDrawer extends JPanel {
         Border myBorder = BorderFactory.createTitledBorder(sol_kind);
         vd.setBorder(myBorder);
 
+        JPanel main_pane = new JPanel();
+        main_pane.setOpaque(true);
+        main_pane.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        main_pane.setLayout(new BorderLayout(100, 100));
+        main_pane.add(vd, BorderLayout.CENTER);
+
         int colNum = 2;
         int rowNum = 2;
         int xPosition = (screenPositionIndex - 1) % colNum;
@@ -50,14 +56,10 @@ public class VRPDrawer extends JPanel {
         int frameWidth = (int) screenSize.getWidth() / colNum;
         int frameHeight = (int) screenSize.getHeight() / rowNum;
 
-        JFrame myFrame = new JFrame("ALNS_VRP");
+        JFrame myFrame = new JFrame("ALNS_VRP -- " + sol_kind);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setBounds(xPosition * frameWidth, yPosition * frameHeight, frameWidth, frameHeight);
-        myFrame.getContentPane().add(vd);
-        myFrame.getContentPane().add(new JPanel(), BorderLayout.EAST);
-        myFrame.getContentPane().add(new JPanel(), BorderLayout.WEST);
-        myFrame.getContentPane().add(new JPanel(), BorderLayout.NORTH);
-        myFrame.getContentPane().add(new JPanel(), BorderLayout.SOUTH);
+        myFrame.getContentPane().add(main_pane);
         myFrame.setVisible(true);
     }
 
