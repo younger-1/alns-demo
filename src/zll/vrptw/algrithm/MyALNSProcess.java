@@ -101,16 +101,15 @@ public class MyALNSProcess {
             // o.onSolutionRepaired(this, s_t);
 
             if (0 == i % 100) {
-
                 String ss = String.format("Iterations: %4d, Solution: s_t:[cost: %.1f, total: %.1f] ", i,
                         Math.round(s_t.cost.cost * 100) / 100.0, Math.round(s_t.cost.total * 100) / 100.0);
                 System.out.println(String.format(ss));
             }
             // 更新局部满意解
-            if (s_t.cost.total < s_c.cost.total) {
+            if (s_t.cost.cost < s_c.cost.cost) {
                 s_c = s_t;
                 // 更新全局满意解，sg全局满意解
-                if (s_t.cost.total < s_g.cost.total) {
+                if (s_t.cost.cost < s_g.cost.cost) {
                     handleNewGlobalMinimum(destroyOperator, repairOperator, s_t);
                 } else {
                     // 更新局部满意解
