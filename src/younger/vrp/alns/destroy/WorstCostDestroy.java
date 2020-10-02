@@ -64,8 +64,6 @@ public class WorstCostDestroy extends ALNSAbstractOperation implements IALNSDest
 		// });
 		Arrays.sort(removeList);
 
-		// System.out.println(Arrays.toString(removeList));
-
 		// 移除
 		for (int i = removeNr - 1; i >= 0; i--) {
 			s.removeCustomer(customList.get(removeList[i]).routeNo, customList.get(removeList[i]).customerNo);

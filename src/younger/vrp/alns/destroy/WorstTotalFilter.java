@@ -52,15 +52,7 @@ public class WorstTotalFilter extends ALNSAbstractOperation implements IALNSDest
                 removeList[max_total_diff_index] = i;
         }
 
-        // Arrays.sort(removeList, Collections.reverseOrder());
-        // Arrays.sort(removeList, new Comparator<Integer>() {
-        // public int compare(Integer o1, Integer o2) {
-        // return o1 < o2 ? 1 : -1;
-        // }
-        // });
         Arrays.sort(removeList);
-
-        // System.out.println(Arrays.toString(removeList));
 
         // 移除
         for (int i = removeNr - 1; i >= 0; i--) {

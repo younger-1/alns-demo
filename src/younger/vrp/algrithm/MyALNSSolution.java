@@ -83,7 +83,6 @@ public class MyALNSSolution {
 		removenRoute.getCost().cost += cost;
 		removenRoute.getCost().load += load;
 
-		// * 1.计算当前路径、总路径的 load violation
 		double routeLoad = removenRoute.getCost().load;
 		if (routeLoad > this.instance.getVehicleCapacity()) {
 			double violaton = routeLoad - this.instance.getVehicleCapacity();
@@ -97,7 +96,6 @@ public class MyALNSSolution {
 		// ! 移除节点
 		removalCustomers.add(removenRoute.removeNode(cusPosition));
 
-		// 计算当前路径的time windows，time
 		double time = 0;
 		double timeWindowViolation = 0;
 		for (int i = 1; i < removenRoute.getRoute().size(); i++) {
@@ -112,7 +110,6 @@ public class MyALNSSolution {
 		this.cost.time += (time - removenRoute.getCost().time);
 		removenRoute.getCost().time = time;
 
-		// * 2. 计算当前路径、总路径的 time windows violation
 		if (timeWindowViolation > 0) {
 			double violationDiff = timeWindowViolation - removenRoute.getCost().timeViolation;
 			removenRoute.getCost().timeViolation = timeWindowViolation;
@@ -122,14 +119,11 @@ public class MyALNSSolution {
 			removenRoute.getCost().timeViolation = 0;
 		}
 
-		// * 3. 计算当前路径、总路径的 maxCustomerNumViolation
-		// removenRoute.getCustomerNum() > instance.getMaxCustomerNum();
 		if (removenRoute.getCost().maxCustomerNumViolation > 0) {
 			removenRoute.getCost().maxCustomerNumViolation -= 1;
 			this.cost.maxCustomerNumViolation -= 1;
 		}
 
-		// * 4.计算 total
 		// removenRoute.getCost().calculateTotalCost(this.alpha, this.beta);
 		removenRoute.getCost().calculateTotalCost(this.alpha, this.beta, this.gamma);
 		// this.cost.calculateTotalCost(this.alpha, this.beta);
@@ -137,26 +131,20 @@ public class MyALNSSolution {
 	}
 
 	public void insertCustomer(int routePosition, int insertCusPosition, Node insertCustomer) {
-		// * this.cost 只需存储 this.cost.cost, this.cost.loadViolation, this.cost.timeViolation
 		double[][] distance = instance.getDistanceMatrix();
-
-		// ! 无需clone
 		Route insertRoute = this.routes.get(routePosition);
 
-		// 计算load和cost的变化量
 		double load = +insertCustomer.getDemand();
 		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
 				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
 				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
 						.get(insertCusPosition).getId()];
 
-		// 更新当前路径、总路径的cost、load
 		this.cost.cost += cost;
 		this.cost.load += load;
 		insertRoute.getCost().cost += cost;
 		insertRoute.getCost().load += load;
 
-		// * 1.计算 load violation
 		double routeLoad = insertRoute.getCost().load;
 		if (routeLoad > this.instance.getVehicleCapacity()) {
 			double violaton = routeLoad - this.instance.getVehicleCapacity();
@@ -164,10 +152,8 @@ public class MyALNSSolution {
 			insertRoute.getCost().loadViolation = violaton;
 		}
 
-		// ! 插入节点
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
 
-		// 计算当前路径的time windows，time
 		double time = 0;
 		double timeWindowViolation = 0;
 		for (int i = 1; i < insertRoute.getRoute().size(); i++) {
@@ -182,20 +168,17 @@ public class MyALNSSolution {
 		this.cost.time += (time - insertRoute.getCost().time);
 		insertRoute.getCost().time = time;
 
-		// * 2. 计算当前路径、总路径的time windows violation
 		if (timeWindowViolation > 0) {
 			double violationDiff = timeWindowViolation - insertRoute.getCost().timeViolation;
 			insertRoute.getCost().timeViolation = timeWindowViolation;
 			this.cost.timeViolation += violationDiff;
 		}
 
-		// * 3. 计算 maxCustomerNumViolation
 		if (insertRoute.getCustomerNum() > instance.getMaxCustomerNum()) {
 			insertRoute.getCost().maxCustomerNumViolation += 1;
 			this.cost.maxCustomerNumViolation += 1;
 		}
 
-		// * 4.计算 total
 		// insertRoute.getCost().calculateTotalCost(this.alpha, this.beta);
 		insertRoute.getCost().calculateTotalCost(this.alpha, this.beta, this.gamma);
 		// this.cost.calculateTotalCost(this.alpha, this.beta);
@@ -203,22 +186,16 @@ public class MyALNSSolution {
 	}
 
 	public void evaluateInsertCustomer(int routePosition, int insertCusPosition, Node insertCustomer, Cost newCost) {
-		// * this.cost, insertRoute.getCost 不应该在这里变化
-		// * newCost 代替 this.cost 变化
 		double[][] distance = instance.getDistanceMatrix();
 
-		// ! 这是条 clone 路径
 		Route insertRoute = this.routes.get(routePosition).cloneRoute();
 
 		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
 				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
 				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
 						.get(insertCusPosition).getId()];
-
-		// 更新总路径 cost
 		newCost.cost += cost;
 
-		// * 1.计算 load violation
 		insertRoute.getCost().load += insertCustomer.getDemand();
 		double routeLoad = insertRoute.getCost().load;
 		if (routeLoad > this.instance.getVehicleCapacity()) {
@@ -226,7 +203,6 @@ public class MyALNSSolution {
 			newCost.loadViolation += violaton - insertRoute.getCost().loadViolation;
 		}
 
-		// ! 插入节点
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
 
 		double time = 0;
@@ -241,17 +217,14 @@ public class MyALNSSolution {
 			time += insertRoute.getRoute().get(i).getServiceTime();
 		}
 
-		// * 2. 计算总路径的time windows violation
 		if (timeWindowViolation > 0) {
 			newCost.timeViolation += timeWindowViolation - insertRoute.getCost().timeViolation;
 		}
 
-		// * 3. 计算 maxCustomerNumViolation
 		if (insertRoute.getCustomerNum() > instance.getMaxCustomerNum()) {
 			newCost.maxCustomerNumViolation += 1;
 		}
 
-		// * 4.计算 total
 		// newCost.calculateTotalCost(this.alpha, this.beta);
 		newCost.calculateTotalCost(this.alpha, this.beta, this.gamma);
 	}
@@ -262,12 +235,10 @@ public class MyALNSSolution {
 
 	public Solution toSolution() {
 		Solution sol = new Solution();
-
 		List<Route> solutionRoutes = new ArrayList<>();
 		for (Route route : this.routes) {
 			solutionRoutes.add(route.cloneRoute());
 		}
-
 		sol.setRoutes(solutionRoutes);
 		sol.setTotalCost(cost.cost);
 		sol.setVehicleNr(vehicleNr);
@@ -278,12 +249,9 @@ public class MyALNSSolution {
 	@Override
 	public String toString() {
 		String result = "Solution{" + "Cost = " + cost + ", routes = [";
-
 		for (Route vehicle : this.routes) {
 			result += "\n\t" + vehicle;
 		}
-
 		return result + "]}";
 	}
-
 }
