@@ -26,6 +26,8 @@ public class VRPDrawer extends JPanel {
     double y_min;
     double x_diff;
     double y_diff;
+    private final Random r = new Random(1004);
+
     public static void draw_sol(MyALNSSolution sol, int screenPositionIndex) {
         VRPDrawer vd = new VRPDrawer(sol);
         String sol_kind = switch (screenPositionIndex) {
@@ -94,8 +96,6 @@ public class VRPDrawer extends JPanel {
         int width = this.getWidth();
         int height = this.getHeight();
 
-        Random r = new Random();
-        r.setSeed(1004);
         for (int i = 0; i < x_routes.length; i++) {
             int[] x_coord = Arrays.stream(x_routes[i]).map((num) -> width * (num - x_min) / x_diff)
                     .mapToInt(num -> (int) num).toArray();
