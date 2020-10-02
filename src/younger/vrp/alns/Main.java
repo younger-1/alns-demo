@@ -34,9 +34,9 @@ public class Main {
 	public static void main(String args[]) {
 
 		try {
-			solve("RC2_2_1", // 需要测试的算例
-					"Homberger", // 算例类型,输入 Homberger 或 Solomon ，注意大写
-					200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
+			solve("C101", // 需要测试的算例
+					"Solomon", // 算例类型,输入 Homberger 或 Solomon ，注意大写
+					100, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
 					ALNSConfiguration.DEFAULT, // ALNS相关参数
 					// new VisualizationControl(false, true, false, false));
 					new VisualizationControl(true, true, true, true));
