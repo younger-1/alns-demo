@@ -101,10 +101,10 @@ public class MyALNSProcess {
             // o.onSolutionRepaired(this, s_t);
 
             if (0 == i % 100) {
-
                 String ss = String.format("Iterations: %4d, Solution: s_t:[cost: %.1f, total: %.1f] ", i,
                         Math.round(s_t.cost.cost * 100) / 100.0, Math.round(s_t.cost.total * 100) / 100.0);
                 System.out.println(String.format(ss));
+
             }
             // 更新局部满意解
             if (s_t.cost.total < s_c.cost.total) {
