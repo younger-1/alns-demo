@@ -34,10 +34,10 @@ public class Cost {
 
 	@Override
 	public String toString() {
-		String result = "[ total=" + total + ", cost=" + cost + ", load=" + load + ", time=" + time
-				+ ", customerNum violation=" + maxCustomerNumViolation + ", time windows violation=" + timeViolation
-				+ ", load violation=" + loadViolation;
-		return result + " ]";
+		String result = String.format(
+				"[ total=%.1f, cost=%.1f, load=%.1f, time=%.1f, customerNum violation=%d, time windows violation=%.1f, load violation=%.1f",
+				total, cost, load, time, maxCustomerNumViolation, timeViolation, loadViolation);
+		return result;
 	}
 
 	/**

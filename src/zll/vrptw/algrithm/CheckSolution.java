@@ -63,18 +63,17 @@ public class CheckSolution {
 				if (Math.abs(vehicle.getCost().time - time) > 0.001)
 					checkTime = false;
 
-				result += "\n check route " + id + ": " + "\n check cost = " + costInVehicle + "  " + checkCost
-						+ "\n check demand = " + loadInVehicle + "  " + checkLoad + "\n check time = " + time + "  "
-						+ checkTime + "\n check time windows = " + checkTimeWindows + "\n";
-
+				result += String.format(
+						"\n  check route %d: \n  check cost = %.2f , %b \n  check demand = %.2f , %b \n  check time = %.2f , %b \n  check time windows = %b \n",
+						id, costInVehicle, checkCost, loadInVehicle, checkLoad, time, checkTime, checkTimeWindows);
 			}
 		}
 
 		boolean checkTotalCost = true;
 		if (Math.abs(totalCost - solution.getTotalCost()) > 0.001)
 			checkTotalCost = false;
-
-		result += "\ncheck total cost = " + Math.round(totalCost * 100) / 100.0 + "  " + checkTotalCost + "\n";
+		
+		result += String.format("\ncheck total cost = %.2f , %b \n", totalCost, checkTotalCost);
 
 		return result;
 	}

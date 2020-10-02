@@ -171,7 +171,7 @@ public class MyALNSProcess {
                         i,
                         Math.round(s_1.cost.cost * 100) / 100.0, Math.round(s_1.cost.total * 100) / 100.0,
                         Math.round(s_2.cost.cost * 100) / 100.0, Math.round(s_2.cost.total * 100) / 100.0);
-                System.out.println(String.format(ss));
+                System.out.println(ss);
             }
 
             // if (s_t.cost.total < s_c.cost.total) {
