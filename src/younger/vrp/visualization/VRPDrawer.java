@@ -96,6 +96,7 @@ public class VRPDrawer extends JPanel {
         super.paintComponent(g);
         int width = this.getWidth();
         int height = this.getHeight();
+        int radius = width / 180;
 
         Random r = new Random();
         r.setSeed(1004);
@@ -107,6 +108,9 @@ public class VRPDrawer extends JPanel {
             Color randomColor = new Color((float) r.nextDouble(), (float) r.nextDouble(), (float) r.nextDouble());
             g.setColor(randomColor);
             g.drawPolyline(x_coord, y_coord, x_coord.length);
+            for (int j = 0; j < x_coord.length; j++) {
+                g.fillOval(x_coord[j] - radius, y_coord[j] - radius, 2 * radius, 2 * radius);
+            }
         }
     }
 }
