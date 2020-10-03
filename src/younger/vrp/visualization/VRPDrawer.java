@@ -27,6 +27,9 @@ public class VRPDrawer extends JPanel {
     double y_min;
     double x_diff;
     double y_diff;
+    private final Random r = new Random(1004);
+    Color[] routeColor;
+
     public static void draw_sol(MyALNSSolution sol, int screenPositionIndex) {
         VRPDrawer vd = new VRPDrawer(sol);
         String sol_kind = switch (screenPositionIndex) {
@@ -63,6 +66,12 @@ public class VRPDrawer extends JPanel {
 
     public VRPDrawer(MyALNSSolution sol) {
         List<Route> routes = sol.routes;
+
+        routeColor = new Color[routes.size()];
+        for (int i = 0; i < routeColor.length; i++) {
+            routeColor[i] = new Color((float) r.nextDouble(), (float) r.nextDouble(), (float) r.nextDouble());
+        }
+
         x_routes = new double[routes.size()][];
         y_routes = new double[routes.size()][];
         int i = 0;
@@ -84,7 +93,6 @@ public class VRPDrawer extends JPanel {
                 .reduce(Double::min).get();
         x_diff = Arrays.stream(x_routes).map(route -> Arrays.stream(route).reduce(0, Double::max)).reduce(0D,
                 Double::max) - x_min;
-
         y_min = Arrays.stream(y_routes).map(route -> Arrays.stream(route).reduce(Double::min).getAsDouble())
                 .reduce(Double::min).get();
         y_diff = Arrays.stream(y_routes).map(route -> Arrays.stream(route).reduce(0, Double::max)).reduce(0D,
@@ -96,7 +104,7 @@ public class VRPDrawer extends JPanel {
         super.paintComponent(g);
         int width = this.getWidth();
         int height = this.getHeight();
-        int radius = width / 180;
+        int radius = width / 220;
 
         Random r = new Random();
         r.setSeed(1004);
@@ -105,8 +113,7 @@ public class VRPDrawer extends JPanel {
                     .mapToInt(num -> (int) num).toArray();
             int[] y_coord = Arrays.stream(y_routes[i]).map((num) -> height * (num - y_min) / y_diff)
                     .mapToInt(num -> (int) num).toArray();
-            Color randomColor = new Color((float) r.nextDouble(), (float) r.nextDouble(), (float) r.nextDouble());
-            g.setColor(randomColor);
+            g.setColor(routeColor[i]);
             g.drawPolyline(x_coord, y_coord, x_coord.length);
             for (int j = 0; j < x_coord.length; j++) {
                 g.fillOval(x_coord[j] - radius, y_coord[j] - radius, 2 * radius, 2 * radius);
