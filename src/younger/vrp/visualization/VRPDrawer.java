@@ -105,6 +105,7 @@ public class VRPDrawer extends JPanel {
         int width = this.getWidth();
         int height = this.getHeight();
         int radius = width / 220;
+        // int radius = (int) (Math.log(width + 1) / 1.5);
 
         for (int i = 0; i < x_routes.length; i++) {
             int[] x_coord = Arrays.stream(x_routes[i]).map((num) -> width * (num - x_min) / x_diff)
@@ -116,6 +117,8 @@ public class VRPDrawer extends JPanel {
             for (int j = 0; j < x_coord.length; j++) {
                 g.fillOval(x_coord[j] - radius, y_coord[j] - radius, 2 * radius, 2 * radius);
             }
+            g.setColor(new Color(0, 0, 0));
+            g.drawString(Integer.toString(i + 1), x_coord[1], y_coord[1]);
         }
     }
 }
