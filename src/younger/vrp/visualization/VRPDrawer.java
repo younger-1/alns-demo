@@ -107,8 +107,7 @@ public class VRPDrawer extends JPanel {
         int radius = width / 220;
         // int radius = (int) (Math.log(width + 1) / 1.5);
 
-        Random r = new Random();
-        r.setSeed(1004);
+        int valid_route_index = 0;
         for (int i = 0; i < x_routes.length; i++) {
             int[] x_coord = Arrays.stream(x_routes[i])
                     .map((num) -> 1 / 20.0 * width + 18 / 20.0 * width * (num - x_min) / x_diff)
@@ -116,13 +115,16 @@ public class VRPDrawer extends JPanel {
             int[] y_coord = Arrays.stream(y_routes[i])
                     .map((num) -> 1 / 20.0 * height + 18 / 20.0 * height * (num - y_min) / y_diff)
                     .mapToInt(num -> (int) num).toArray();
-            g.setColor(routeColor[i]);
-            g.drawPolyline(x_coord, y_coord, x_coord.length);
-            for (int j = 0; j < x_coord.length; j++) {
-                g.fillOval(x_coord[j] - radius, y_coord[j] - radius, 2 * radius, 2 * radius);
+            if (x_coord.length > 2) {
+                valid_route_index += 1;
+                g.setColor(routeColor[i]);
+                g.drawPolyline(x_coord, y_coord, x_coord.length);
+                for (int j = 0; j < x_coord.length; j++) {
+                    g.fillOval(x_coord[j] - radius, y_coord[j] - radius, 2 * radius, 2 * radius);
+                }
+                g.setColor(new Color(0, 0, 0));
+                g.drawString(Integer.toString(valid_route_index), x_coord[1], y_coord[1]);
             }
-            g.setColor(new Color(0, 0, 0));
-            g.drawString(Integer.toString(i + 1), x_coord[1], y_coord[1]);
         }
     }
 }
