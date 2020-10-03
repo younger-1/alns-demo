@@ -110,9 +110,11 @@ public class VRPDrawer extends JPanel {
         Random r = new Random();
         r.setSeed(1004);
         for (int i = 0; i < x_routes.length; i++) {
-            int[] x_coord = Arrays.stream(x_routes[i]).map((num) -> width * (num - x_min) / x_diff)
+            int[] x_coord = Arrays.stream(x_routes[i])
+                    .map((num) -> 1 / 20.0 * width + 18 / 20.0 * width * (num - x_min) / x_diff)
                     .mapToInt(num -> (int) num).toArray();
-            int[] y_coord = Arrays.stream(y_routes[i]).map((num) -> height * (num - y_min) / y_diff)
+            int[] y_coord = Arrays.stream(y_routes[i])
+                    .map((num) -> 1 / 20.0 * height + 18 / 20.0 * height * (num - y_min) / y_diff)
                     .mapToInt(num -> (int) num).toArray();
             g.setColor(routeColor[i]);
             g.drawPolyline(x_coord, y_coord, x_coord.length);
