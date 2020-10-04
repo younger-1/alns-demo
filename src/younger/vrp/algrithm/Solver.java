@@ -3,14 +3,14 @@ package younger.vrp.algrithm;
 import younger.vrp.instance.Instance;
 import younger.vrp.alns.config.VisualizationControl;
 import younger.vrp.alns.config.IALNSConfig;
-import younger.vrp.alns.config.VRPCatatory;
+import younger.vrp.alns.config.VRPCatetory;
 
 public class Solver {
 
     public Solver() {
     }
 
-    public Solution getInitialSolution(Instance instance, VRPCatatory cata) {
+    public Solution getInitialSolution(Instance instance, VRPCatetory cata) {
         GreedyVRP greedyVRP = new GreedyVRP(instance);
         return greedyVRP.getInitialSolution(cata);
     }

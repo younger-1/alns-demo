@@ -1,12 +1,12 @@
 package younger.vrp.alns.config;
 
-public enum VRPCatatory {
+public enum VRPCatetory {
 
     CVRPTW(true), OVRPTW(false);
 
     private boolean addDepotToEnd;
 
-    VRPCatatory(boolean addDepotToEnd) {
+    VRPCatetory(boolean addDepotToEnd) {
         this.setAddDepotToEnd(addDepotToEnd);
     }
 

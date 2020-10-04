@@ -6,7 +6,7 @@ import younger.vrp.algrithm.Solver;
 import younger.vrp.alns.config.ALNSConfiguration;
 import younger.vrp.alns.config.VisualizationControl;
 import younger.vrp.alns.config.IALNSConfig;
-import younger.vrp.alns.config.VRPCatatory;
+import younger.vrp.alns.config.VRPCatetory;
 import younger.vrp.instance.Instance;
 
 /**
@@ -36,7 +36,7 @@ public class Main {
 
 		try {
 			solve("RC2_2_1", "Homberger", 200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
-					ALNSConfiguration.Default, VisualizationControl.AllPic, VRPCatatory.OVRPTW);
+					ALNSConfiguration.Default, VisualizationControl.AllPic, VRPCatetory.OVRPTW);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -44,7 +44,7 @@ public class Main {
 
 	// solve函数，输出解 输入变量：算例名，客户数，
 	private static double[] solve(String name, String instanceType, int size, IALNSConfig ac, VisualizationControl vc,
-			VRPCatatory cata)
+			VRPCatetory cata)
 			throws Exception {
 
 		// 输入Solomon算例

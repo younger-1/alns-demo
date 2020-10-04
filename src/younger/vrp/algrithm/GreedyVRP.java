@@ -5,7 +5,7 @@ import java.util.List;
 
 import younger.vrp.instance.Node;
 import younger.vrp.instance.Route;
-import younger.vrp.alns.config.VRPCatatory;
+import younger.vrp.alns.config.VRPCatetory;
 import younger.vrp.instance.Instance;
 
 /**
@@ -65,7 +65,7 @@ public class GreedyVRP {
      *
      * @return Solution
      */
-    public Solution getInitialSolution(VRPCatatory cata) {
+    public Solution getInitialSolution(VRPCatetory cata) {
         // The final Solution
         Solution solution = new Solution();
 
