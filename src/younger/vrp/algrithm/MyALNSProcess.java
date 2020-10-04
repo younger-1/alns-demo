@@ -222,7 +222,7 @@ public class MyALNSProcess {
             throws IOException {
         // todo: System.out.println(String.format("[%d]: Found new global minimum: %.2f, Required Vehicles: %d, I_uns: %d", i, s_2.getCostFitness(), s_2.activeVehicles(), s_g.getUnscheduledJobs().size()));
         if (this.cpng) {
-            // TODO OutputUtil.createPNG(s_t, i);
+            // todo: OutputUtil.createPNG(s_t, i);
         }
         // 接受全局较优
         if (s_2.feasible())

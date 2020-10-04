@@ -9,10 +9,6 @@ import younger.vrp.alns.operation.ALNSAbstractOperation;
 import younger.vrp.instance.Route;
 
 public class RandomDestroy extends ALNSAbstractOperation implements IALNSDestroy {
-	/*
-	 * @Override public ALNSStrategieVisualizationManager getVisualizationManager()
-	 * { // TODO Auto-generated method stub return null; }
-	 */
 	@Override
 	public MyALNSSolution destroy(MyALNSSolution s, int removeNr) throws Exception {
 

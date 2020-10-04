@@ -6,6 +6,7 @@ import younger.vrp.algrithm.Solver;
 import younger.vrp.alns.config.ALNSConfiguration;
 import younger.vrp.alns.config.VisualizationControl;
 import younger.vrp.alns.config.IALNSConfig;
+import younger.vrp.alns.config.VRPCatatory;
 import younger.vrp.instance.Instance;
 
 /**
@@ -34,20 +35,16 @@ public class Main {
 	public static void main(String args[]) {
 
 		try {
-			solve("RC2_2_1", // 需要测试的算例
-					"Homberger", // 算例类型,输入 Homberger 或 Solomon ，注意大写
-					200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
-					ALNSConfiguration.DEFAULT, // ALNS相关参数
-					// new VisualizationControl(false, true, false, false));
-					new VisualizationControl(true, true, true, true));
-			// new VisualizationControl());
+			solve("RC2_2_1", "Homberger", 200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
+					ALNSConfiguration.Default, VisualizationControl.AllPic);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
 	}
 
 	// solve函数，输出解 输入变量：算例名，客户数，
-	private static double[] solve(String name, String instanceType, int size, IALNSConfig c, VisualizationControl cp)
+	private static double[] solve(String name, String instanceType, int size, IALNSConfig ac, VisualizationControl vc,
+			VRPCatatory cata)
 			throws Exception {
 
 		// 输入Solomon算例
@@ -62,7 +59,7 @@ public class Main {
 		// System.out.println(is);
 		System.out.println(checkSolution.Check(is));
 		// 满意解
-		Solution ims = solver.improveSolution(is, c, cp, instance);
+		Solution ims = solver.improveSolution(is, instance, ac, vc, cata);
 		System.out.println(ims);
 		System.out.println(checkSolution.Check(ims));
 		System.out.println("ALNS progress cost " + ims.testTime + "s.");

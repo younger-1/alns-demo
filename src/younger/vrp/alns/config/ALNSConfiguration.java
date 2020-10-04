@@ -2,7 +2,9 @@ package younger.vrp.alns.config;
 
 public enum ALNSConfiguration implements IALNSConfig {
 
-    DEFAULT(20, 30, 5000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5);
+    Default(20, 30, 5000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5),
+    CostMin(30, 10, 10000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5),
+    TotalMin(10, 30, 10000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5);
 
     private final int v;// 迭代次数v
     private final int w;// 迭代次数w

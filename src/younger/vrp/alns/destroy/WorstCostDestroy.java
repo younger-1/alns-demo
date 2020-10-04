@@ -9,10 +9,6 @@ import younger.vrp.instance.Route;
 import younger.vrp.instance.Instance;
 
 public class WorstCostDestroy extends ALNSAbstractOperation implements IALNSDestroy {
-	/*
-	 * @Override public ALNSStrategieVisualizationManager getVisualizationManager()
-	 * { // TODO Auto-generated method stub return null; }
-	 */
 	@Override
 	public MyALNSSolution destroy(MyALNSSolution s, int removeNr) throws Exception {
 
