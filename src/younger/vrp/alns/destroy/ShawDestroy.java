@@ -31,19 +31,19 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 		int removenRoutePosition = routeList.remove(0);
 		Route removenRoute = s.routes.get(removenRoutePosition);
 
-		while (removenRoute.getRoute().size() <= 2) {
+		while (removenRoute.getSize() <= 2) {
 			removenRoutePosition = routeList.remove(0);
 			removenRoute = s.routes.get(removenRoutePosition);
 		}
 
 		// 选择被移除客户
 		ArrayList<Integer> cusList = new ArrayList<Integer>();
-		for (int j = 1; j < removenRoute.getRoute().size() - 1; j++)
+		for (int j = 1; j < removenRoute.getSize() - 1; j++)
 			cusList.add(j);
 		Collections.shuffle(cusList);
 
 		int removenCusPosition = cusList.remove(0);
-		Node removenCus = removenRoute.getRoute().get(removenCusPosition);
+		Node removenCus = removenRoute.getNode(removenCusPosition);
 		s.removeCustomer(removenRoutePosition, removenCusPosition);
 
 		// !记录被移除的点
@@ -59,9 +59,9 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 			double minRelate = Double.MAX_VALUE;
 
 			for (int j = 0; j < s.routes.size(); j++) {
-				for (int i = 1; i < s.routes.get(j).getRoute().size() - 1; ++i) {
+				for (int i = 1; i < s.routes.get(j).getSize() - 1; ++i) {
 
-					Node relatedNode = s.routes.get(j).getRoute().get(i);
+					Node relatedNode = s.routes.get(j).getNode(i);
 					int l = (lastRoute.getId() == s.routes.get(j).getId()) ? 0 : 1;
 
 					double d = distance[lastRemove.getId()][relatedNode.getId()];

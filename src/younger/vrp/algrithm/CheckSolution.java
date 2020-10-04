@@ -29,7 +29,7 @@ public class CheckSolution {
 
 		for (int i = 0; i < solution.getRoutes().size(); i++) {
 			Route vehicle = solution.getRoutes().get(i);
-			if (vehicle.getRoute().size() >= 3) {
+			if (vehicle.getSize() >= 3) {
 				id++;
 
 				double costInVehicle = 0;
@@ -41,16 +41,16 @@ public class CheckSolution {
 				boolean checkTime = true;
 				boolean checkTimeWindows = true;
 
-				for (int j = 1; j < vehicle.getRoute().size(); j++) {
-					time += distance[vehicle.getRoute().get(j - 1).getId()][vehicle.getRoute().get(j).getId()];
-					costInVehicle += distance[vehicle.getRoute().get(j - 1).getId()][vehicle.getRoute().get(j).getId()];
-					loadInVehicle += vehicle.getRoute().get(j).getDemand();
-					if (time < vehicle.getRoute().get(j).getTimeWindow()[0])
-						time = vehicle.getRoute().get(j).getTimeWindow()[0];
-					else if (time > vehicle.getRoute().get(j).getTimeWindow()[1])
+				for (int j = 1; j < vehicle.getSize(); j++) {
+					time += distance[vehicle.getNode(j - 1).getId()][vehicle.getNode(j).getId()];
+					costInVehicle += distance[vehicle.getNode(j - 1).getId()][vehicle.getNode(j).getId()];
+					loadInVehicle += vehicle.getNode(j).getDemand();
+					if (time < vehicle.getNode(j).getTimeWindow()[0])
+						time = vehicle.getNode(j).getTimeWindow()[0];
+					else if (time > vehicle.getNode(j).getTimeWindow()[1])
 						checkTimeWindows = false;
 
-					time += vehicle.getRoute().get(j).getServiceTime();
+					time += vehicle.getNode(j).getServiceTime();
 				}
 
 				totalCost += costInVehicle;

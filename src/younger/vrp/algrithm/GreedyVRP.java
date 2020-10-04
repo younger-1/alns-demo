@@ -77,7 +77,7 @@ public class GreedyVRP {
 
         // Add the depot to the vehicle.
         // ! 把仓库放入第一条路径的第一个位置
-        currentVehicle.addNodeToRoute(depot);
+        currentVehicle.add(depot);
 
         // Repeat until all customers are routed or if we run out vehicles.
         while (true) {
@@ -88,7 +88,7 @@ public class GreedyVRP {
 
             // Get the last node of the current route. We will try to find the closest node
             // to it that also satisfies the capacity constraint.
-            Node lastInTheCurrentRoute = currentVehicle.getLastNodeOfTheRoute();
+            Node lastNode = currentVehicle.getLastNode();
 
             // The distance of the closest node, if any, to the last node in the route.
             double smallestDistance = Double.MAX_VALUE;
@@ -99,11 +99,11 @@ public class GreedyVRP {
 
             // Find the nearest neighbor based on distance
             for (Node n : this.customers) {
-                double distance = this.distanceMatrix[lastInTheCurrentRoute.getId()][n.getId()];
+                double distance = this.distanceMatrix[lastNode.getId()][n.getId()];
 
                 // If we found a customer with closer that the value of "smallestDistance"
                 // ,store him temporarily
-                boolean isAddThisNodeToRoute = currentVehicle.getCustomerNum() + 1 < this.maxCustomerNum
+                boolean isAddThisNodeToRoute = currentVehicle.getSize() - 1 < this.maxCustomerNum
                         && distance < smallestDistance && isSatisfyConstraint(depot, currentVehicle, n);
                 if (isAddThisNodeToRoute) {
                     smallestDistance = distance;
@@ -137,7 +137,7 @@ public class GreedyVRP {
                 solution.cost.load += closestNode.getDemand();
 
                 // Add the closest node to the route
-                currentVehicle.addNodeToRoute(closestNode);
+                currentVehicle.add(closestNode);
 
                 // Remove customer from the non-served customers list.
                 this.customers.remove(closestNode);
@@ -145,13 +145,13 @@ public class GreedyVRP {
                 // We didn't find any node that satisfies the condition.
             } else {
                 // Increase cost by the distance to travel from the last node back to depot
-                currentVehicle.getCost().cost += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
-                currentVehicle.getCost().time += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
-                solution.cost.cost += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
-                solution.cost.time += this.distanceMatrix[lastInTheCurrentRoute.getId()][depot.getId()];
+                currentVehicle.getCost().cost += this.distanceMatrix[lastNode.getId()][depot.getId()];
+                currentVehicle.getCost().time += this.distanceMatrix[lastNode.getId()][depot.getId()];
+                solution.cost.cost += this.distanceMatrix[lastNode.getId()][depot.getId()];
+                solution.cost.time += this.distanceMatrix[lastNode.getId()][depot.getId()];
 
                 // Terminate current route by adding the depot as a final destination
-                currentVehicle.addNodeToRoute(depot);
+                currentVehicle.add(depot);
 
                 // !路径结束，计算这条路径的 total cost
                 currentVehicle.getCost().calculateTotalCost();
@@ -169,19 +169,19 @@ public class GreedyVRP {
                     currentVehicle = this.vehicles.remove(0);
 
                     // Add the depot as a starting point to the new route
-                    currentVehicle.addNodeToRoute(depot);
+                    currentVehicle.add(depot);
                 }
             }
         }
 
         // Now add the final route to the solution
-        Node lastNode = currentVehicle.getLastNodeOfTheRoute();
+        Node lastNode = currentVehicle.getLastNode();
         currentVehicle.getCost().cost += this.distanceMatrix[lastNode.getId()][depot.getId()];
         currentVehicle.getCost().time += this.distanceMatrix[lastNode.getId()][depot.getId()];
         solution.cost.cost += this.distanceMatrix[lastNode.getId()][depot.getId()];
         solution.cost.time += this.distanceMatrix[lastNode.getId()][depot.getId()];
 
-        currentVehicle.addNodeToRoute(depot);
+        currentVehicle.add(depot);
         currentVehicle.getCost().calculateTotalCost();
         solution.addRoute(currentVehicle);
 
@@ -189,7 +189,7 @@ public class GreedyVRP {
     }
 
     private boolean isSatisfyConstraint(Node depot, Route currentVehicle, Node n) {
-        Node lastNode = currentVehicle.getLastNodeOfTheRoute();
+        Node lastNode = currentVehicle.getLastNode();
         boolean isSatisfyCapacity = (currentVehicle.getCost().load + n.getDemand()) <= vehicleCapacity;
         boolean isSatisfyTimeWindow = (currentVehicle.getCost().time + distanceMatrix[lastNode.getId()][n.getId()]) < n
                 .getTimeWindow()[1];

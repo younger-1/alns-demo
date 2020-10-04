@@ -20,7 +20,7 @@ public class WorstCostDestroy extends ALNSAbstractOperation implements IALNSDest
 		// !new
 		ArrayList<Fitness> customList = new ArrayList<>();
 		for (int j = 0; j < s.routes.size(); j++) {
-			for (int i = 1; i < s.routes.get(j).getRoute().size() - 1; ++i) {
+			for (int i = 1; i < s.routes.get(j).getSize() - 1; ++i) {
 				customList.add(Fitness.calculateFitness(s.instance, s.routes.get(j), j, i));
 			}
 		}
@@ -80,7 +80,7 @@ class Fitness implements Comparable<Fitness> {
 		double[][] distance = instance.getDistanceMatrix();
 
 		// ! why
-		// int x = route.getRoute().get(0).getId();
+		// int x = route.getNode(0).getId();
 		// int y = customer.getId();
 		// double fitness = (route.getCost().getTimeViolation() +
 		// route.getCost().getLoadViolation()
@@ -89,9 +89,9 @@ class Fitness implements Comparable<Fitness> {
 		// ! new
 		Fitness f = new Fitness();
 
-		double cost_down = distance[a_Route.getRoute().get(cNo - 1).getId()][a_Route.getRoute().get(cNo).getId()]
-				+ distance[a_Route.getRoute().get(cNo).getId()][a_Route.getRoute().get(cNo + 1).getId()]
-				- distance[a_Route.getRoute().get(cNo - 1).getId()][a_Route.getRoute().get(cNo + 1).getId()];
+		double cost_down = distance[a_Route.getNode(cNo - 1).getId()][a_Route.getNode(cNo).getId()]
+				+ distance[a_Route.getNode(cNo).getId()][a_Route.getNode(cNo + 1).getId()]
+				- distance[a_Route.getNode(cNo - 1).getId()][a_Route.getNode(cNo + 1).getId()];
 		f.fitness = cost_down;
 
 		f.routeNo = rNo;

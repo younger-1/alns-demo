@@ -67,7 +67,7 @@ public class Solution {
         String result = "\nSolution { " + "totalCost = " + Math.round(this.cost.cost * 100) / 100.0 + ", routes = [";
 
         for (Route vehicle : this.routes) {
-            if (vehicle.getRoute().size() > 2)
+            if (vehicle.getSize() > 2)
                 result += "\n\t" + vehicle;
         }
 

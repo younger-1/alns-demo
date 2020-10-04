@@ -55,7 +55,7 @@ public class Route {
     /**
      * Returns the last node in the route
      */
-    public Node getLastNodeOfTheRoute() {
+    public Node getLastNode() {
         return this.route.get(this.route.size() - 1);
     }
 
@@ -64,7 +64,7 @@ public class Route {
      *
      * @param node The new customer to be inserted.
      */
-    public void addNodeToRoute(Node node) {
+    public void add(Node node) {
         this.route.add(node);
     }
 
@@ -90,7 +90,7 @@ public class Route {
 
     @Override
     public String toString() {
-        String result = "Route{" + "customerNum = " + getCustomerNum() + ", " + "cost = " + this.cost + ", route = [";
+        String result = "Route{" + "customerNum = " + (getSize() - 2) + ", " + "cost = " + this.cost + ", route = [";
 
         for (Node customer : this.route) {
             result += "\n\t\t" + customer;
@@ -112,9 +112,12 @@ public class Route {
     public void setCost(Cost cost) {
         this.cost = cost;
     }
-
-    public int getCustomerNum() {
-        return this.route.size() - 2;
+    
+    public int getSize() {
+        return this.route.size();
     }
 
+    public Node getNode(int i) {
+        return this.route.get(i);
+    }
 }

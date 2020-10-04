@@ -31,12 +31,12 @@ public class RegretBalance extends ALNSAbstractRepair implements IALNSRepair {
 
             for (int j = 0; j < s.routes.size(); j++) {
 
-                if (s.routes.get(j).getRoute().size() < 1) {
+                if (s.routes.get(j).getSize() < 1) {
                     continue;
                 }
 
                 // 寻找最优插入位置
-                for (int i = 1; i < s.routes.get(j).getRoute().size() - 1; ++i) {
+                for (int i = 1; i < s.routes.get(j).getSize() - 1; ++i) {
 
                     // 评价插入情况
                     Cost newCost = new Cost(s.cost);

@@ -70,13 +70,12 @@ public class MyALNSSolution {
 		Route removenRoute = this.routes.get(routePosition);
 
 		// System.out.println(this);
-		double load = -removenRoute.getRoute().get(cusPosition).getDemand();
-		double cost = -distance[removenRoute.getRoute().get(cusPosition - 1).getId()][removenRoute.getRoute()
-				.get(cusPosition).getId()]
-				- distance[removenRoute.getRoute().get(cusPosition).getId()][removenRoute.getRoute()
-						.get(cusPosition + 1).getId()]
-				+ distance[removenRoute.getRoute().get(cusPosition - 1).getId()][removenRoute.getRoute()
-						.get(cusPosition + 1).getId()];
+		double load = -removenRoute.getNode(cusPosition).getDemand();
+		double cost = -distance[removenRoute.getNode(cusPosition - 1).getId()][removenRoute.getNode(cusPosition)
+				.getId()]
+				- distance[removenRoute.getNode(cusPosition).getId()][removenRoute.getNode(cusPosition + 1).getId()]
+				+ distance[removenRoute.getNode(cusPosition - 1).getId()][removenRoute.getNode(cusPosition + 1)
+						.getId()];
 
 		this.cost.cost += cost;
 		this.cost.load += load;
@@ -98,14 +97,14 @@ public class MyALNSSolution {
 
 		double time = 0;
 		double timeWindowViolation = 0;
-		for (int i = 1; i < removenRoute.getRoute().size(); i++) {
-			time += distance[removenRoute.getRoute().get(i - 1).getId()][removenRoute.getRoute().get(i).getId()];
-			if (time < removenRoute.getRoute().get(i).getTimeWindow()[0])
-				time = removenRoute.getRoute().get(i).getTimeWindow()[0];
-			else if (time > removenRoute.getRoute().get(i).getTimeWindow()[1])
-				timeWindowViolation += time - removenRoute.getRoute().get(i).getTimeWindow()[1];
+		for (int i = 1; i < removenRoute.getSize(); i++) {
+			time += distance[removenRoute.getNode(i - 1).getId()][removenRoute.getNode(i).getId()];
+			if (time < removenRoute.getNode(i).getTimeWindow()[0])
+				time = removenRoute.getNode(i).getTimeWindow()[0];
+			else if (time > removenRoute.getNode(i).getTimeWindow()[1])
+				timeWindowViolation += time - removenRoute.getNode(i).getTimeWindow()[1];
 
-			time += removenRoute.getRoute().get(i).getServiceTime();
+			time += removenRoute.getNode(i).getServiceTime();
 		}
 		this.cost.time += (time - removenRoute.getCost().time);
 		removenRoute.getCost().time = time;
@@ -135,10 +134,10 @@ public class MyALNSSolution {
 		Route insertRoute = this.routes.get(routePosition);
 
 		double load = +insertCustomer.getDemand();
-		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
-				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
-				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
-						.get(insertCusPosition).getId()];
+		double cost = +distance[insertRoute.getNode(insertCusPosition - 1).getId()][insertCustomer.getId()]
+				+ distance[insertCustomer.getId()][insertRoute.getNode(insertCusPosition).getId()]
+				- distance[insertRoute.getNode(insertCusPosition - 1).getId()][insertRoute.getNode(insertCusPosition)
+						.getId()];
 
 		this.cost.cost += cost;
 		this.cost.load += load;
@@ -156,14 +155,14 @@ public class MyALNSSolution {
 
 		double time = 0;
 		double timeWindowViolation = 0;
-		for (int i = 1; i < insertRoute.getRoute().size(); i++) {
-			time += distance[insertRoute.getRoute().get(i - 1).getId()][insertRoute.getRoute().get(i).getId()];
-			if (time < insertRoute.getRoute().get(i).getTimeWindow()[0])
-				time = insertRoute.getRoute().get(i).getTimeWindow()[0];
-			else if (time > insertRoute.getRoute().get(i).getTimeWindow()[1])
-				timeWindowViolation += time - insertRoute.getRoute().get(i).getTimeWindow()[1];
+		for (int i = 1; i < insertRoute.getSize(); i++) {
+			time += distance[insertRoute.getNode(i - 1).getId()][insertRoute.getNode(i).getId()];
+			if (time < insertRoute.getNode(i).getTimeWindow()[0])
+				time = insertRoute.getNode(i).getTimeWindow()[0];
+			else if (time > insertRoute.getNode(i).getTimeWindow()[1])
+				timeWindowViolation += time - insertRoute.getNode(i).getTimeWindow()[1];
 
-			time += insertRoute.getRoute().get(i).getServiceTime();
+			time += insertRoute.getNode(i).getServiceTime();
 		}
 		this.cost.time += (time - insertRoute.getCost().time);
 		insertRoute.getCost().time = time;
@@ -174,7 +173,7 @@ public class MyALNSSolution {
 			this.cost.timeViolation += violationDiff;
 		}
 
-		if (insertRoute.getCustomerNum() > instance.getMaxCustomerNum()) {
+		if (insertRoute.getSize() - 2 > instance.getMaxCustomerNum()) {
 			insertRoute.getCost().maxCustomerNumViolation += 1;
 			this.cost.maxCustomerNumViolation += 1;
 		}
@@ -190,10 +189,10 @@ public class MyALNSSolution {
 
 		Route insertRoute = this.routes.get(routePosition).cloneRoute();
 
-		double cost = +distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertCustomer.getId()]
-				+ distance[insertCustomer.getId()][insertRoute.getRoute().get(insertCusPosition).getId()]
-				- distance[insertRoute.getRoute().get(insertCusPosition - 1).getId()][insertRoute.getRoute()
-						.get(insertCusPosition).getId()];
+		double cost = +distance[insertRoute.getNode(insertCusPosition - 1).getId()][insertCustomer.getId()]
+				+ distance[insertCustomer.getId()][insertRoute.getNode(insertCusPosition).getId()]
+				- distance[insertRoute.getNode(insertCusPosition - 1).getId()][insertRoute.getNode(insertCusPosition)
+						.getId()];
 		newCost.cost += cost;
 
 		insertRoute.getCost().load += insertCustomer.getDemand();
@@ -207,21 +206,21 @@ public class MyALNSSolution {
 
 		double time = 0;
 		double timeWindowViolation = 0;
-		for (int i = 1; i < insertRoute.getRoute().size(); i++) {
-			time += distance[insertRoute.getRoute().get(i - 1).getId()][insertRoute.getRoute().get(i).getId()];
-			if (time < insertRoute.getRoute().get(i).getTimeWindow()[0])
-				time = insertRoute.getRoute().get(i).getTimeWindow()[0];
-			else if (time > insertRoute.getRoute().get(i).getTimeWindow()[1])
-				timeWindowViolation += time - insertRoute.getRoute().get(i).getTimeWindow()[1];
+		for (int i = 1; i < insertRoute.getSize(); i++) {
+			time += distance[insertRoute.getNode(i - 1).getId()][insertRoute.getNode(i).getId()];
+			if (time < insertRoute.getNode(i).getTimeWindow()[0])
+				time = insertRoute.getNode(i).getTimeWindow()[0];
+			else if (time > insertRoute.getNode(i).getTimeWindow()[1])
+				timeWindowViolation += time - insertRoute.getNode(i).getTimeWindow()[1];
 
-			time += insertRoute.getRoute().get(i).getServiceTime();
+			time += insertRoute.getNode(i).getServiceTime();
 		}
 
 		if (timeWindowViolation > 0) {
 			newCost.timeViolation += timeWindowViolation - insertRoute.getCost().timeViolation;
 		}
 
-		if (insertRoute.getCustomerNum() > instance.getMaxCustomerNum()) {
+		if (insertRoute.getSize() - 2 > instance.getMaxCustomerNum()) {
 			newCost.maxCustomerNumViolation += 1;
 		}
 
