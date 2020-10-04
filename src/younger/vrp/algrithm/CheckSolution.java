@@ -45,9 +45,9 @@ public class CheckSolution {
 					time += distance[vehicle.getNode(j - 1).getId()][vehicle.getNode(j).getId()];
 					costInVehicle += distance[vehicle.getNode(j - 1).getId()][vehicle.getNode(j).getId()];
 					loadInVehicle += vehicle.getNode(j).getDemand();
-					if (time < vehicle.getNode(j).getTimeWindow()[0])
-						time = vehicle.getNode(j).getTimeWindow()[0];
-					else if (time > vehicle.getNode(j).getTimeWindow()[1])
+					if (time < vehicle.getNode(j).getTW()[0])
+						time = vehicle.getNode(j).getTW()[0];
+					else if (time > vehicle.getNode(j).getTW()[1])
 						checkTimeWindows = false;
 
 					time += vehicle.getNode(j).getServiceTime();

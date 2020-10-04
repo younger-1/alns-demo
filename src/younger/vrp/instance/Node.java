@@ -55,7 +55,7 @@ public class Node {
         this.serviceTime = serviceTime;
     }
 
-    public double[] getTimeWindow() {
+    public double[] getTW() {
         return this.timeWindows;
     }
 

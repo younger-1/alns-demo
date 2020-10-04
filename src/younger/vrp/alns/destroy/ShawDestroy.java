@@ -66,7 +66,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 
 					double d = distance[lastRemove.getId()][relatedNode.getId()];
 					double fitness = d * (1 + 0.5 * l
-							+ 0.0001 * Math.abs(lastRemove.getTimeWindow()[0] - relatedNode.getTimeWindow()[0])
+							+ 0.0001 * Math.abs(lastRemove.getTW()[0] - relatedNode.getTW()[0])
 							+ 0.1 * Math.abs(lastRemove.getDemand() - relatedNode.getDemand()));
 
 					if (minRelate > fitness) {

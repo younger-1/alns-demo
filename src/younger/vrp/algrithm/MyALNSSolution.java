@@ -99,10 +99,10 @@ public class MyALNSSolution {
 		double timeWindowViolation = 0;
 		for (int i = 1; i < removenRoute.getSize(); i++) {
 			time += distance[removenRoute.getNode(i - 1).getId()][removenRoute.getNode(i).getId()];
-			if (time < removenRoute.getNode(i).getTimeWindow()[0])
-				time = removenRoute.getNode(i).getTimeWindow()[0];
-			else if (time > removenRoute.getNode(i).getTimeWindow()[1])
-				timeWindowViolation += time - removenRoute.getNode(i).getTimeWindow()[1];
+			if (time < removenRoute.getNode(i).getTW()[0])
+				time = removenRoute.getNode(i).getTW()[0];
+			else if (time > removenRoute.getNode(i).getTW()[1])
+				timeWindowViolation += time - removenRoute.getNode(i).getTW()[1];
 
 			time += removenRoute.getNode(i).getServiceTime();
 		}
@@ -157,10 +157,10 @@ public class MyALNSSolution {
 		double timeWindowViolation = 0;
 		for (int i = 1; i < insertRoute.getSize(); i++) {
 			time += distance[insertRoute.getNode(i - 1).getId()][insertRoute.getNode(i).getId()];
-			if (time < insertRoute.getNode(i).getTimeWindow()[0])
-				time = insertRoute.getNode(i).getTimeWindow()[0];
-			else if (time > insertRoute.getNode(i).getTimeWindow()[1])
-				timeWindowViolation += time - insertRoute.getNode(i).getTimeWindow()[1];
+			if (time < insertRoute.getNode(i).getTW()[0])
+				time = insertRoute.getNode(i).getTW()[0];
+			else if (time > insertRoute.getNode(i).getTW()[1])
+				timeWindowViolation += time - insertRoute.getNode(i).getTW()[1];
 
 			time += insertRoute.getNode(i).getServiceTime();
 		}
@@ -208,10 +208,10 @@ public class MyALNSSolution {
 		double timeWindowViolation = 0;
 		for (int i = 1; i < insertRoute.getSize(); i++) {
 			time += distance[insertRoute.getNode(i - 1).getId()][insertRoute.getNode(i).getId()];
-			if (time < insertRoute.getNode(i).getTimeWindow()[0])
-				time = insertRoute.getNode(i).getTimeWindow()[0];
-			else if (time > insertRoute.getNode(i).getTimeWindow()[1])
-				timeWindowViolation += time - insertRoute.getNode(i).getTimeWindow()[1];
+			if (time < insertRoute.getNode(i).getTW()[0])
+				time = insertRoute.getNode(i).getTW()[0];
+			else if (time > insertRoute.getNode(i).getTW()[1])
+				timeWindowViolation += time - insertRoute.getNode(i).getTW()[1];
 
 			time += insertRoute.getNode(i).getServiceTime();
 		}

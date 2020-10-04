@@ -124,9 +124,9 @@ public class GreedyVRP {
                 solution.cost.time += smallestDistance;
 
                 // waiting time windows open
-                if (currentVehicle.getCost().time < closestNode.getTimeWindow()[0]) {
-                    solution.cost.time += (closestNode.getTimeWindow()[0] - currentVehicle.getCost().time);
-                    currentVehicle.getCost().time = closestNode.getTimeWindow()[0];
+                if (currentVehicle.getCost().time < closestNode.getTW()[0]) {
+                    solution.cost.time += (closestNode.getTW()[0] - currentVehicle.getCost().time);
+                    currentVehicle.getCost().time = closestNode.getTW()[0];
                 }
 
                 currentVehicle.getCost().time += closestNode.getServiceTime();
@@ -188,13 +188,12 @@ public class GreedyVRP {
         return solution;
     }
 
-    private boolean isSatisfyConstraint(Node depot, Route currentVehicle, Node n) {
-        Node lastNode = currentVehicle.getLastNode();
-        boolean isSatisfyCapacity = (currentVehicle.getCost().load + n.getDemand()) <= vehicleCapacity;
-        boolean isSatisfyTimeWindow = (currentVehicle.getCost().time + distanceMatrix[lastNode.getId()][n.getId()]) < n
-                .getTimeWindow()[1];
-        boolean isSatisfyDepotTimeWindow = (currentVehicle.getCost().time + distanceMatrix[lastNode.getId()][n.getId()]
-                + n.getServiceTime() + distanceMatrix[n.getId()][depot.getId()]) < depot.getTimeWindow()[1];
-        return isSatisfyCapacity && isSatisfyTimeWindow && isSatisfyDepotTimeWindow;
+    private boolean isSatisfyConstraint(Node depot, Route route, Node n) {
+        Node lastNode = route.getLastNode();
+        boolean isSatisfyCapacity = (route.getCost().load + n.getDemand()) <= vehicleCapacity;
+        boolean isSatisfyTW = (route.getCost().time + distanceMatrix[lastNode.getId()][n.getId()]) < n.getTW()[1];
+        boolean isSatisfyDepotTW = (route.getCost().time + distanceMatrix[lastNode.getId()][n.getId()]
+                + n.getServiceTime() + distanceMatrix[n.getId()][depot.getId()]) < depot.getTW()[1];
+        return isSatisfyCapacity && isSatisfyTW && isSatisfyDepotTW;
     }
 }

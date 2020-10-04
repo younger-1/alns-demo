@@ -65,7 +65,7 @@ public class ShawFilter extends ALNSAbstractOperation implements IALNSDestroy {
                     int l = (lastRoute.getId() == s.routes.get(j).getId()) ? -1 : 1;
 
                     double fitness = l * 2 + 3 * distance[lastRemove.getId()][relatedNode.getId()]
-                            + 2 * Math.abs(lastRemove.getTimeWindow()[0] - relatedNode.getTimeWindow()[0])
+                            + 2 * Math.abs(lastRemove.getTW()[0] - relatedNode.getTW()[0])
                             + 2 * Math.abs(lastRemove.getDemand() - relatedNode.getDemand());
 
                     if (minRelate > fitness) {
