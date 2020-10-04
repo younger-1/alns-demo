@@ -12,12 +12,12 @@ public class RandomFilter extends ALNSAbstractOperation implements IALNSDestroy 
     @Override
     public MyALNSSolution destroy(MyALNSSolution s, int removeNr) throws Exception {
 
-        if (s.removalCustomers.size() != 0) {
+        if (s.removeNodes.size() != 0) {
             System.err.println("removalCustomers is not empty.");
             return s;
         }
 
-        while (s.removalCustomers.size() < removeNr) {
+        while (s.removeNodes.size() < removeNr) {
 
             ArrayList<Integer> routeList = new ArrayList<Integer>();
             for (int j = 0; j < s.routes.size(); j++)

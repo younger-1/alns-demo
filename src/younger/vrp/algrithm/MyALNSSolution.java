@@ -30,7 +30,7 @@ public class MyALNSSolution {
 
 	public static final double punish = 1000;
 
-	public ArrayList<Node> removalCustomers;
+	public ArrayList<Node> removeNodes;
 
 	public MyALNSSolution(Solution sol, Instance instance) {
 		this.cost = new Cost(sol.cost);
@@ -45,7 +45,7 @@ public class MyALNSSolution {
 			this.routes.add(route.cloneRoute());
 		}
 
-		this.removalCustomers = new ArrayList<Node>();
+		this.removeNodes = new ArrayList<Node>();
 	}
 
 	public MyALNSSolution(MyALNSSolution sol) {
@@ -61,70 +61,70 @@ public class MyALNSSolution {
 			this.routes.add(route.cloneRoute());
 		}
 
-		this.removalCustomers = new ArrayList<Node>();
+		this.removeNodes = new ArrayList<Node>();
 	}
 
 	public void removeCustomer(int routePosition, int cusPosition) {
 		double[][] distance = instance.getDistanceMatrix();
 
-		Route removenRoute = this.routes.get(routePosition);
+		Route removeRoute = this.routes.get(routePosition);
 
 		// System.out.println(this);
-		double load = -removenRoute.getNode(cusPosition).getDemand();
-		double cost = -distance[removenRoute.getNode(cusPosition - 1).getId()][removenRoute.getNode(cusPosition)
+		double load = -removeRoute.getNode(cusPosition).getDemand();
+		double cost = -distance[removeRoute.getNode(cusPosition - 1).getId()][removeRoute.getNode(cusPosition)
 				.getId()]
-				- distance[removenRoute.getNode(cusPosition).getId()][removenRoute.getNode(cusPosition + 1).getId()]
-				+ distance[removenRoute.getNode(cusPosition - 1).getId()][removenRoute.getNode(cusPosition + 1)
+				- distance[removeRoute.getNode(cusPosition).getId()][removeRoute.getNode(cusPosition + 1).getId()]
+				+ distance[removeRoute.getNode(cusPosition - 1).getId()][removeRoute.getNode(cusPosition + 1)
 						.getId()];
 
 		this.cost.cost += cost;
 		this.cost.load += load;
-		removenRoute.getCost().cost += cost;
-		removenRoute.getCost().load += load;
+		removeRoute.getCost().cost += cost;
+		removeRoute.getCost().load += load;
 
-		double routeLoad = removenRoute.getCost().load;
+		double routeLoad = removeRoute.getCost().load;
 		if (routeLoad > this.instance.getVehicleCapacity()) {
 			double violaton = routeLoad - this.instance.getVehicleCapacity();
-			this.cost.loadViolation += violaton - removenRoute.getCost().loadViolation;
-			removenRoute.getCost().loadViolation = violaton;
-		} else if (removenRoute.getCost().loadViolation > 0) {
-			this.cost.loadViolation -= removenRoute.getCost().loadViolation;
-			removenRoute.getCost().loadViolation = 0;
+			this.cost.loadVio += violaton - removeRoute.getCost().loadVio;
+			removeRoute.getCost().loadVio = violaton;
+		} else if (removeRoute.getCost().loadVio > 0) {
+			this.cost.loadVio -= removeRoute.getCost().loadVio;
+			removeRoute.getCost().loadVio = 0;
 		}
 
 		// ! 移除节点
-		removalCustomers.add(removenRoute.removeNode(cusPosition));
+		removeNodes.add(removeRoute.removeNode(cusPosition));
 
 		double time = 0;
 		double timeWindowViolation = 0;
-		for (int i = 1; i < removenRoute.getSize(); i++) {
-			time += distance[removenRoute.getNode(i - 1).getId()][removenRoute.getNode(i).getId()];
-			if (time < removenRoute.getNode(i).getTW()[0])
-				time = removenRoute.getNode(i).getTW()[0];
-			else if (time > removenRoute.getNode(i).getTW()[1])
-				timeWindowViolation += time - removenRoute.getNode(i).getTW()[1];
+		for (int i = 1; i < removeRoute.getSize(); i++) {
+			time += distance[removeRoute.getNode(i - 1).getId()][removeRoute.getNode(i).getId()];
+			if (time < removeRoute.getNode(i).getTW()[0])
+				time = removeRoute.getNode(i).getTW()[0];
+			else if (time > removeRoute.getNode(i).getTW()[1])
+				timeWindowViolation += time - removeRoute.getNode(i).getTW()[1];
 
-			time += removenRoute.getNode(i).getServiceTime();
+			time += removeRoute.getNode(i).getServiceTime();
 		}
-		this.cost.time += (time - removenRoute.getCost().time);
-		removenRoute.getCost().time = time;
+		this.cost.time += (time - removeRoute.getCost().time);
+		removeRoute.getCost().time = time;
 
 		if (timeWindowViolation > 0) {
-			double violationDiff = timeWindowViolation - removenRoute.getCost().timeViolation;
-			removenRoute.getCost().timeViolation = timeWindowViolation;
-			this.cost.timeViolation += violationDiff;
-		} else if (removenRoute.getCost().timeViolation > 0) {
-			this.cost.timeViolation -= removenRoute.getCost().timeViolation;
-			removenRoute.getCost().timeViolation = 0;
+			double violationDiff = timeWindowViolation - removeRoute.getCost().timeVio;
+			removeRoute.getCost().timeVio = timeWindowViolation;
+			this.cost.timeVio += violationDiff;
+		} else if (removeRoute.getCost().timeVio > 0) {
+			this.cost.timeVio -= removeRoute.getCost().timeVio;
+			removeRoute.getCost().timeVio = 0;
 		}
 
-		if (removenRoute.getCost().maxCustomerNumViolation > 0) {
-			removenRoute.getCost().maxCustomerNumViolation -= 1;
-			this.cost.maxCustomerNumViolation -= 1;
+		if (removeRoute.getCost().nodeNumVio > 0) {
+			removeRoute.getCost().nodeNumVio -= 1;
+			this.cost.nodeNumVio -= 1;
 		}
 
 		// removenRoute.getCost().calculateTotalCost(this.alpha, this.beta);
-		removenRoute.getCost().calculateTotalCost(this.alpha, this.beta, this.gamma);
+		removeRoute.getCost().calculateTotalCost(this.alpha, this.beta, this.gamma);
 		// this.cost.calculateTotalCost(this.alpha, this.beta);
 		this.cost.calculateTotalCost(this.alpha, this.beta, this.gamma);
 	}
@@ -147,8 +147,8 @@ public class MyALNSSolution {
 		double routeLoad = insertRoute.getCost().load;
 		if (routeLoad > this.instance.getVehicleCapacity()) {
 			double violaton = routeLoad - this.instance.getVehicleCapacity();
-			this.cost.loadViolation += violaton - insertRoute.getCost().loadViolation;
-			insertRoute.getCost().loadViolation = violaton;
+			this.cost.loadVio += violaton - insertRoute.getCost().loadVio;
+			insertRoute.getCost().loadVio = violaton;
 		}
 
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
@@ -168,14 +168,14 @@ public class MyALNSSolution {
 		insertRoute.getCost().time = time;
 
 		if (timeWindowViolation > 0) {
-			double violationDiff = timeWindowViolation - insertRoute.getCost().timeViolation;
-			insertRoute.getCost().timeViolation = timeWindowViolation;
-			this.cost.timeViolation += violationDiff;
+			double violationDiff = timeWindowViolation - insertRoute.getCost().timeVio;
+			insertRoute.getCost().timeVio = timeWindowViolation;
+			this.cost.timeVio += violationDiff;
 		}
 
 		if (insertRoute.getSize() - 2 > instance.getMaxCustomerNum()) {
-			insertRoute.getCost().maxCustomerNumViolation += 1;
-			this.cost.maxCustomerNumViolation += 1;
+			insertRoute.getCost().nodeNumVio += 1;
+			this.cost.nodeNumVio += 1;
 		}
 
 		// insertRoute.getCost().calculateTotalCost(this.alpha, this.beta);
@@ -199,7 +199,7 @@ public class MyALNSSolution {
 		double routeLoad = insertRoute.getCost().load;
 		if (routeLoad > this.instance.getVehicleCapacity()) {
 			double violaton = routeLoad - this.instance.getVehicleCapacity();
-			newCost.loadViolation += violaton - insertRoute.getCost().loadViolation;
+			newCost.loadVio += violaton - insertRoute.getCost().loadVio;
 		}
 
 		insertRoute.addNodeToRouteWithIndex(insertCustomer, insertCusPosition);
@@ -217,11 +217,11 @@ public class MyALNSSolution {
 		}
 
 		if (timeWindowViolation > 0) {
-			newCost.timeViolation += timeWindowViolation - insertRoute.getCost().timeViolation;
+			newCost.timeVio += timeWindowViolation - insertRoute.getCost().timeVio;
 		}
 
 		if (insertRoute.getSize() - 2 > instance.getMaxCustomerNum()) {
-			newCost.maxCustomerNumViolation += 1;
+			newCost.nodeNumVio += 1;
 		}
 
 		// newCost.calculateTotalCost(this.alpha, this.beta);
@@ -229,7 +229,7 @@ public class MyALNSSolution {
 	}
 
 	public boolean feasible() {
-		return cost.loadViolation < 0.01;
+		return cost.loadVio < 0.01;
 	}
 
 	public Solution toSolution() {
