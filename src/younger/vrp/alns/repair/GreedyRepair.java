@@ -8,16 +8,16 @@ public class GreedyRepair extends ALNSAbstractRepair implements IALNSRepair {
 
 	@Override
 	public MyALNSSolution repair(MyALNSSolution s) {
-		if (s.removalCustomers.size() == 0) {
+		if (s.removeNodes.size() == 0) {
 			System.err.println("removalCustomers is empty!");
 			return s;
 		}
 
-		int insertCusNr = s.removalCustomers.size();
+		int insertCusNr = s.removeNodes.size();
 
 		for (int k = 0; k < insertCusNr; k++) {
 
-			Node insertNode = s.removalCustomers.remove(0);
+			Node insertNode = s.removeNodes.remove(0);
 
 			double bestCost;
 			int bestCusP = -1;

@@ -12,7 +12,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 	@Override
 	public MyALNSSolution destroy(MyALNSSolution s, int removeNr) throws Exception {
 
-		if (s.removalCustomers.size() != 0) {
+		if (s.removeNodes.size() != 0) {
 			System.err.println("removalCustomers is not empty.");
 			return s;
 		}
@@ -54,7 +54,7 @@ public class ShawDestroy extends ALNSAbstractOperation implements IALNSDestroy {
 
 		double[][] distance = s.instance.getDistanceMatrix();
 
-		while (s.removalCustomers.size() < removeNr) {
+		while (s.removeNodes.size() < removeNr) {
 
 			double minRelate = Double.MAX_VALUE;
 

@@ -12,18 +12,18 @@ public class RegretRepair extends ALNSAbstractRepair implements IALNSRepair {
 	@Override
 	public MyALNSSolution repair(MyALNSSolution s) {
 		// 如果没有移除的客户，上一步错误
-		if (s.removalCustomers.size() == 0) {
+		if (s.removeNodes.size() == 0) {
 			System.err.println("removalCustomers is empty!");
 			return s;
 		}
 
 		ArrayList<BestPos> bestPoses = new ArrayList<BestPos>();
 
-		int insertCusNr = s.removalCustomers.size();
+		int insertCusNr = s.removeNodes.size();
 
 		for (int k = 0; k < insertCusNr; k++) {
 
-			Node insertNode = s.removalCustomers.remove(0);
+			Node insertNode = s.removeNodes.remove(0);
 
 			double first, second;
 			int bestCusP = -1;

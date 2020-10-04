@@ -6,9 +6,9 @@ public class Cost {
 	public double time;
 	public double load;
 
-	public double loadViolation;
-	public double timeViolation;
-	public int maxCustomerNumViolation;
+	public double loadVio;
+	public double timeVio;
+	public int nodeNumVio;
 
 	public Cost() {
 		total = 0;
@@ -16,9 +16,9 @@ public class Cost {
 		load = 0;
 		time = 0;
 
-		loadViolation = 0;
-		timeViolation = 0;
-		maxCustomerNumViolation = 0;
+		loadVio = 0;
+		timeVio = 0;
+		nodeNumVio = 0;
 	}
 
 	public Cost(Cost cost) {
@@ -27,16 +27,16 @@ public class Cost {
 		this.load = cost.load;
 		this.time = cost.time;
 
-		this.loadViolation = cost.loadViolation;
-		this.timeViolation = cost.timeViolation;
-		this.maxCustomerNumViolation = cost.maxCustomerNumViolation;
+		this.loadVio = cost.loadVio;
+		this.timeVio = cost.timeVio;
+		this.nodeNumVio = cost.nodeNumVio;
 	}
 
 	@Override
 	public String toString() {
 		String result = String.format(
 				"[ total=%.1f, cost=%.1f, load=%.1f, time=%.1f, customerNum violation=%d, time windows violation=%.1f, load violation=%.1f",
-				total, cost, load, time, maxCustomerNumViolation, timeViolation, loadViolation);
+				total, cost, load, time, nodeNumVio, timeVio, loadVio);
 		return result;
 	}
 
@@ -47,19 +47,19 @@ public class Cost {
 	 * @param beta
 	 */
 	public void calculateTotalCost(double alpha, double beta) {
-		total = cost + alpha * loadViolation + beta * timeViolation;
+		total = cost + alpha * loadVio + beta * timeVio;
 	}
 
 	public void calculateTotalCost(double alpha, double beta, double gamma) {
-		total = cost + alpha * loadViolation + beta * timeViolation + gamma * maxCustomerNumViolation;
+		total = cost + alpha * loadVio + beta * timeVio + gamma * nodeNumVio;
 	}
 
 	public void calculateTotalCost() {
-		total = cost + loadViolation + timeViolation;
+		total = cost + loadVio + timeVio;
 	}
 
 	public void setLoadViol(double capacityviol) {
-		this.loadViolation = capacityviol;
+		this.loadVio = capacityviol;
 	}
 
 	public void setCost(double cost) {
@@ -71,11 +71,11 @@ public class Cost {
 	}
 
 	public double getLoadViolation() {
-		return loadViolation;
+		return loadVio;
 	}
 
 	public double getTimeViolation() {
-		return timeViolation;
+		return timeVio;
 	}
 
 	public double getLoad() {
@@ -95,6 +95,6 @@ public class Cost {
 	}
 
 	public void setTimeViolation(double timeViolation) {
-		this.timeViolation = timeViolation;
+		this.timeVio = timeViolation;
 	}
 }

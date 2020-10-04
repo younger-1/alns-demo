@@ -12,19 +12,19 @@ public class RandomRepair extends ALNSAbstractRepair implements IALNSRepair {
 	@Override
 	public MyALNSSolution repair(MyALNSSolution s) {
 		// 如果没有移除的客户，上一步错误
-		if (s.removalCustomers.size() == 0) {
+		if (s.removeNodes.size() == 0) {
 			System.err.println("removalCustomers is empty!");
 			return s;
 		}
 
 		// 获取随机数
 		Random r = s.instance.getRandom();
-		int insertCusNr = s.removalCustomers.size();
+		int insertCusNr = s.removeNodes.size();
 
 		// ! 插入节点循环
 		for (int i = 0; i < insertCusNr; i++) {
 
-			Node insertNode = s.removalCustomers.remove(0);
+			Node insertNode = s.removeNodes.remove(0);
 
 			// ! 随机决定查找多少条路径
 			int randomRouteNr = r.nextInt(s.routes.size()) + 1;
