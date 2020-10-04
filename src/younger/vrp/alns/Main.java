@@ -36,7 +36,7 @@ public class Main {
 
 		try {
 			solve("RC2_2_1", "Homberger", 200, // 客户点数量，Solomon可选择 25,50,100，Homberger可选择200，400
-					ALNSConfiguration.Default, VisualizationControl.AllPic);
+					ALNSConfiguration.Default, VisualizationControl.AllPic, VRPCatatory.OVRPTW);
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -55,11 +55,11 @@ public class Main {
 		// 解决策略
 		Solver solver = new Solver();
 		// 初始解
-		Solution is = solver.getInitialSolution(instance);
+		Solution is = solver.getInitialSolution(instance, cata);
 		// System.out.println(is);
 		System.out.println(checkSolution.Check(is));
 		// 满意解
-		Solution ims = solver.improveSolution(is, instance, ac, vc, cata);
+		Solution ims = solver.improveSolution(is, instance, ac, vc);
 		System.out.println(ims);
 		System.out.println(checkSolution.Check(ims));
 		System.out.println("ALNS progress cost " + ims.testTime + "s.");

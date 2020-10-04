@@ -3,6 +3,7 @@ package younger.vrp.alns.config;
 public enum VisualizationControl {
 
     AllPic(true, true, true, true), SimplePic(true, true, true, true);
+
     private boolean init_sol_chart;
     private boolean s1_sol_chart;
     private boolean s2_sol_chart;
