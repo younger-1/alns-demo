@@ -99,16 +99,14 @@ public class Instance {
         // 读取算例数据
         this.name = name;
         this.type = instanceType;
-        // importVehicleData(size, name);
+        importVehicleData(size, name);
 
         this.customers = new ArrayList<Node>();
         importCustomerData(size, name);
 
-        this.vehicleNr = 25;
-        this.vehicleCapacity = 24;
         this.maxCustomerNum = 9;
-        // this.distanceMatrix = new double[size + 5][size + 5];
-        // createDistanceMatrix();
+        this.distanceMatrix = new double[size + 5][size + 5];
+        createDistanceMatrix();
 
         r = new Random();
         r.setSeed(-1);
@@ -116,87 +114,44 @@ public class Instance {
 
     // 读取数据客户点数据
     public void importCustomerData(int size, String name) throws IOException {
-        this.distanceMatrix = new double[110][110];
-        for (int i = 0; i < distanceMatrix.length; i++) {
-            for (int j = 0; j < distanceMatrix[i].length; j++) {
-                distanceMatrix[i][j] = 60000;
-            }
-        }
-        String dataFileName = "./input/distance_sample.csv";
+       String dataFileName = "";
+        if (type.equals("Solomon"))
+            dataFileName = "./instances" + "/solomon" + "/solomon_" + size + "/" + name + ".txt";
+        else if (type.equals("Homberger"))
+            dataFileName = "./instances" + "/homberger" + "/homberger_" + size + "/" + name + ".txt";
+
+        BufferedReader bReader = new BufferedReader(new FileReader(dataFileName));
+
+        int data_in_x_lines = Integer.MAX_VALUE;
+
         String line;
-        boolean is_first_line_skiped = false;
-        HashMap<Long, Integer> my = new HashMap<>();
-        BufferedReader bReaders = new BufferedReader(new FileReader(dataFileName));
-        while ((line = bReaders.readLine()) != null) {
-            if (false == is_first_line_skiped) {
-                is_first_line_skiped = true;
-                continue;
-            }
-            String[] dataLine = line.split(",");
 
-            // set distance matrix
-            Long id_1 = Long.parseLong(dataLine[0]);
-            Long id_2 = Long.parseLong(dataLine[1]);
-            boolean is_add_this_customer = (null == my.get(id_1));
-            boolean is_add_that_customer = (null == my.get(id_2));
-            Integer distance = Integer.parseInt(dataLine[6]);
-            Integer[] index = convert_id_to_index(my, id_1, id_2);
-            distanceMatrix[index[0]][index[1]] = distance;
-            distanceMatrix[index[1]][index[0]] = distance;
+        while ((line = bReader.readLine()) != null) {
+            // 以空格为间隔符读取数据
+            String datavalue[] = line.split("\\s+");
 
-            // add depot
-            if (index[0] == 0 && is_add_this_customer) {
-                Node depot = new Node();
-                depot.setId(0);
-                depot.setDemand(0);
-                depot.setTimeWindow(0, 999999);
-                depot.setServiceTime(10);
-                depot.setX(Double.parseDouble(dataLine[2]));
-                depot.setY(Double.parseDouble(dataLine[3]));
-                this.customers.add(depot);
-                is_add_this_customer = false;
+            if (datavalue.length > 0 && datavalue[0].equals("CUST")) {
+                data_in_x_lines = 2;
             }
 
-            // set customer
-            if (is_add_this_customer) {
+            if (data_in_x_lines < 1 && datavalue.length > 0) {
+
                 Node customer = new Node();
-                customer.setId(index[0]);
-                customer.setDemand(2);
-                customer.setTimeWindow(0, 999999);
-                customer.setServiceTime(10);
-                customer.setX(Double.parseDouble(dataLine[2]));
-                customer.setY(Double.parseDouble(dataLine[3]));
+                customer.setId(Integer.parseInt(datavalue[1]));
+                customer.setX(Double.parseDouble(datavalue[2]));
+                customer.setY(Double.parseDouble(datavalue[3]));
+                customer.setDemand(Double.parseDouble(datavalue[4]));
+                customer.setTimeWindow(Double.parseDouble(datavalue[5]), Double.parseDouble(datavalue[6]));
+                customer.setServiceTime(Double.parseDouble(datavalue[7]));
                 this.customers.add(customer);
             }
-            if (is_add_that_customer) {
-                Node customer = new Node();
-                customer.setId(index[1]);
-                customer.setDemand(2);
-                customer.setTimeWindow(0, 999999);
-                customer.setServiceTime(10);
-                customer.setX(Double.parseDouble(dataLine[4]));
-                customer.setY(Double.parseDouble(dataLine[5]));
-                this.customers.add(customer);
-            }
-
+            data_in_x_lines--;
         }
-        bReaders.close();
+        bReader.close();
 
         numberOfNodes = customers.size();
+
         System.out.println("Input customers success !");
-
-    }
-
-    private Integer[] convert_id_to_index(HashMap<Long, Integer> my, Long id_1, Long id_2) {
-        Integer index_1 = my.get(id_1);
-        Integer index_2 = my.get(id_2);
-        if (null == index_1) {
-            my.put(id_1, my.size());
-        }
-        if (null == index_2) {
-            my.put(id_2, my.size());
-        }
-        return new Integer[] { my.get(id_1), my.get(id_2) };
     }
 
     // 读取数据车辆信息
@@ -243,7 +198,6 @@ public class Instance {
                 this.distanceMatrix[i][j] = (double) (Math
                         .round(Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2)) * 100)
                         / 100.0);
-                ;
             }
         }
     }
