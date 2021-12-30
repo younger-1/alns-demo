@@ -1,6 +1,8 @@
 package younger.vrp.algrithm;
 
 import younger.vrp.instance.Route;
+import younger.vrp.alns.config.VRPCategory;
+import younger.vrp.base.IDistance;
 import younger.vrp.instance.Instance;
 
 /**
@@ -15,65 +17,61 @@ import younger.vrp.instance.Instance;
  */
 public class CheckSolution {
 
-	private double[][] distance;
+    private IDistance dInstance = IDistance.getDistanceInstance();
 
-	public CheckSolution(Instance instance) {
-		this.distance = instance.getDistanceMatrix();
-	}
+    public CheckSolution(Instance instance) {
+    }
 
-	public String Check(Solution solution) {
-		String result = "";
-		double totalCost = 0;
+    public String Check(ALNSSolution solution, VRPCategory cate) {
+        String result = "";
+        double distanceCost = 0;
 
-		int id = 0;
+        int id = 0;
 
-		for (int i = 0; i < solution.getRoutes().size(); i++) {
-			Route vehicle = solution.getRoutes().get(i);
-			if (vehicle.getSize() >= 3) {
-				id++;
+        for (int i = 0; i < solution.getRoutes().size(); i++) {
+            Route vehicle = solution.getRoutes().get(i);
+            boolean isValidRoute = vehicle.getSize() >= 3;
+            if (isValidRoute) {
+                id++;
 
-				double costInVehicle = 0;
-				double loadInVehicle = 0;
-				double time = 0;
+                double costInVehicle = 0;
+                double loadInVehicle = 0;
+                double time = 0;
 
-				boolean checkCost = true;
-				boolean checkLoad = true;
-				boolean checkTime = true;
-				boolean checkTimeWindows = true;
+                boolean checkCost = true;
+                boolean checkLoad = true;
+                boolean checkTime = true;
+                boolean checkTimeWindows = true;
 
-				for (int j = 1; j < vehicle.getSize(); j++) {
-					time += distance[vehicle.getNode(j - 1).getId()][vehicle.getNode(j).getId()];
-					costInVehicle += distance[vehicle.getNode(j - 1).getId()][vehicle.getNode(j).getId()];
-					loadInVehicle += vehicle.getNode(j).getDemand();
-					if (time < vehicle.getNode(j).getTW()[0])
-						time = vehicle.getNode(j).getTW()[0];
-					else if (time > vehicle.getNode(j).getTW()[1])
-						checkTimeWindows = false;
+                for (int j = 1; j < vehicle.getSize(); j++) {
+                    time += dInstance.getDistance(vehicle.getNode(j - 1).getId(), vehicle.getNode(j).getId());
+                    costInVehicle += dInstance.getDistance(vehicle.getNode(j - 1).getId(), vehicle.getNode(j).getId());
+                    loadInVehicle += vehicle.getNode(j).getDemand();
 
-					time += vehicle.getNode(j).getServiceTime();
-				}
+                    time += vehicle.getNode(j).getServiceTime();
+                }
 
-				totalCost += costInVehicle;
+                distanceCost += costInVehicle;
 
-				if (Math.abs(vehicle.getCost().cost - costInVehicle) > 0.001)
-					checkCost = false;
-				if (Math.abs(vehicle.getCost().load - loadInVehicle) > 0.001)
-					checkLoad = false;
-				if (Math.abs(vehicle.getCost().time - time) > 0.001)
-					checkTime = false;
+                if (Math.abs(vehicle.costs.getDist() - costInVehicle) > 0.001)
+                    checkCost = false;
+                if (Math.abs(vehicle.costs.getLoad() - loadInVehicle) > 0.001)
+                    checkLoad = false;
+                if (Math.abs(vehicle.costs.getTime() - time) > 0.001)
+                    checkTime = false;
 
-				result += String.format(
-						"\n  check route %d: \n  check cost = %.2f , %b \n  check demand = %.2f , %b \n  check time = %.2f , %b \n  check time windows = %b \n",
-						id, costInVehicle, checkCost, loadInVehicle, checkLoad, time, checkTime, checkTimeWindows);
-			}
-		}
+                result += String.format(
+                        "\n  check route %2d: \n  check demand = %8.2f , %b \n  check cost   = %8.2f , %b \n  check time   = %8.2f , %b \n  check time windows : %b \n",
+                        id, loadInVehicle, checkLoad, costInVehicle, checkCost, time, checkTime, checkTimeWindows);
+            }
+        }
 
-		boolean checkTotalCost = true;
-		if (Math.abs(totalCost - solution.getTotalCost()) > 0.001)
-			checkTotalCost = false;
-			
-		result += String.format("\ncheck total cost = %.2f , %b \n", totalCost, checkTotalCost);
-		return result;
-	}
+        boolean checkDistanceCost = true;
+        if (Math.abs(distanceCost - solution.costs.getDist()) > 0.001)
+            checkDistanceCost = false;
+
+        result += String.format("\ncheck distance cost = %.2f , %b \n", distanceCost, checkDistanceCost);
+        return result;
+    }
 
 }

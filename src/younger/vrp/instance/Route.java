@@ -2,13 +2,15 @@ package younger.vrp.instance;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
-import younger.vrp.algrithm.Cost;
+import younger.vrp.base.IDistance;
 
 /**
  *         Every instance of this class represents a Route (Vehicle) that will
  *         be used in order to serve a set of customers
- * @author Xavier Young
+ * 
  *
  */
 public class Route {
@@ -24,22 +26,26 @@ public class Route {
      * The cost of the current Route. It is calculated as the sum of the distances
      * of every next node from the previous one.
      */
-    private Cost cost;
+    public Cost costs;
 
+    // private static double[][] distance;
+    // public static void referenceDistance(double[][] distance_matrix) {
+    //     distance = distance_matrix;
+    // }
     /**
      * Constructor
      *
-     * @param capacity The capacity for this Vehicle
+     * The capacity for this Vehicle
      */
     public Route(int id) {
         this.route = new ArrayList<>();
         this.id = id;
-        this.cost = new Cost();
+        this.costs = new Cost();
     }
 
     public Route cloneRoute() {
         Route clone = new Route(this.id);
-        clone.cost = new Cost(this.cost);
+        clone.costs = new Cost(this.costs);
         clone.route = new ArrayList<>(this.route);
         return clone;
     }
@@ -90,34 +96,35 @@ public class Route {
 
     @Override
     public String toString() {
-        String result = "Route{" + "customerNum = " + (getSize() - 2) + ", " + "cost = " + this.cost + ", route = [";
+        int[][] distanceMatrix = IDistance.getDistanceInstance().distanceMatrix();
+        String result = String.format(
+                "Route { route_id = %3d , customer_number = %2d ,\n\t    Cost = %s,\n\t    route = [", this.id,
+                getSize() - 2, this.costs);
 
-        for (Node customer : this.route) {
-            result += "\n\t\t" + customer;
+        for (int i = 0; i < this.getSize(); i++) {
+            Node customer = this.getNode(i);
+            Node before = i == 0 ? this.getNode(0) : this.getNode(i - 1);
+            result += "\n\t\t" + customer
+                    + String.format("    -    Traj: %7d", distanceMatrix[before.getId()][customer.getId()]);
         }
 
-        return result + "]}";
+        return result + " ] }";
     }
 
-    /**
-     * @return the cost
-     */
-    public Cost getCost() {
-        return this.cost;
-    }
-
-    /**
-     * @param cost the cost to set
-     */
-    public void setCost(Cost cost) {
-        this.cost = cost;
-    }
-    
     public int getSize() {
         return this.route.size();
     }
 
-    public Node getNode(int i) {
-        return this.route.get(i);
+    public Node getNode(int index) {
+        return this.route.get(index);
+    }
+
+    public Optional<Integer> getIndexOfNode(int id) {
+        return Stream.iterate(0, i -> i + 1).limit(this.getSize()).filter(i -> this.getNode(i).getId() == id)
+                .findFirst();
+    }
+
+    public Optional<Node> getNodeWithID(int id) {
+        return this.getIndexOfNode(id).map(index -> this.getNode(index));
     }
 }

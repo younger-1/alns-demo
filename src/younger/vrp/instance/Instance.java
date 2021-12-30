@@ -1,104 +1,46 @@
 package younger.vrp.instance;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+
+import younger.vrp.algrithm.ALNSSolution;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * @author Xavier Young
  */
 public class Instance {
 
-    private int[] vehicleInfo;
-    private int[][] customerInfo;
-    private String name;
-    private String type;
-    private Random r;
-
     /**
      * This list will keep all the nodes of the problem. NOTE: position 0 of the
      * list contains the depot.
      */
-    private List<Node> customers;
+    private List<Node> customers = new ArrayList<Node>();
 
-    /**
-     * The available vehicles numbers.
-     */
-    private int vehicleNr;
-
-    /**
-     * The capacity of vehicles.
-     */
-    private int vehicleCapacity;
+    // NOTE: info and name
+    // private int[] vehicleInfo;
+    // private int[][] customerInfo;
+    private String type;
+    private String name;
 
     /**
      * A 2-D matrix that will keep the distances of every node to each other.
      */
-    private double[][] distanceMatrix;
+    // private double[][] distanceMatrix;
 
     /**
-     * The total number of customers.
+     * The map of id to index
      */
-    private int numberOfNodes;
-    private int maxCustomerNum;
+    private HashMap<String, Node> idToNodeMap = new HashMap<>();
 
-    public Random getRandom() {
-        return r;
-    }
-
-    public int getMaxCustomerNum() {
-        return maxCustomerNum;
-    }
-
-    public void setR(Random r) {
-        this.r = r;
-    }
-
-    public List<Node> getCustomers() {
-        return this.customers;
-    }
-
-    public double[][] getDistanceMatrix() {
-        return this.distanceMatrix;
-    }
-
-    public int getVehicleNr() {
-        return this.vehicleNr;
-    }
-
-    public void setVehicleNr(int nr) {
-        this.vehicleNr = nr;
-    }
-
-    public int getVehicleCapacity() {
-        return this.vehicleCapacity;
-    }
-
-    public int getCustomerNr() {
-        return this.numberOfNodes;
-    }
-
-    public int[] getVehicleInfo() {
-        return vehicleInfo;
-    }
-
-    public int[][] getCustomerInfo() {
-        return customerInfo;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    // size 是测试用例文件名中的节点数
-    public Instance(int size, String name, String instanceType) throws IOException {
+    public Instance(String instanceType, String name, int size) {
         // 读取算例数据
-        this.name = name;
         this.type = instanceType;
+        this.name = name;
         importVehicleData(size, name);
 
         this.customers = new ArrayList<Node>();
@@ -106,15 +48,12 @@ public class Instance {
 
         this.maxCustomerNum = 9;
         this.distanceMatrix = new double[size + 5][size + 5];
-        createDistanceMatrix();
 
-        r = new Random();
-        r.setSeed(-1);
     }
 
     // 读取数据客户点数据
     public void importCustomerData(int size, String name) throws IOException {
-       String dataFileName = "";
+        String dataFileName = "";
         if (type.equals("Solomon"))
             dataFileName = "./instances" + "/solomon" + "/solomon_" + size + "/" + name + ".txt";
         else if (type.equals("Homberger"))
@@ -185,21 +124,32 @@ public class Instance {
         System.out.println("Input vehicle success !");
     }
 
-    /**
-     * A helper function that creates the distance matrix.
-     */
-    public void createDistanceMatrix() {
-        for (int i = 0; i < this.numberOfNodes; i++) {
-            Node n1 = this.customers.get(i);
+    public List<Node> getCustomers() {
+        return this.customers;
+    }
 
-            for (int j = 0; j < this.numberOfNodes; j++) {
-                Node n2 = this.customers.get(j);
+    public List<Node> getCopyOfCustomers() {
+        return new ArrayList<>(this.customers);
+    }
 
-                this.distanceMatrix[i][j] = (double) (Math
-                        .round(Math.sqrt(Math.pow(n1.getX() - n2.getX(), 2) + Math.pow(n1.getY() - n2.getY(), 2)) * 100)
-                        / 100.0);
-            }
-        }
+    // public double[][] getDistanceMatrix() {
+    //     return this.distanceMatrix;
+    // }
+
+    // public void setDistanceMatrix(double[][] distanceMatrix) {
+    //     this.distanceMatrix = distanceMatrix;
+    // }
+
+    public int getCustomerNumber() {
+        return this.customers.size();
+    }
+
+    public Node getCustomer(String leaderUid) {
+        return idToNodeMap.get(leaderUid);
+    }
+
+    public Node getCustomer(int index) {
+        return customers.get(index);
     }
 
 }

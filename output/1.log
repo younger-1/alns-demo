@@ -1,0 +1,73 @@
+alns-demo on  wiki [✘»+⇡]
+➜  git c -m "[rerun]"
+
+[wiki 99f582d] [rerun]
+ 66 files changed, 4081 insertions(+), 2427 deletions(-)
+
+ delete mode 100644 src/younger/vrp/algrithm/Solution.java
+
+ rename src/younger/vrp/alns/{repair => recreate/balance}/RegretBalance.java (68%)
+ rewrite src/younger/vrp/algrithm/CheckSolution.java (93%)
+ rewrite src/younger/vrp/alns/Main.java (90%)
+ rewrite src/younger/vrp/alns/config/ALNSConfiguration.java (80%)
+ rewrite src/younger/vrp/alns/config/IALNSConfig.java (75%)
+ rewrite src/younger/vrp/alns/operation/ALNSAbstractOperation.java (66%)
+ rewrite src/younger/vrp/alns/operation/IALNSOperation.java (72%)
+ rewrite src/younger/vrp/instance/Instance.java (89%)
+
+ delete mode 100644 src/younger/vrp/algrithm/MyALNSProcess.java
+ create mode 100644 src/younger/vrp/algrithm/ALNSProcess.java
+
+ delete mode 100644 src/younger/vrp/algrithm/MyALNSSolution.java
+ create mode 100644 src/younger/vrp/algrithm/ALNSSolution.java
+
+ delete mode 100644 src/younger/vrp/algrithm/Cost.java
+ create mode 100644 src/younger/vrp/instance/Cost.java
+
+ delete mode 100644 src/younger/vrp/alns/config/VRPCatetory.java
+ create mode 100644 src/younger/vrp/alns/config/VRPCategory.java
+
+ delete mode 100644 src/younger/vrp/alns/destroy/IALNSDestroy.java
+ delete mode 100644 src/younger/vrp/alns/destroy/RandomDestroy.java
+ delete mode 100644 src/younger/vrp/alns/destroy/RandomFilter.java
+ delete mode 100644 src/younger/vrp/alns/destroy/ShawDestroy.java
+ delete mode 100644 src/younger/vrp/alns/destroy/ShawFilter.java
+ delete mode 100644 src/younger/vrp/alns/destroy/WorstCostDestroy.java
+ delete mode 100644 src/younger/vrp/alns/destroy/WorstTotalFilter.java
+ delete mode 100644 src/younger/vrp/alns/repair/ALNSAbstractRepair.java
+ delete mode 100644 src/younger/vrp/alns/repair/GreedyBalance.java
+ delete mode 100644 src/younger/vrp/alns/repair/GreedyRepair.java
+ delete mode 100644 src/younger/vrp/alns/repair/IALNSRepair.java
+ delete mode 100644 src/younger/vrp/alns/repair/RandomRepair.java
+ delete mode 100644 src/younger/vrp/alns/repair/RegretRepair.java
+
+ create mode 100644 violation_parameter_fitting.py
+ create mode 100644 src/younger/vrp/alns/config/Constraint.java
+ create mode 100644 src/younger/vrp/alns/config/Fare.java
+ create mode 100644 src/younger/vrp/alns/config/InitRelax.java
+ create mode 100644 src/younger/vrp/alns/config/MaxViolation.java
+ create mode 100644 src/younger/vrp/alns/config/Rate.java
+ create mode 100644 src/younger/vrp/alns/recreate/ALNSAbstractRecreate.java
+ create mode 100644 src/younger/vrp/alns/recreate/IALNSRecreate.java
+ create mode 100644 src/younger/vrp/alns/recreate/balance/GreedyBalance.java
+ create mode 100644 src/younger/vrp/alns/recreate/balance/RandomBalance.java
+ create mode 100644 src/younger/vrp/alns/recreate/repair/GreedyRepair.java
+ create mode 100644 src/younger/vrp/alns/recreate/repair/RandomRepair.java
+ create mode 100644 src/younger/vrp/alns/recreate/repair/RegretRepair.java
+ create mode 100644 src/younger/vrp/alns/revive/SpreadRevive.java
+ create mode 100644 src/younger/vrp/alns/revive/StringRevive.java
+ create mode 100644 src/younger/vrp/alns/ruin/ALNSAbstractRuin.java
+ create mode 100644 src/younger/vrp/alns/ruin/AreaRuin.java
+ create mode 100644 src/younger/vrp/alns/ruin/IALNSRuin.java
+ create mode 100644 src/younger/vrp/alns/ruin/RadialRuin.java
+ create mode 100644 src/younger/vrp/alns/ruin/RandomRuin.java
+ create mode 100644 src/younger/vrp/alns/ruin/destroy/BrotherRouteDestroy.java
+ create mode 100644 src/younger/vrp/alns/ruin/destroy/ShawDestroy.java
+ create mode 100644 src/younger/vrp/alns/ruin/destroy/WorstDestroy.java
+ create mode 100644 src/younger/vrp/alns/ruin/filter/BrotherRouteFilter.java
+ create mode 100644 src/younger/vrp/alns/ruin/filter/ShawFilter.java
+ create mode 100644 src/younger/vrp/alns/ruin/filter/WorstFilter.java
+ create mode 100644 src/younger/vrp/base/Distance.java
+ create mode 100644 src/younger/vrp/base/DistanceUtils.java
+ create mode 100644 src/younger/vrp/base/IDistance.java
+ create mode 100644 src/younger/vrp/instance/Expense.java

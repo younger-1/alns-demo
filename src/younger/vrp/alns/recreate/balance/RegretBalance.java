@@ -1,16 +1,22 @@
-package younger.vrp.alns.repair;
+package younger.vrp.alns.recreate.balance;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import younger.vrp.algrithm.Cost;
-import younger.vrp.algrithm.MyALNSSolution;
+import younger.vrp.algrithm.ALNSSolution;
+import younger.vrp.alns.recreate.ALNSAbstractRecreate;
+import younger.vrp.alns.recreate.IALNSRecreate;
+import younger.vrp.instance.Cost;
 import younger.vrp.instance.Node;
 
-public class RegretBalance extends ALNSAbstractRepair implements IALNSRepair {
+public class RegretBalance extends ALNSAbstractRecreate implements IALNSRecreate {
+
+    public static RegretBalance of() {
+        return new RegretBalance();
+    }
 
     @Override
-    public MyALNSSolution repair(MyALNSSolution s) {
+    public ALNSSolution recreate(ALNSSolution s) {
         if (s.removeNodes.size() == 0) {
             System.err.println("removalCustomers is empty!");
             return s;
@@ -36,26 +42,22 @@ public class RegretBalance extends ALNSAbstractRepair implements IALNSRepair {
                 }
 
                 // 寻找最优插入位置
-                for (int i = 1; i < s.routes.get(j).getSize() - 1; ++i) {
+                for (int i = 1; i < s.routes.get(j).getSize(); ++i) {
 
                     // 评价插入情况
-                    Cost newCost = new Cost(s.cost);
-                    s.evaluateInsertCustomer(j, i, insertNode, newCost);
+                    Cost newCost = s.evaluateInsertCustomer(j, i, insertNode);
 
-                    if (newCost.total > Double.MAX_VALUE) {
-                        newCost.total = Double.MAX_VALUE;
+                    if (newCost.getTotal() > Double.MAX_VALUE) {
+                        newCost.setTotal(Double.MAX_VALUE);
                     }
 
-                    // if a better insertion is found, set the position to insert in the move and
-                    // update the minimum cost found
-                    if (newCost.total < first) {
-                        // System.out.println(varCost.checkFeasible());
+                    if (newCost.getTotal() < first) {
                         bestCusP = i;
                         bestRouteP = j;
                         second = first;
-                        first = newCost.total;
-                    } else if (newCost.total < second && newCost.total != first) {
-                        second = newCost.total;
+                        first = newCost.getTotal();
+                    } else if (newCost.getTotal() < second && newCost.getTotal() != first) {
+                        second = newCost.getTotal();
                     }
                 }
             }

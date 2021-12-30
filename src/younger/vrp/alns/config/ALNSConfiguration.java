@@ -2,89 +2,74 @@ package younger.vrp.alns.config;
 
 public enum ALNSConfiguration implements IALNSConfig {
 
-    Default(20, 30, 5000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5),
-    CostMin(30, 10, 10000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5),
-    TotalMin(10, 30, 10000, 500, 0.1, 20, 5, 1, 0.99937, 0.05, 0.5);
+    Default(2000, 3, 3, 300, 0.1, 15, 9, 2, 0.99967),
+    CostMin(20000, 30, 10, 250, 0.1, 25, 8, 1, 0.99967),
+    TotalMin(20000, 10, 30, 250, 0.1, 25, 8, 1, 0.99967);
 
-    private final int v;// 迭代次数v
-    private final int w;// 迭代次数w
-    private final int omega;// 迭代次数
-    private final int tau;// 更新算子选择概率的间隔迭代次数
-    private final double r_p;// 计算概率
-    private final int sigma_1;// 发现全局最优，add
-    private final int sigma_2;// 发现局部最优，add
-    private final int sigma_3;// 发现较差，add
-    private final double c;
-    private final double delta;
-    private final double big_omega;
+    private final int u;                // 迭代次数
+    private final int v;                // 第一阶段更新次数 v
+    private final int w;                // 第二阶段更新次数 w
+    private final int tau;              // 更新算子的权重和选择概率的间隔迭代次数
+    private final double lambda;        // 算子的权重更新速度
+    private final int reward_1;         // 发现全局最优
+    private final int reward_2;         // 发现局部最优
+    private final int reward_3;         // 发现较差
+    private final double sa;            // 模拟退火(SA)的降温系数
 
-    ALNSConfiguration(int v, int w, int omega, int tau, double r_p, int sigma_1, int sigma_2, int sigma_3, double c,
-            double delta, double big_omega) {
+    private ALNSConfiguration(int u, int v, int w, int tau, double lambda, int reward_1, int reward_2, int reward_3, double sa) {
+        this.u = u;
         this.v = v;
         this.w = w;
-        this.omega = omega;
         this.tau = tau;
-        this.r_p = r_p;
-        this.sigma_1 = sigma_1;
-        this.sigma_2 = sigma_2;
-        this.sigma_3 = sigma_3;
-        this.c = c;
-        this.delta = delta;
-        this.big_omega = big_omega;
+        this.lambda = lambda;
+        this.reward_1 = reward_1;
+        this.reward_2 = reward_2;
+        this.reward_3 = reward_3;
+        this.sa = sa;
     }
 
     @Override
-    public int getW() {
+    public int get_w() {
         return w;
     }
 
     @Override
-    public int getV() {
+    public int get_v() {
         return v;
     }
 
     @Override
-    public int getOmega() {
-        return omega;
+    public int get_u() {
+        return u;
     }
 
     @Override
-    public int getTau() {
+    public int get_tau() {
         return tau;
     }
 
     @Override
-    public double getR_p() {
-        return r_p;
+    public double get_lambda() {
+        return lambda;
     }
 
     @Override
-    public int getSigma_1() {
-        return sigma_1;
+    public int get_reward_1() {
+        return reward_1;
     }
 
     @Override
-    public int getSigma_2() {
-        return sigma_2;
+    public int get_reward_2() {
+        return reward_2;
     }
 
     @Override
-    public int getSigma_3() {
-        return sigma_3;
+    public int get_reward_3() {
+        return reward_3;
     }
 
     @Override
-    public double getC() {
-        return c;
-    }
-
-    @Override
-    public double getDelta() {
-        return delta;
-    }
-
-    @Override
-    public double getBig_omega() {
-        return big_omega;
+    public double get_sa() {
+        return sa;
     }
 }

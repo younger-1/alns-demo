@@ -2,7 +2,9 @@ package younger.vrp.alns.config;
 
 public enum VisualizationControl {
 
-    AllPic(true, true, true, true), SimplePic(true, true, true, true);
+    None(false, false, false, false), 
+    AllPic(true, true, true, true), 
+    SimplePic(true, false, false, true);
 
     private boolean init_sol_chart;
     private boolean s1_sol_chart;
@@ -12,8 +14,7 @@ public enum VisualizationControl {
     VisualizationControl() {
     }
 
-    VisualizationControl(boolean init_sol_chart, boolean s1_sol_chart, boolean s2_sol_chart,
-            boolean global_sol_chart) {
+    VisualizationControl(boolean init_sol_chart, boolean s1_sol_chart, boolean s2_sol_chart, boolean global_sol_chart) {
         this.init_sol_chart = init_sol_chart;
         this.s1_sol_chart = s1_sol_chart;
         this.s2_sol_chart = s2_sol_chart;

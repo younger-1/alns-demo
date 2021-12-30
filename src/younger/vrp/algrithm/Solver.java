@@ -3,20 +3,31 @@ package younger.vrp.algrithm;
 import younger.vrp.instance.Instance;
 import younger.vrp.alns.config.VisualizationControl;
 import younger.vrp.alns.config.IALNSConfig;
-import younger.vrp.alns.config.VRPCatetory;
+import younger.vrp.alns.config.VRPCategory;
 
 public class Solver {
 
-    public Solver() {
+    private Instance instance;
+
+    public Solver(Instance instance) {
+        this.instance = instance;
     }
 
-    public Solution getInitialSolution(Instance instance, VRPCatetory cata) {
+    public ALNSSolution getInitialSolution(VRPCategory cate) {
         GreedyVRP greedyVRP = new GreedyVRP(instance);
-        return greedyVRP.getInitialSolution(cata);
+        return greedyVRP.getInitialSolution(cate);
     }
 
-    public Solution improveSolution(Solution s, Instance is, IALNSConfig ac, VisualizationControl vc) throws Exception {
-        MyALNSProcess ALNS = new MyALNSProcess(s, is, ac, vc);
-        return ALNS.improveSolution(vc);
+    public ALNSSolution improveSolution(ALNSSolution s, IALNSConfig ac, VisualizationControl vc)
+            throws Exception {
+        ALNSProcess ALNS = new ALNSProcess(s, instance, ac, vc);
+        ALNSSolution sol = ALNS.improveSolution(vc);
+        try {
+            // is.exportResult(sol);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return sol;
     }
+
 }
