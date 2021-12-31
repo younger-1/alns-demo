@@ -149,15 +149,11 @@ public class Instance {
     // }
 
     public int getCustomerNumber() {
-        return this.customers.size();
+        return this.customers.size() - 1;
     }
 
     public Node getCustomer(String leaderUid) {
         return idToNodeMap.get(leaderUid);
-    }
-
-    public Node getCustomer(int index) {
-        return customers.get(index);
     }
 
 }

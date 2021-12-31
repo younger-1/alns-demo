@@ -22,10 +22,6 @@ public class GreedyVRP {
      */
     private List<Node> customers;
 
-    /**
-     * customer number
-     */
-    private int customerNumber;
 
     /**
      * All the vehicles.
@@ -47,11 +43,6 @@ public class GreedyVRP {
     public GreedyVRP(Instance instance) {
         this.instance = instance;
         this.customers = instance.getCustomers();
-        this.customerNumber = instance.getCustomerNumber();
-    }
-
-    public int getCustomerNr() {
-        return this.customerNumber;
     }
 
     private ALNSSolution pre_init(VRPCategory cate) {

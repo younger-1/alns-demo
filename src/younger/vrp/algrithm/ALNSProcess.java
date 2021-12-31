@@ -269,8 +269,9 @@ public class ALNSProcess {
 
         update_global();
         // s_g = s_2[get_best_s_2()];
-        System.out.println(s_1[get_best_s_1()]);
-        System.out.println(s_2[get_best_s_2()]);
+
+        // System.out.println(s_1[get_best_s_1()]);
+        // System.out.println(s_2[get_best_s_2()]);
 
         double alns_time = Math.round((System.currentTimeMillis() - t_start) * 1000) / 1000000.;
 

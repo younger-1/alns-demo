@@ -3,7 +3,6 @@ package younger.vrp.algrithm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 import younger.vrp.instance.Node;
 import younger.vrp.instance.Route;
@@ -357,7 +356,7 @@ public class ALNSSolution {
     public String toString() {
         String result = String.format(
                 "\nALNS_Solution { route_number = %d , customer_number = %d , \n    Expense = %s , \n\n    Violation Overview:",
-                this.routes.size(), this.instance.getCustomerNumber(), this.costs);
+                this.routes.size(), this.customerNr, this.costs);
 
         String time_vio_result = "\n\troute_id\ttime_violation";
         String load_vio_result = "\n\troute_id\tload_violation";
@@ -378,6 +377,6 @@ public class ALNSSolution {
                 route_result += "\n\t" + route;
             }
         }
-        return result + time_vio_result + load_vio_result + node_vio_result + /* route_result + */ "\n    ]\n}";
+        return result + time_vio_result + load_vio_result + node_vio_result + route_result + "\n    ]\n}";
     }
 }

@@ -101,7 +101,8 @@ public class Node {
 
     @Override
     public String toString() {
-        return String.format("Node { x = %10.6f, y = %9.6f, id = %4d, demand = %4.0f }", x, y, id, demand);
+        // return String.format("Node { x = %10.6f, y = %9.6f, id = %4d, demand = %4.0f }", x, y, id, demand);
+        return String.format("Node { x = %6.2f, y = %6.2f, id = %4d, demand = %4.0f }", x, y, id, demand);
     }
 
     @Override
