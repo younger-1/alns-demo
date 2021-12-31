@@ -90,9 +90,6 @@ public class GreedyVRP {
                 // load
                 overloadedVehicle.costs.setLoad(n.getDemand());
 
-                // arc
-                overloadedVehicle.costs.setArc(-distanceMatrix[0][i]);
-
                 // distance
                 overloadedVehicle.costs.setDist(distanceMatrix[0][i]);
 
@@ -145,11 +142,6 @@ public class GreedyVRP {
 
         // Repeat until all customers are routed or if we run out vehicles.
         while (true) {
-
-            // If we served all customers, exit.
-            if (this.customers.size() == 0)
-                break;
-
             // Get the last node of the current route. We will try to find the closest node
             // to it that also satisfies the capacity constraint.
             Node lastNode = currentVehicle.getLastNode();
@@ -182,7 +174,8 @@ public class GreedyVRP {
                     boolean isSatisfyNodeNumber = currentVehicle.getSize() - 1 < this.maxCustomerNum * (1 - customerNumRelax);
                     boolean isSatisfyTime = currentVehicle.costs.getTime() + distance / cate.getRate().getVehicleSpeed()
                             + n.getDemand() / cate.getRate().getServiceSpeed() <= maxTime * (1 - timeRelax);
-                    if (isSatisfyNodeNumber && isSatisfyCapacity && isSatisfyTime) {
+
+                    if (cate.isSatisfy(isSatisfyCapacity, isSatisfyNodeNumber, isSatisfyTime)) {
                         smallestDistance = distance;
                         closestNode = n;
                         closestNodeIndex = i;
@@ -192,10 +185,6 @@ public class GreedyVRP {
 
             // A node that satisfies the capacity constraint found
             if (closestNode != null) {
-                // ! prepare to calculate arc distance
-                if (currentVehicle.getSize() == 1) {
-                    currentVehicle.costs.setArc(-smallestDistance);
-                }
                 // ! Increase the cost of the current route by the distance of the previous final
                 currentVehicle.costs.setDist(currentVehicle.costs.getDist() + smallestDistance);
 
@@ -215,18 +204,17 @@ public class GreedyVRP {
                 // Remove customer from the non-served customers list.
                 this.customers.remove(closestNodeIndex);
 
-                // We didn't find any node that satisfies the condition.
-            } else {
+            }
+            // We didn't find any node that satisfies the condition
+            // or we have served all customers,
+            // then we should put this route to solution
+            if (closestNode == null || this.customers.size() == 0) {
                 // Increase cost by the distance to travel from the last node back to depot
                 double distance_to_depot = this.distanceMatrix[lastNode.getId()][depot.getId()];
                 currentVehicle.costs.setDist(currentVehicle.costs.getDist() + distance_to_depot);
 
                 double time_to_depot = distance_to_depot / cate.getRate().getVehicleSpeed();
                 currentVehicle.costs.setTime(currentVehicle.costs.getTime() + time_to_depot);
-
-                // * time DO NOT include the service time of the last customer
-                double time_not_serve = lastNode.getDemand() / cate.getRate().getServiceSpeed();
-                currentVehicle.costs.setTime(currentVehicle.costs.getTime() - time_not_serve);
 
                 // Terminate current route by adding the depot as a final destination
                 currentVehicle.add(depot);
@@ -239,31 +227,18 @@ public class GreedyVRP {
                     // review: add more car
                     System.err.println("The vehicles are used up! Please add more vehicles!");
                     break;
-                    // if we still have some vehicles, use.
-                } else {
+                    // if we still have some vehicles and still have customers to be served
+                } else if (this.customers.size() != 0) {
                     // Recruit a new vehicle.
                     currentVehicle = this.available_vehicles.remove(0);
                     // Add the depot as a starting point to the new route
                     currentVehicle.add(depot);
                 }
             }
-        }
 
-        if (this.available_vehicles.size() != 0) {
-            // Now add the final route to the solution
-            Node lastNode = currentVehicle.getLastNode();
-            double distance_to_depot = this.distanceMatrix[lastNode.getId()][depot.getId()];
-            currentVehicle.costs.setDist(currentVehicle.costs.getDist() + distance_to_depot);
-
-            double time_to_depot = distance_to_depot / cate.getRate().getVehicleSpeed();
-            currentVehicle.costs.setTime(currentVehicle.costs.getTime() + time_to_depot);
-
-            // * time DO NOT include the service time of the last customer
-            double time_not_serve = lastNode.getDemand() / cate.getRate().getServiceSpeed();
-            currentVehicle.costs.setTime(currentVehicle.costs.getTime() - time_not_serve);
-
-            currentVehicle.add(depot);
-            solution.addRoute(currentVehicle);
+            // If we served all customers, exit.
+            if (this.customers.size() == 0)
+                break;
         }
 
         // * Pre-recruit vehicles
@@ -287,7 +262,7 @@ public class GreedyVRP {
     private void post_init(ALNSSolution sol) {
         double average_dist = sol.update_average_dist();
         for (Route route : sol.getRoutes()) {
-            route.costs.setArc(route.costs.getArc() + route.costs.getDist());
+            route.costs.setArc(this.calcArc(route));
             route.costs.calc_total();
 
             sol.costs.setArc(sol.costs.getArc() + route.costs.getArc());
@@ -301,5 +276,11 @@ public class GreedyVRP {
             sol.costs.setTotal(sol.costs.getTotal() + route.costs.getTotal() * (route.costs.getDist() / average_dist));
         }
         sol.costs.total_to_fare();
+    }
+
+    private double calcArc(Route route) {
+        return route.costs.getDist()
+                - distanceMatrix[0][route.getNodeId(1)]
+                - distanceMatrix[route.getNodeId(route.getSize() - 2)][0];
     }
 }

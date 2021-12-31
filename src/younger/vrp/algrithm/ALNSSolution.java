@@ -94,16 +94,6 @@ public class ALNSSolution {
         this.routes.remove(routePos);
     }
 
-    public void removeCustomerWithID(int customerID) {
-        int routePos = IntStream.range(0, this.routes.size())
-                .filter(i -> this.routes.get(i).getIndexOfNode(customerID).isPresent()).findFirst().getAsInt();
-
-        // this.routes.stream().map(r -> r.getIndexOfNode(customerID)).filter(Optional::isPresent).findFirst().get().get();
-        int customerPos = this.routes.get(routePos).getIndexOfNode(customerID).get();
-
-        this.removeCustomer(routePos, customerPos);
-    }
-
     public void removeAllCustomerOfRoute(Route route) {
         pre_do(this.costs, route);
 

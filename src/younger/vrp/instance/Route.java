@@ -119,12 +119,8 @@ public class Route {
         return this.route.get(index);
     }
 
-    public Optional<Integer> getIndexOfNode(int id) {
-        return Stream.iterate(0, i -> i + 1).limit(this.getSize()).filter(i -> this.getNode(i).getId() == id)
-                .findFirst();
+    public int getNodeId(int index) {
+        return this.route.get(index).getId();
     }
 
-    public Optional<Node> getNodeWithID(int id) {
-        return this.getIndexOfNode(id).map(index -> this.getNode(index));
-    }
 }

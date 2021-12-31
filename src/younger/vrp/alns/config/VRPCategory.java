@@ -91,4 +91,14 @@ public enum VRPCategory {
         return fare;
     }
 
+    public boolean isSatisfy(boolean isSatisfyCapacity, boolean isSatisfyNodeNumber, boolean isSatisfyTime) {
+        boolean ok = isSatisfyCapacity;
+        if (this.isTL()) {
+            ok = ok && isSatisfyNodeNumber && isSatisfyTime;
+        }
+        if (this.isTW()) {
+        }
+        return ok;
+    }
+
 }
