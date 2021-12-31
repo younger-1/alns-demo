@@ -20,7 +20,8 @@ public enum InitRelax {
     A3J(0, 1 / 14.0, 3 / 14.0, 1 / 15.0),
     B1J(0, 1 / 7.0, 1 / 14.0, 1 / 15.0),
     B2J(0, 1 / 7.0, 1 / 7.0, 1 / 15.0),
-    B3J(0, 1 / 7.0, 3 / 14.0, 1 / 15.0);
+    B3J(0, 1 / 7.0, 3 / 14.0, 1 / 15.0),
+    ;
 
     private double vehicleNumRelax;
     private double customerNumRelax;

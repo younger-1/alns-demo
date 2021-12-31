@@ -31,7 +31,8 @@ public class Distance implements IDistance {
 
             for (int j = 0; j < nodes.size(); j++) {
                 Node n2 = nodes.get(j);
-                distanceMatrix[id][j] = DistanceUtils.getDistance(n1.getX(), n1.getY(), n2.getX(), n2.getY());
+                // distanceMatrix[id][j] = DistanceUtils.getDistance(n1.getX(), n1.getY(), n2.getX(), n2.getY());
+                distanceMatrix[id][j] = DistanceUtils.getEuclideanDistance(n1.getX(), n1.getY(), n2.getX(), n2.getY());
             }
 
             // review: we don't require the driver to come back to the depot now

@@ -4,7 +4,8 @@ package younger.vrp.alns.config;
  * Available resources will be consumed in VRP
  */
 public enum Constraint {
-    Default(999, 2000, 14, 300);
+    Default(999, 2000, 14, 300),
+    ;
 
     public void setVehicleNr(int x) {
         this.vehicleNr = x;

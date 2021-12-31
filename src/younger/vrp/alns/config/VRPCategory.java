@@ -2,18 +2,26 @@ package younger.vrp.alns.config;
 
 public enum VRPCategory {
 
-    CVRP(true, Constraint.Default, MaxViolation.Default, Fare.Default, Rate.Case1, InitRelax.None),
-    OVRP(false, Constraint.Default, MaxViolation.Default, Fare.Default, Rate.Case1, InitRelax.Z2);
+    CVRP(true, false, false, Constraint.Default, MaxViolation.Default, Fare.Default, Rate.Case1, InitRelax.None),
+    OVRP(false, false, false, Constraint.Default, MaxViolation.Default, Fare.Default, Rate.Case1, InitRelax.Z2),
+    VRPTL(true, true, false, Constraint.Default, MaxViolation.Default, Fare.Default, Rate.Case1, InitRelax.Z2),
+    VRPTW(true, false, true, Constraint.Default, MaxViolation.Default, Fare.Default, Rate.Case1, InitRelax.Z2),
+    ;
 
     private boolean addDepotToEnd;
+    private boolean isTL;
+    private boolean isTW;
     private Constraint cons;
     private MaxViolation violation;
     private Fare fare;
     private Rate rate;
     private InitRelax ir;
 
-    private VRPCategory(boolean addDepotToEnd, Constraint cons, MaxViolation mv, Fare fare, Rate rate, InitRelax ir) {
+    private VRPCategory(boolean addDepotToEnd, boolean isTL, boolean isTW, Constraint cons, MaxViolation mv, Fare fare,
+            Rate rate, InitRelax ir) {
         this.addDepotToEnd = addDepotToEnd;
+        this.isTL = isTL;
+        this.isTW = isTW;
         this.cons = cons;
         this.violation = mv;
         this.fare = fare;
@@ -27,6 +35,20 @@ public enum VRPCategory {
      */
     public boolean isAddDepotToEnd() {
         return addDepotToEnd;
+    }
+
+    /**
+     * @return the isTL
+     */
+    public boolean isTL() {
+        return isTL;
+    }
+
+    /**
+     * @return the isTW
+     */
+    public boolean isTW() {
+        return isTW;
     }
 
     /**

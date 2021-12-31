@@ -6,7 +6,8 @@ package younger.vrp.alns.config;
  * 计算 total 所用的参数可通过根目录下的 violation_parameter_fitting.py 脚本拟合获取
  */
 public enum MaxViolation {
-    Default(500, 5, 10);
+    Default(500, 5, 10),
+    ;
 
     private int loadViolation;
     private int nodeViolation;

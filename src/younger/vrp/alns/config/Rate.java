@@ -7,7 +7,13 @@ package younger.vrp.alns.config;
  */
 public enum Rate {
 
-    None(1, 1), Case1(360, 8), Case2(420, 8), Case3(480, 8), Case4(600, 8), Case5(720, 8);
+    None(1, 1),
+    Case1(360, 8),
+    Case2(420, 8),
+    Case3(480, 8),
+    Case4(600, 8),
+    Case5(720, 8),
+    ;
 
     /**
      * @apiNote
