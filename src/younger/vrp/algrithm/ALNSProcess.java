@@ -56,7 +56,7 @@ public class ALNSProcess {
         prepare_two_stage();
 
         if (vc.isInit_sol_chart()) {
-            VRPDrawer.draw_sol(s_g, 1).saveImage("data-vehicle-routing-alns/img/Init_Solution.alns");
+            VRPDrawer.draw_sol(s_g, 1).saveImage("Init_Solution.alns");
         }
 
         ALNSAbstractOperation.use(s_.getVrpCate());
@@ -284,13 +284,13 @@ public class ALNSProcess {
         int _b1 = get_best_s_1();
         int _b2 = get_best_s_2();
         if (cp.isS1_sol_chart()) {
-            VRPDrawer.draw_sol(s_1[_b1], 2).saveImage("data-vehicle-routing-alns/img/Stage_1_Solution.alns");
+            VRPDrawer.draw_sol(s_1[_b1], 2).saveImage("Stage_1_Solution.alns");
         }
         if (cp.isS2_sol_chart()) {
-            VRPDrawer.draw_sol(s_2[_b2], 3).saveImage("data-vehicle-routing-alns/img/Stage_2_Solution.alns");
+            VRPDrawer.draw_sol(s_2[_b2], 3).saveImage("Stage_2_Solution.alns");
         }
         if (cp.isGlobal_sol_chart()) {
-            VRPDrawer.draw_sol(s_g, 4).saveImage("data-vehicle-routing-alns/img/Global_Solution.alns");
+            VRPDrawer.draw_sol(s_g, 4).saveImage("Global_Solution.alns");
         }
 
         return s_g;

@@ -59,7 +59,7 @@ public class Cost {
     /**
      * Allow violation: 500:10:5
      * @apiNotee
-     * 拟合的参数可通过 data-vehicle-routing-alns 目录下的 violation_parameter_fitting.py 脚本获取
+     * 拟合的参数可通过根目录下的 violation_parameter_fitting.py 脚本获取
      */
     public void calc_total() {
 

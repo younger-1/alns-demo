@@ -204,11 +204,11 @@ public class VRPDrawer extends JPanel {
         BufferedImage bImage = new BufferedImage(myContainer.getWidth(), myContainer.getHeight(), BufferedImage.TYPE_INT_ARGB);
         myContainer.paint(bImage.createGraphics());
 
+        String outdir = "img/test/";
+        title = outdir + title;
         File output = new File(title + ".png");
         File outputDir = output.getParentFile();
-        if (!outputDir.exists()) {
-            outputDir.mkdir();
-        }
+        outputDir.mkdirs();
 
         try {
             javax.imageio.ImageIO.write(bImage, "PNG", output);
