@@ -6,6 +6,14 @@ package younger.vrp.alns.config;
 public enum Constraint {
     Default(999, 2000, 14, 300);
 
+    public void setVehicleNr(int x) {
+        this.vehicleNr = x;
+    }
+
+    public void setVehicleCapacity(int x) {
+        this.vehicleCapacity = x;
+    }
+
     private Constraint(int vehicleNr, int vehicleCapacity, int maxCustomerNum, double time) {
         this.vehicleNr = vehicleNr;
         this.vehicleCapacity = vehicleCapacity;

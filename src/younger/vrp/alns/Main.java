@@ -25,6 +25,8 @@ public class Main {
     // solve函数，输出解 输入变量：算例名，客户数，
 	private static double solve(Instance instance, IALNSConfig ac, VisualizationControl vc, VRPCategory cate)
 			throws Exception {
+        cate.getCons().setVehicleNr(instance.getVehicleNr());
+        cate.getCons().setVehicleCapacity(instance.getVehicleCapacity());
 
         // 检查结果
         // CheckSolution checkSolution = new CheckSolution(instance);

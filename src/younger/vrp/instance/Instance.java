@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import younger.vrp.algrithm.ALNSSolution;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -24,8 +22,18 @@ public class Instance {
     // NOTE: info and name
     // private int[] vehicleInfo;
     // private int[][] customerInfo;
-    private String type;
-    private String name;
+    // private String type;
+    // private String name;
+
+    /**
+     * The available vehicles numbers.
+     */
+    private int vehicleNr;
+
+    /**
+     * The capacity of vehicles.
+     */
+    private int vehicleCapacity;
 
     /**
      * A 2-D matrix that will keep the distances of every node to each other.
@@ -37,22 +45,24 @@ public class Instance {
      */
     private HashMap<String, Node> idToNodeMap = new HashMap<>();
 
-    public Instance(String instanceType, String name, int size) {
+    public Instance(String type, String name, int size) throws IOException {
         // 读取算例数据
-        this.type = instanceType;
-        this.name = name;
-        importVehicleData(size, name);
+        importVehicleData(type, name, size);
 
         this.customers = new ArrayList<Node>();
-        importCustomerData(size, name);
+        importCustomerData(type, name, size);
+    }
 
-        this.maxCustomerNum = 9;
-        this.distanceMatrix = new double[size + 5][size + 5];
+    public int getVehicleCapacity() {
+        return vehicleCapacity;
+    }
 
+    public int getVehicleNr() {
+        return vehicleNr;
     }
 
     // 读取数据客户点数据
-    public void importCustomerData(int size, String name) throws IOException {
+    public void importCustomerData(String type, String name, int size) throws IOException {
         String dataFileName = "";
         if (type.equals("Solomon"))
             dataFileName = "./instances" + "/solomon" + "/solomon_" + size + "/" + name + ".txt";
@@ -88,13 +98,11 @@ public class Instance {
         }
         bReader.close();
 
-        numberOfNodes = customers.size();
-
         System.out.println("Input customers success !");
     }
 
     // 读取数据车辆信息
-    public void importVehicleData(int size, String name) throws IOException {
+    public void importVehicleData(String type, String name, int size) throws IOException {
 
         String dataFileName = "";
         if (type.equals("Solomon"))
