@@ -25,7 +25,6 @@ public class Node {
      * A unique identifier for the customer
      */
     private int id;
-    private String uid;
 
     /**
      * The current customer's demand.
@@ -37,7 +36,6 @@ public class Node {
      */
     public Node(Node n) {
         this.id = n.id;
-        this.uid = n.uid;
         this.x = n.x;
         this.y = n.y;
         this.demand = n.demand;
@@ -91,14 +89,6 @@ public class Node {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
     }
 
     public double getDemand() {

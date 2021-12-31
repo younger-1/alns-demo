@@ -7,13 +7,9 @@ public interface IDistance {
         return Distance.getInstance();
     }
 
-    public int getDistance(String fromLeader, String toLeader);
-
     public int getDistance(int from, int to);
 
-    public List<String> getNeighbours(String leader);
-
-    public List<String> getNeighbours(int index);
+    public List<Integer> getNeighbours(int index);
 
     public int[][] distanceMatrix();
 }
