@@ -13,7 +13,6 @@ import younger.vrp.alns.revive.StringRevive;
 import younger.vrp.alns.config.IALNSConfig;
 import younger.vrp.alns.ruin.ALNSAbstractRuin;
 import younger.vrp.alns.ruin.IALNSRuin;
-import younger.vrp.instance.Instance;
 import younger.vrp.visualization.VRPDrawer;
 
 public class ALNSProcess {
@@ -49,15 +48,11 @@ public class ALNSProcess {
     private int max_i;
     private int allow_reduced_num;
 
-    public ALNSProcess(ALNSSolution s_, Instance instance, IALNSConfig c, VisualizationControl vc) {
+    public ALNSProcess(ALNSSolution s_, IALNSConfig c) {
         config = c;
 
         s_g = new ALNSSolution(s_);
         prepare_two_stage();
-
-        if (vc.isInit_sol_chart()) {
-            VRPDrawer.draw_sol(s_g, 1).saveImage("Init_Solution.alns");
-        }
 
         ALNSAbstractOperation.use(s_.getVrpCate());
         destroy_ops = ALNSAbstractRuin.common_destroy();
@@ -114,7 +109,13 @@ public class ALNSProcess {
     }
 
     // ! ALNS框架
-    public ALNSSolution improveSolution(VisualizationControl cp) throws Exception {
+    public ALNSSolution improveSolution(String instanceName, VisualizationControl vc) throws Exception {
+        VRPDrawer.setInstanceName(instanceName);
+        instanceName += "-";
+        if (vc.isInit_sol_chart()) {
+            VRPDrawer.drawSolution(s_g, 1).saveImage(instanceName + "init");
+        }
+
         T = 0.003 * s_g.costs.getArc();
         double descent_coefficient = config.get_sa();
         t_start = System.currentTimeMillis();
@@ -189,7 +190,9 @@ public class ALNSProcess {
             }
 
             // * Revive
-            already_reduced = reduce_route_revive(already_reduced, i);
+            if (allow_reduced_num > 0) {
+                already_reduced = reduce_route_revive(already_reduced, i);
+            }
             spread_route_revive(i);
 
             // * Stage 2
@@ -284,14 +287,14 @@ public class ALNSProcess {
 
         int _b1 = get_best_s_1();
         int _b2 = get_best_s_2();
-        if (cp.isS1_sol_chart()) {
-            VRPDrawer.draw_sol(s_1[_b1], 2).saveImage("Stage_1_Solution.alns");
+        if (vc.isS1_sol_chart()) {
+            VRPDrawer.drawSolution(s_1[_b1], 2).saveImage(instanceName + "stage_1");
         }
-        if (cp.isS2_sol_chart()) {
-            VRPDrawer.draw_sol(s_2[_b2], 3).saveImage("Stage_2_Solution.alns");
+        if (vc.isS2_sol_chart()) {
+            VRPDrawer.drawSolution(s_2[_b2], 3).saveImage(instanceName + "stage_2");
         }
-        if (cp.isGlobal_sol_chart()) {
-            VRPDrawer.draw_sol(s_g, 4).saveImage("Global_Solution.alns");
+        if (vc.isGlobal_sol_chart()) {
+            VRPDrawer.drawSolution(s_g, 4).saveImage(instanceName + "best");
         }
 
         return s_g;

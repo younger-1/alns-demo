@@ -15,8 +15,9 @@ import younger.vrp.instance.Instance;
 public class Main {
     public static void main(String args[]) {
         try {
-			Instance instance = new Instance("Homberger", "RC2_2_1", 200);
-			solve(instance, ALNSConfiguration.Default, VisualizationControl.AllPic, VRPCategory.OVRP);
+            // Instance instance = new Instance("Homberger", "RC2_2_1", 200);
+            Instance instance = new Instance("Solomon", "C101", 50);
+			solve(instance, ALNSConfiguration.Default, VisualizationControl.AllPic, VRPCategory.CVRP);
         } catch (Exception e2) {
             e2.printStackTrace();
         }

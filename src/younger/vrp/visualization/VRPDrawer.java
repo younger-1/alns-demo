@@ -21,6 +21,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 import younger.vrp.algrithm.ALNSSolution;
 import younger.vrp.alns.config.VRPCategory;
@@ -28,6 +29,7 @@ import younger.vrp.instance.Node;
 import younger.vrp.instance.Route;
 
 public class VRPDrawer extends JPanel {
+    private static String instanceName = "";
     private static final long serialVersionUID = 1L;
     private double[][] x_routes;
     private double[][] y_routes;
@@ -40,23 +42,28 @@ public class VRPDrawer extends JPanel {
     private VRPCategory vrpCate;
     private JFrame myFrame;
 
-    public static VRPDrawer draw_sol(ALNSSolution sol, int screenPositionIndex) {
+    public static void setInstanceName(String name) {
+        instanceName = name;
+    }
+
+    public static VRPDrawer drawSolution(ALNSSolution sol, int screenPositionIndex) {
         VRPDrawer vd = new VRPDrawer(sol);
         String sol_kind = null;
         if (screenPositionIndex == 1) {
-            sol_kind = "Init";
+            sol_kind = "init";
         } else if (screenPositionIndex == 2) {
-            sol_kind = "Stage-1";
+            sol_kind = "stage_1";
         } else if (screenPositionIndex == 3) {
-            sol_kind = "Stage-2";
+            sol_kind = "stage_2";
         } else if (screenPositionIndex == 4) {
-            sol_kind = "Optimal";
+            sol_kind = "best";
         }
-        sol_kind += String.format(" -- Route(%d), arc(%f)", sol.routes.size(), sol.costs.getArc());
-        // sol_kind += String.format("Route(%d), cost(%.3f), colinear(%d)", sol.getNumberOfRoute(), sol.getCost().getDistance(), sol.getCoLineCount());
+        sol_kind += String.format(" [routes: %d, dist: %f, time: %f]", sol.routes.size(), sol.costs.getDist(),
+                sol.costs.getTime());
 
         // Border myBorder = BorderFactory.createMatteBorder(5, 5, 5, 5, Color.CYAN);
         Border myBorder = BorderFactory.createTitledBorder(sol_kind);
+        myBorder = BorderFactory.createTitledBorder(myBorder, instanceName, TitledBorder.RIGHT, TitledBorder.TOP);
         vd.setBorder(myBorder);
 
         JPanel main_pane = new JPanel();
@@ -181,7 +188,7 @@ public class VRPDrawer extends JPanel {
                 // g2.setColor(Color.RED);
                 // g2.setStroke(new BasicStroke(3.0f));
                 g.setColor(Color.LIGHT_GRAY);
-                g.fillRect(x_coord[i] - radius, y_coord[i] - radius, 2 * radius, 2 * radius);
+                g.fillRect(x_coord[i] - radius, y_coord[i] - radius, 4 * radius, 4 * radius);
             }
         }
 

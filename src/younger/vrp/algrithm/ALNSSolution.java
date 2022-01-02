@@ -9,7 +9,6 @@ import younger.vrp.instance.Route;
 import younger.vrp.alns.config.VRPCategory;
 import younger.vrp.base.IDistance;
 import younger.vrp.instance.Expense;
-import younger.vrp.instance.Instance;
 
 public class ALNSSolution {
     /**
@@ -17,7 +16,6 @@ public class ALNSSolution {
      */
     public List<Route> routes;
     public Expense costs;
-    private Instance instance;
     public int[][] distance = IDistance.getDistanceInstance().distanceMatrix();
     public int customerNr;
     // optimize: new random for each solution
@@ -26,13 +24,11 @@ public class ALNSSolution {
     private VRPCategory vrpCate;
     private double average_dist;
 
-    public ALNSSolution(Instance ins, VRPCategory vrpCate) {
+    public ALNSSolution(VRPCategory vrpCate) {
         this.vrpCate = vrpCate;
-        this.instance = ins;
 
         this.costs = new Expense();
         this.routes = new ArrayList<>();
-        this.customerNr = instance.getCustomerNumber();
         this.removeNodes = new ArrayList<Node>();
         // note: may use it
         // this.update_average_dist();
@@ -50,7 +46,6 @@ public class ALNSSolution {
 
     public ALNSSolution(ALNSSolution sol) {
         this.vrpCate = sol.vrpCate;
-        this.instance = sol.instance;
 
         this.costs = new Expense(sol.costs);
         this.routes = new ArrayList<>();
@@ -140,17 +135,13 @@ public class ALNSSolution {
         pre_do(this.costs, route);
 
         double load = -route.getNode(cusPosition).getDemand();
-        double dist = cusPosition == route.getSize() - 1
-                ? (-distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()])
-                : (-distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()]
+        double dist = (-distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()]
                         - distance[route.getNode(cusPosition).getId()][route.getNode(cusPosition + 1).getId()]
                         + distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition + 1).getId()]);
         double arc = cusPosition == 1
                 ? -distance[route.getNode(cusPosition).getId()][route.getNode(cusPosition + 1).getId()]
                 : dist;
-        double time_tmp = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
-        double time = cusPosition == route.getSize() - 2 ? dist / vrpCate.getRate().getVehicleSpeed()
-                - route.getNode(cusPosition - 1).getDemand() / vrpCate.getRate().getServiceSpeed() : time_tmp;
+        double time = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
 
         route.costs.setDist(route.costs.getDist() + dist);
         route.costs.setLoad(route.costs.getLoad() + load);
@@ -196,17 +187,13 @@ public class ALNSSolution {
         pre_do(newCost, route);
 
         double load = -route.getNode(cusPosition).getDemand();
-        double dist = cusPosition == route.getSize() - 1
-                ? (-distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()])
-                : (-distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()]
+        double dist = (-distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()]
                         - distance[route.getNode(cusPosition).getId()][route.getNode(cusPosition + 1).getId()]
                         + distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition + 1).getId()]);
         double arc = cusPosition == 1
                 ? -distance[route.getNode(cusPosition).getId()][route.getNode(cusPosition + 1).getId()]
                 : dist;
-        double time_tmp = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
-        double time = cusPosition == route.getSize() - 2 ? dist / vrpCate.getRate().getVehicleSpeed()
-                - route.getNode(cusPosition - 1).getDemand() / vrpCate.getRate().getServiceSpeed() : time_tmp;
+        double time = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
 
         route.costs.setDist(route.costs.getDist() + dist);
         route.costs.setLoad(route.costs.getLoad() + load);
@@ -248,15 +235,11 @@ public class ALNSSolution {
         pre_do(this.costs, route);
 
         double load = +customer.getDemand();
-        double dist = cusPosition == route.getSize()
-                ? (+distance[route.getNode(cusPosition - 1).getId()][customer.getId()])
-                : (+distance[route.getNode(cusPosition - 1).getId()][customer.getId()]
+        double dist = (+distance[route.getNode(cusPosition - 1).getId()][customer.getId()]
                         + distance[customer.getId()][route.getNode(cusPosition).getId()]
                         - distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()]);
         double arc = cusPosition == 1 ? +distance[customer.getId()][route.getNode(cusPosition).getId()] : dist;
-        double time_tmp = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
-        double time = cusPosition == route.getSize() - 1 ? dist / vrpCate.getRate().getVehicleSpeed()
-                + route.getNode(cusPosition - 1).getDemand() / vrpCate.getRate().getServiceSpeed() : time_tmp;
+        double time = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
 
         route.costs.setDist(route.costs.getDist() + dist);
         route.costs.setLoad(route.costs.getLoad() + load);
@@ -295,16 +278,12 @@ public class ALNSSolution {
         Route route = this.routes.get(routePosition).cloneRoute();
         pre_do(newCost, route);
 
-        double dist = cusPosition == route.getSize()
-                ? (+distance[route.getNode(cusPosition - 1).getId()][customer.getId()])
-                : (+distance[route.getNode(cusPosition - 1).getId()][customer.getId()]
+        double dist = (+distance[route.getNode(cusPosition - 1).getId()][customer.getId()]
                         + distance[customer.getId()][route.getNode(cusPosition).getId()]
                         - distance[route.getNode(cusPosition - 1).getId()][route.getNode(cusPosition).getId()]);
         double arc = cusPosition == 1 ? +distance[customer.getId()][route.getNode(cusPosition).getId()] : dist;
         double load = +customer.getDemand();
-        double time_tmp = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
-        double time = cusPosition == route.getSize() - 1 ? dist / vrpCate.getRate().getVehicleSpeed()
-                + route.getNode(cusPosition - 1).getDemand() / vrpCate.getRate().getServiceSpeed() : time_tmp;
+        double time = dist / vrpCate.getRate().getVehicleSpeed() + load / vrpCate.getRate().getServiceSpeed();
 
         route.costs.setDist(route.costs.getDist() + dist);
         route.costs.setLoad(route.costs.getLoad() + load);

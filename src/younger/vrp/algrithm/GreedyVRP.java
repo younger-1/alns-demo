@@ -47,7 +47,7 @@ public class GreedyVRP {
 
     private ALNSSolution pre_init(VRPCategory cate) {
 
-        ALNSSolution sol = new ALNSSolution(instance, cate);
+        ALNSSolution sol = new ALNSSolution(cate);
 
         this.vehicleCapacity = cate.getCons().getVehicleCapacity();
         this.maxCustomerNum = cate.getCons().getMaxCustomerNum();

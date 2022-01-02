@@ -20,8 +20,8 @@ public class Solver {
 
     public ALNSSolution improveSolution(ALNSSolution s, IALNSConfig ac, VisualizationControl vc)
             throws Exception {
-        ALNSProcess ALNS = new ALNSProcess(s, instance, ac, vc);
-        ALNSSolution sol = ALNS.improveSolution(vc);
+        ALNSProcess ALNS = new ALNSProcess(s, ac);
+        ALNSSolution sol = ALNS.improveSolution(this.instance.getName(), vc);
         try {
             // is.exportResult(sol);
         } catch (Exception e) {

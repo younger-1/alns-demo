@@ -22,8 +22,7 @@ public class Instance {
     // NOTE: info and name
     // private int[] vehicleInfo;
     // private int[][] customerInfo;
-    // private String type;
-    // private String name;
+    private String name;
 
     /**
      * The available vehicles numbers.
@@ -46,11 +45,19 @@ public class Instance {
     private HashMap<String, Node> idToNodeMap = new HashMap<>();
 
     public Instance(String type, String name, int size) throws IOException {
+        this.name = String.format("%s_%s_%d", type.toLowerCase(), name, size);
         // 读取算例数据
         importVehicleData(type, name, size);
 
         this.customers = new ArrayList<Node>();
         importCustomerData(type, name, size);
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
     }
 
     public int getVehicleCapacity() {

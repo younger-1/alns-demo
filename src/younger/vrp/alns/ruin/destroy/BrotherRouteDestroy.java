@@ -3,6 +3,7 @@ package younger.vrp.alns.ruin.destroy;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 import younger.vrp.algrithm.ALNSSolution;
@@ -32,8 +33,14 @@ public class BrotherRouteDestroy extends ALNSAbstractRuin implements IALNSRuin {
     public ALNSSolution ruin(ALNSSolution s, int nodes) throws Exception {
 
         int[] routes = random.ints(0, s.routes.size()).distinct().limit((long) Math.sqrt(s.routes.size())).toArray();
-        Route centerRoute = Arrays.stream(routes).mapToObj(x -> s.routes.get(x)).filter(r -> r.getSize() > 2)
-                .reduce((a, b) -> getDebtSpace(a) > getDebtSpace(b) ? a : b).get();
+        Optional<Route> centerRoute_or_not = Arrays.stream(routes).mapToObj(x -> s.routes.get(x))
+                .filter(r -> r.getSize() > 2)
+                .reduce((a, b) -> getDebtSpace(a) > getDebtSpace(b) ? a : b);
+
+        if (centerRoute_or_not.isEmpty()) {
+            return s;
+        }
+        Route centerRoute = centerRoute_or_not.get();
 
         Map<Route, Integer> route_num = new HashMap<>();
 
