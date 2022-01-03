@@ -96,7 +96,7 @@ public class Route {
     public String toString() {
         int[][] distanceMatrix = IDistance.getDistanceInstance().distanceMatrix();
         String result = String.format(
-                "Route { route_id = %3d , customer_number = %2d ,\n\t    Cost = %s,\n\t    route = [", this.id,
+                "Route { route_id = %d , customer_number = %d ,\n\t    Cost = %s,\n\t    route = [", this.id,
                 getSize() - 2, this.costs);
 
         for (int i = 0; i < this.getSize(); i++) {

@@ -16,7 +16,6 @@ import younger.vrp.instance.Instance;
  */
 public class GreedyVRP {
 
-    private Instance instance;
     /**
      * All the customers
      */
@@ -41,7 +40,6 @@ public class GreedyVRP {
      * Constructor
      */
     public GreedyVRP(Instance instance) {
-        this.instance = instance;
         this.customers = instance.getCustomers();
     }
 
@@ -82,7 +80,7 @@ public class GreedyVRP {
                 overloadedVehicle.costs.setLoad(n.getDemand());
 
                 // distance
-                overloadedVehicle.costs.setDist(distanceMatrix[0][i]);
+                overloadedVehicle.costs.setDist(distanceMatrix[0][i] + distanceMatrix[i][0]);
 
                 // time
                 double travel_time = distanceMatrix[0][i] / cate.getRate().getVehicleSpeed();
@@ -201,7 +199,7 @@ public class GreedyVRP {
             // then we should put this route to solution
             if (closestNode == null || this.customers.size() == 0) {
                 // Increase cost by the distance to travel from the last node back to depot
-                double distance_to_depot = this.distanceMatrix[lastNode.getId()][depot.getId()];
+                double distance_to_depot = this.distanceMatrix[currentVehicle.getLastNode().getId()][depot.getId()];
                 currentVehicle.costs.setDist(currentVehicle.costs.getDist() + distance_to_depot);
 
                 double time_to_depot = distance_to_depot / cate.getRate().getVehicleSpeed();

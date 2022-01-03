@@ -30,7 +30,7 @@ public class Expense extends Cost {
     @Override
     public String toString() {
         String result = String.format(
-                "[ total=%.1f, price=%.1f | distance=%.1f, arc=%.1f | time=%.1f, time_vio=%.1f | load=%.0f, load_vio=%.0f | nodeNum_vio=%d ]",
+                "[ total = %.1f, price = %.1f | distance = %.1f, arc = %.1f | time = %.1f, time_vio = %.1f | load = %.0f, load_vio = %.0f | nodeNum_vio = %d ]",
                 total, price, dist, arc, time, timeVio, load, loadVio, nodeNumVio);
         return result;
     }

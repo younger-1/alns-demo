@@ -58,7 +58,7 @@ public class VRPDrawer extends JPanel {
         } else if (screenPositionIndex == 4) {
             sol_kind = "best";
         }
-        sol_kind += String.format(" [routes: %d, dist: %f, time: %f]", sol.routes.size(), sol.costs.getDist(),
+        sol_kind += String.format(" [routes: %d, dist: %.2f, time: %.2f]", sol.routes.size(), sol.costs.getDist(),
                 sol.costs.getTime());
 
         // Border myBorder = BorderFactory.createMatteBorder(5, 5, 5, 5, Color.CYAN);

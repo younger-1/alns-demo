@@ -51,7 +51,7 @@ public class Cost {
     @Override
     public String toString() {
         String result = String.format(
-                "[ total=%7.1f | distance=%7.1f, arc=%7.1f | time=%5.1f, time_vio=%4.1f | load=%4.0f, load_vio=%3.0f | nodeNum_vio=%2d ]",
+                "[ total = %.2f | dist = %.2f, arc = %.2f | time = %.2f, time_vio = %.2f | load = %.0f, load_vio = %.0f | nodeNum_vio = %d ]",
                 total, dist, arc, time, timeVio, load, loadVio, nodeNumVio);
         return result;
     }
@@ -89,7 +89,7 @@ public class Cost {
             node_conv = 147.19248639 * 5 + 10.87644987 * Math.exp(4.71018239 * (5 - 3.47588821)) + 200 * 100 * (nodeNumVio - 5);
         }
 
-        total = arc + (load_conv + time_conv + node_conv);
+        total = dist + (load_conv + time_conv + node_conv);
         // total = arc + loadVio * 2 + timeVio * 100 + nodeNumVio * 200;
     }
     
