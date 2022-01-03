@@ -250,7 +250,6 @@ public class GreedyVRP {
     }
 
     private void post_init(ALNSSolution sol) {
-        double average_dist = sol.update_average_dist();
         for (Route route : sol.getRoutes()) {
             route.costs.setArc(this.calcArc(route));
             route.costs.calc_total();
@@ -263,7 +262,8 @@ public class GreedyVRP {
             sol.costs.setLoadVio(sol.costs.getLoadVio() + route.costs.getLoadVio());
 
             // For SpreadRevive
-            sol.costs.setTotal(sol.costs.getTotal() + route.costs.getTotal() * (route.costs.getDist() / average_dist));
+            // sol.costs.setTotal(sol.costs.getTotal() + route.costs.getTotal() * (route.costs.getDist() / average_dist));
+            sol.costs.setTotal(sol.costs.getTotal() + route.costs.getTotal());
         }
         sol.costs.total_to_fare();
     }

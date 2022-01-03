@@ -8,8 +8,8 @@ import younger.vrp.alns.operation.ALNSAbstractOperation;
 import younger.vrp.alns.operation.IALNSOperation;
 import younger.vrp.alns.recreate.ALNSAbstractRecreate;
 import younger.vrp.alns.recreate.IALNSRecreate;
-import younger.vrp.alns.revive.SpreadRevive;
-import younger.vrp.alns.revive.StringRevive;
+// import younger.vrp.alns.revive.SpreadRevive;
+// import younger.vrp.alns.revive.StringRevive;
 import younger.vrp.alns.config.IALNSConfig;
 import younger.vrp.alns.ruin.ALNSAbstractRuin;
 import younger.vrp.alns.ruin.IALNSRuin;
@@ -42,9 +42,9 @@ public class ALNSProcess {
      */
     private long t_start;
 
-    private StringRevive stringDestroy;
-    private StringRevive stringFilter;
-    private SpreadRevive spreadRevive;
+    // private StringRevive stringDestroy;
+    // private StringRevive stringFilter;
+    // private SpreadRevive spreadRevive;
     private int max_i;
     private int allow_reduced_num;
 
@@ -62,9 +62,9 @@ public class ALNSProcess {
 
         init_strategy();
 
-        stringDestroy = StringRevive.of(STAGE_1);
-        stringFilter = StringRevive.of(STAGE_2);
-        spreadRevive = SpreadRevive.of();
+        // stringDestroy = StringRevive.of(STAGE_1);
+        // stringFilter = StringRevive.of(STAGE_2);
+        // spreadRevive = SpreadRevive.of();
 
         max_i = config.get_u();
         allow_reduced_num = get_reduced_vehicle_num();
@@ -134,7 +134,7 @@ public class ALNSProcess {
         int recreate_p = 12;
         final int rare_lucky = 0;
 
-        int already_reduced = 0;
+        // int already_reduced = 0;
 
         int i = 0;
         int print_counter = 0;
@@ -190,10 +190,10 @@ public class ALNSProcess {
             }
 
             // * Revive
-            if (allow_reduced_num > 0) {
-                already_reduced = reduce_route_revive(already_reduced, i);
-            }
-            spread_route_revive(i);
+            // if (allow_reduced_num > 0) {
+            //     already_reduced = reduce_route_revive(already_reduced, i);
+            // }
+            // spread_route_revive(i);
 
             // * Stage 2
             for (int w = 0; w < max_w; w++, i++) {
@@ -308,8 +308,8 @@ public class ALNSProcess {
         if (already_reduced == (i - begin_reduce) / interval_reduce) {
             // FIXME: s_g.feasible() may not good
             if (s_g.feasible() && begin_reduce < i && i < end_reduce) {
-                stringDestroy.revive(s_1);
-                stringFilter.revive(s_2);
+                // stringDestroy.revive(s_1);
+                // stringFilter.revive(s_2);
                 already_reduced += 1;
             }
         }
@@ -318,8 +318,8 @@ public class ALNSProcess {
 
     private void spread_route_revive(int iter) throws Exception {
         if (iter > 100 && Math.random() > 0.4) {
-            spreadRevive.revive(s_1);
-            spreadRevive.revive(s_2);
+            // spreadRevive.revive(s_1);
+            // spreadRevive.revive(s_2);
         }
     }
 

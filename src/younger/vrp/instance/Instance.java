@@ -1,7 +1,6 @@
 package younger.vrp.instance;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import java.io.BufferedReader;
@@ -38,11 +37,6 @@ public class Instance {
      * A 2-D matrix that will keep the distances of every node to each other.
      */
     // private double[][] distanceMatrix;
-
-    /**
-     * The map of id to index
-     */
-    private HashMap<String, Node> idToNodeMap = new HashMap<>();
 
     public Instance(String type, String name, int size) throws IOException {
         this.name = String.format("%s_%s_%d", type.toLowerCase(), name, size);

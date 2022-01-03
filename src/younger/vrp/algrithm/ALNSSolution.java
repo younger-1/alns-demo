@@ -112,7 +112,7 @@ public class ALNSSolution {
 
         fare.total_to_arc();
         // For SpreadRevive
-        fare.setTotal(fare.getTotal() - r.costs.getTotal() * (r.costs.getDist() / average_dist));
+        // fare.setTotal(fare.getTotal() - r.costs.getTotal() * (r.costs.getDist() / average_dist));
     }
 
     private void post_do(Expense fare, Route r) {
@@ -126,7 +126,7 @@ public class ALNSSolution {
         fare.setNodeVio(fare.getNodeVio() + r.costs.getNodeVio());
 
         // For SpreadRevive
-        fare.setTotal(fare.getTotal() + r.costs.getTotal() * (r.costs.getDist() / average_dist));
+        // fare.setTotal(fare.getTotal() + r.costs.getTotal() * (r.costs.getDist() / average_dist));
         fare.total_to_fare();
     }
 
