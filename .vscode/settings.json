@@ -1,4 +1,6 @@
 {
     "java.dependency.syncWithFolderExplorer": true,
-    "java.dependency.packagePresentation": "hierarchical"
+    "java.dependency.packagePresentation": "hierarchical",
+    "java.server.launchMode": "Hybrid",
+    "editor.formatOnSaveMode": "modifications"
 }

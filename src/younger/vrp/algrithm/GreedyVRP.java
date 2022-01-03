@@ -103,8 +103,9 @@ public class GreedyVRP {
 
                 // If we found a customer with closer that the value of "smallestDistance"
                 // ,store him temporarily
-                boolean isAddThisNodeToRoute = currentVehicle.getSize() - 1 < this.maxCustomerNum
-                        && distance < smallestDistance && isSatisfyConstraint(depot, currentVehicle, n);
+                boolean isAddThisNodeToRoute = 
+                    // currentVehicle.getSize() - 1 < this.maxCustomerNum && 
+                    distance < smallestDistance && isSatisfyConstraint(depot, currentVehicle, n);
                 if (isAddThisNodeToRoute) {
                     smallestDistance = distance;
                     closestNode = n;
