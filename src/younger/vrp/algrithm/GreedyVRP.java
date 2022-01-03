@@ -20,7 +20,7 @@ public class GreedyVRP {
      * All the customers
      */
     private List<Node> customers;
-
+    private int customerNr;
 
     /**
      * All the vehicles.
@@ -40,12 +40,13 @@ public class GreedyVRP {
      * Constructor
      */
     public GreedyVRP(Instance instance) {
-        this.customers = instance.getCustomers();
+        this.customers = instance.getCopyOfCustomers();
+        this.customerNr = this.customers.size() - 1;
     }
 
     private ALNSSolution pre_init(VRPCategory cate) {
 
-        ALNSSolution sol = new ALNSSolution(cate);
+        ALNSSolution sol = new ALNSSolution(this.customerNr ,cate);
 
         this.vehicleCapacity = cate.getCons().getVehicleCapacity();
         this.maxCustomerNum = cate.getCons().getMaxCustomerNum();

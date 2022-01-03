@@ -139,10 +139,6 @@ public class Instance {
         System.out.println("Input vehicle success !");
     }
 
-    public List<Node> getCustomers() {
-        return this.customers;
-    }
-
     public List<Node> getCopyOfCustomers() {
         return new ArrayList<>(this.customers);
     }
@@ -154,13 +150,4 @@ public class Instance {
     // public void setDistanceMatrix(double[][] distanceMatrix) {
     //     this.distanceMatrix = distanceMatrix;
     // }
-
-    public int getCustomerNumber() {
-        return this.customers.size() - 1;
-    }
-
-    public Node getCustomer(String leaderUid) {
-        return idToNodeMap.get(leaderUid);
-    }
-
 }

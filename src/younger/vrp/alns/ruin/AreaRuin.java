@@ -23,7 +23,7 @@ public class AreaRuin extends ALNSAbstractRuin implements IALNSRuin {
             System.err.println("removalCustomers is not empty.");
             return s;
         } else if (s.customerNr <= 10) {
-            System.err.println("Not enough customers to carry out RadialRuin.");
+            System.err.println("Not enough customers to carry out AreaRuin.");
             return s;
         }
 

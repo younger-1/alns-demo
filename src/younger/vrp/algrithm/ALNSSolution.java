@@ -24,7 +24,8 @@ public class ALNSSolution {
     private VRPCategory vrpCate;
     private double average_dist;
 
-    public ALNSSolution(VRPCategory vrpCate) {
+    public ALNSSolution(int customerNr, VRPCategory vrpCate) {
+        this.customerNr = customerNr;
         this.vrpCate = vrpCate;
 
         this.costs = new Expense();
@@ -45,11 +46,11 @@ public class ALNSSolution {
     // }
 
     public ALNSSolution(ALNSSolution sol) {
+        this.customerNr = sol.customerNr;
         this.vrpCate = sol.vrpCate;
 
         this.costs = new Expense(sol.costs);
         this.routes = new ArrayList<>();
-        this.customerNr = sol.customerNr;
         this.removeNodes = new ArrayList<Node>();
 
         for (Route route : sol.routes) {
