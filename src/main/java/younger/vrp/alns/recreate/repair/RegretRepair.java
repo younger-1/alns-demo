@@ -47,13 +47,13 @@ public class RegretRepair extends ALNSAbstractRecreate implements IALNSRecreate 
                     // 评价插入情况
                     Cost newCost = s.evaluateInsertCustomer(j, i, insertNode);
 
-                    if (newCost.getArc() < first) {
+                    if (newCost.getDist() < first) {
                         bestCusP = i;
                         bestRouteP = j;
                         second = first;
-                        first = newCost.getArc();
-                    } else if (newCost.getArc() < second && newCost.getArc() != first) {
-                        second = newCost.getArc();
+                        first = newCost.getDist();
+                    } else if (newCost.getDist() < second && newCost.getDist() != first) {
+                        second = newCost.getDist();
                     }
                 }
             }

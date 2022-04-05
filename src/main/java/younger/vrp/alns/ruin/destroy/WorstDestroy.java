@@ -28,8 +28,7 @@ public class WorstDestroy extends ALNSAbstractRuin implements IALNSRuin {
                 Route route = s.routes.get(j);
                 for (int i = 1; i < route.getSize() - 1; ++i) {
                     Cost newCost = s.evaluateRemoveCustomer(j, i);
-                    double cost_down = (s.costs.getArc() - newCost.getArc());
-                    // double cost_down = (s.costs.getArc() - newCost.arc) * route.costs.getArc();
+                    double cost_down = (s.costs.getDist() - newCost.getDist());
                     if (cost_down > max_cost) {
                         max_cost = cost_down;
                         nodePos = i;

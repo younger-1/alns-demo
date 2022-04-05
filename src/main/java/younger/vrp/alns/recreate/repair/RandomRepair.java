@@ -73,10 +73,10 @@ public class RandomRepair extends ALNSAbstractRecreate implements IALNSRecreate 
 
                     Cost newCost = s.evaluateInsertCustomer(insertRoutePosition, insertCusPosition, insertNode);
                     // 更新最优插入位置
-                    if (newCost.getArc() < min_cost) {
+                    if (newCost.getDist() < min_cost) {
                         bestRoutePosition = insertRoutePosition;
                         bestCusomerPosition = insertCusPosition;
-                        min_cost = newCost.getArc();
+                        min_cost = newCost.getDist();
                     }
                 }
             }

@@ -36,8 +36,7 @@ public class GreedyRepair extends ALNSAbstractRecreate implements IALNSRecreate 
                 for (int i = 1; i < route.getSize(); ++i) {
                     // 评价插入情况
                     Cost newCost = s.evaluateInsertCustomer(j, i, insertNode);
-                    double cost_up = (newCost.getArc() - s.costs.getArc());
-                    // double cost_up = (newCost.arc - s.costs.getArc()) * route.costs.getArc();
+                    double cost_up = (newCost.getDist() - s.costs.getDist());
                     if (cost_up < min_cost) {
                         nodePos = i;
                         routePos = j;

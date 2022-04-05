@@ -116,7 +116,7 @@ public class ALNSProcess {
             VRPDrawer.drawSolution(s_g, 1).saveImage(instanceName + "init");
         }
 
-        T = 0.003 * s_g.costs.getArc();
+        T = 0.003 * s_g.costs.getDist();
         double descent_coefficient = config.get_sa();
         t_start = System.currentTimeMillis();
 
@@ -173,7 +173,7 @@ public class ALNSProcess {
                 s_repair.update_average_dist();
 
                 int _w = get_worst_s_1();
-                double diff = s_repair.costs.getArc() - s_1[_w].costs.getArc();
+                double diff = s_repair.costs.getDist() - s_1[_w].costs.getDist();
                 // double diff = s_repair.cost.cost - s_1[_w].cost.cost;
                 // double diff = s_repair.cost.time - s_1[_w].cost.time;
                 if (diff <= 0) {
@@ -224,7 +224,7 @@ public class ALNSProcess {
                 double diff = s_repair.costs.getTotal() - s_2[_w].costs.getTotal();
                 if (diff <= 0) {
                     s_2[_w] = s_repair;
-                    if (s_2[_w].costs.getArc() < s_g.costs.getArc()) {
+                    if (s_2[_w].costs.getTotal() < s_g.costs.getTotal()) {
                         // if (s_2[_w].cost.cost < s_g.cost.cost) {
                         handleNewGlobalMinimum(filterOperator, balanceOperator, s_2[_w]);
                     } else {
@@ -253,10 +253,10 @@ public class ALNSProcess {
                 int _b1 = get_best_s_1();
                 int _b2 = get_best_s_2();
                 String ss = String.format(
-                        "Iterations: %5d, Solution: { s_1:[arc: %9.1f, total: %8.1f], s_2:[arc: %9.1f, total: %8.1f] }",
-                        i, Math.round(s_1[_b1].costs.getArc() * 100) / 100.0,
+                        "Iterations: %5d, Solution: { s_1:[dist: %9.1f, total: %8.1f], s_2:[dist: %9.1f, total: %8.1f] }",
+                        i, Math.round(s_1[_b1].costs.getDist() * 100) / 100.0,
                         Math.round(s_1[_b1].costs.getTotal() * 100) / 100.0,
-                        Math.round(s_2[_b2].costs.getArc() * 100) / 100.0,
+                        Math.round(s_2[_b2].costs.getDist() * 100) / 100.0,
                         Math.round(s_2[_b2].costs.getTotal() * 100) / 100.0);
                 System.out.println(ss);
             }
@@ -429,7 +429,7 @@ public class ALNSProcess {
 
     private int get_worst_s_1() {
         return Stream.iterate(0, x -> x + 1).limit(s_1.length).reduce((a, b) -> {
-            return s_1[a].costs.getArc() < s_1[b].costs.getArc() ? b : a;
+            return s_1[a].costs.getDist() < s_1[b].costs.getDist() ? b : a;
             // return s_1[a].cost.cost < s_1[b].cost.cost ? b : a;
             // return s_1[a].cost.time < s_1[b].cost.time ? b : a;
         }).get();
@@ -443,7 +443,7 @@ public class ALNSProcess {
 
     private int get_best_s_1() {
         return Stream.iterate(0, x -> x + 1).limit(s_1.length).reduce((a, b) -> {
-            return s_1[a].costs.getArc() > s_1[b].costs.getArc() ? b : a;
+            return s_1[a].costs.getDist() > s_1[b].costs.getDist() ? b : a;
             // return s_1[a].cost.cost > s_1[b].cost.cost ? b : a;
             // return s_1[a].cost.time > s_1[b].cost.time ? b : a;
         }).get();
