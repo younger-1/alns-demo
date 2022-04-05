@@ -153,7 +153,7 @@ public class VRPDrawer extends JPanel {
 
             g.setColor(routeColor[i]);
 
-            if (vrpCate.isAddDepotToEnd()) {
+            if (!vrpCate.isAddDepotToEnd()) {
                 g.drawPolyline(x_coord, y_coord, x_coord.length);
                 for (int j = 0; j < x_coord.length; j++) {
                     g.fillOval(x_coord[j] - radius, y_coord[j] - radius, 2 * radius, 2 * radius);

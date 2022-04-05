@@ -15,11 +15,19 @@ public enum Constraint {
         this.vehicleCapacity = x;
     }
 
+    public void setMaxCustomerNum(int x) {
+        this.maxCustomerNum = x;
+    }
+
+    public void setTimeLimit(int x) {
+        this.timeLimit = x;
+    }
+
     private Constraint(int vehicleNr, int vehicleCapacity, int maxCustomerNum, double time) {
         this.vehicleNr = vehicleNr;
         this.vehicleCapacity = vehicleCapacity;
         this.maxCustomerNum = maxCustomerNum;
-        this.time = time;
+        this.timeLimit = time;
     }
 
     /**
@@ -48,7 +56,7 @@ public enum Constraint {
      * The max interval time of vehicle travel from depot to last customer.
      * Unit: minute
      */
-    private double time;
+    private double timeLimit;
 
     public int getVehicleNr() {
         return vehicleNr;
@@ -62,8 +70,8 @@ public enum Constraint {
         return vehicleCapacity;
     }
 
-    public double getTime() {
-        return time;
+    public double getTimeLimit() {
+        return timeLimit;
     }
 
 }

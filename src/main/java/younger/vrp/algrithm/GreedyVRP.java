@@ -50,7 +50,7 @@ public class GreedyVRP {
 
         this.vehicleCapacity = cate.getCons().getVehicleCapacity();
         this.maxCustomerNum = cate.getCons().getMaxCustomerNum();
-        this.maxTime = cate.getCons().getTime();
+        this.maxTime = cate.getCons().getTimeLimit();
 
         int availableVehicleNr = cate.getCons().getVehicleNr();
         this.available_vehicles = new ArrayList<Route>();

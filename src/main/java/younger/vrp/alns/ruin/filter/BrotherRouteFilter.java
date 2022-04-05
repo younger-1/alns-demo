@@ -22,7 +22,7 @@ public class BrotherRouteFilter extends ALNSAbstractRuin implements IALNSRuin {
         random = new Random();
         maxCustomerNum = vrpCate.getCons().getMaxCustomerNum();
         vehicleCapacity = vrpCate.getCons().getVehicleCapacity();
-        travelTime = vrpCate.getCons().getTime();
+        travelTime = vrpCate.getCons().getTimeLimit();
     }
 
     public static BrotherRouteFilter of() {

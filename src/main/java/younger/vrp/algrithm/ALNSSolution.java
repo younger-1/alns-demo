@@ -171,8 +171,8 @@ public class ALNSSolution {
         }
 
         double usedTime = route.costs.getTime();
-        if (usedTime > vrpCate.getCons().getTime()) {
-            double violation = usedTime - vrpCate.getCons().getTime();
+        if (usedTime > vrpCate.getCons().getTimeLimit()) {
+            double violation = usedTime - vrpCate.getCons().getTimeLimit();
             // this.costs.getTime()Vio += violation - removeRoute.costs.getTime()Vio;
             route.costs.setTimeVio(violation);
         } else if (route.costs.getTimeVio() > 0) {
@@ -221,8 +221,8 @@ public class ALNSSolution {
         }
 
         double usedTime = route.costs.getTime();
-        if (usedTime > vrpCate.getCons().getTime()) {
-            double violation = usedTime - vrpCate.getCons().getTime();
+        if (usedTime > vrpCate.getCons().getTimeLimit()) {
+            double violation = usedTime - vrpCate.getCons().getTimeLimit();
             route.costs.setTimeVio(violation);
         } else if (route.costs.getTimeVio() > 0) {
             route.costs.setTimeVio(0);
@@ -266,8 +266,8 @@ public class ALNSSolution {
         }
 
         double usedTime = route.costs.getTime();
-        if (usedTime > vrpCate.getCons().getTime()) {
-            double violation = usedTime - vrpCate.getCons().getTime();
+        if (usedTime > vrpCate.getCons().getTimeLimit()) {
+            double violation = usedTime - vrpCate.getCons().getTimeLimit();
             // this.costs.getTime()Vio += violation - insertRoute.costs.getTime()Vio;
             route.costs.setTimeVio(violation);
         }
@@ -309,8 +309,8 @@ public class ALNSSolution {
         }
 
         double usedTime = route.costs.getTime();
-        if (usedTime > vrpCate.getCons().getTime()) {
-            double violation = usedTime - vrpCate.getCons().getTime();
+        if (usedTime > vrpCate.getCons().getTimeLimit()) {
+            double violation = usedTime - vrpCate.getCons().getTimeLimit();
             route.costs.setTimeVio(violation);
         }
 

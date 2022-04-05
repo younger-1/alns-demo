@@ -30,7 +30,7 @@ public class StringRevive extends ALNSAbstractOperation implements IALNSRuin, IA
 
         maxCustomerNum = vrpCate.getCons().getMaxCustomerNum();
         vehicleCapacity = vrpCate.getCons().getVehicleCapacity();
-        travelTime = vrpCate.getCons().getTime();
+        travelTime = vrpCate.getCons().getTimeLimit();
     }
 
     public static StringRevive of(int stage) {

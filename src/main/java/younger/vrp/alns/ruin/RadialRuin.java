@@ -34,7 +34,8 @@ public class RadialRuin extends ALNSAbstractRuin implements IALNSRuin {
             return s;
         }
 
-        int routeCustomerNum = vrpCate.getCons().getMaxCustomerNum();
+        // int routeCustomerNum = vrpCate.getCons().getMaxCustomerNum();
+        int routeCustomerNum = s.customerNr / s.routes.size();
 
         int ruin_num = 0;
         int ruin_times = random.nextInt((int) Math.sqrt(s.routes.size()));
