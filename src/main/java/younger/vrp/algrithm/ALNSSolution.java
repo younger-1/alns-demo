@@ -8,27 +8,27 @@ import younger.vrp.instance.Node;
 import younger.vrp.instance.Route;
 import younger.vrp.alns.config.VRPCategory;
 import younger.vrp.base.IDistance;
-import younger.vrp.instance.Expense;
+import younger.vrp.instance.Cost;
 
 public class ALNSSolution {
     /**
      * All the routes of the current solution.
      */
     public List<Route> routes;
-    public Expense costs;
+    public Cost costs;
     public int[][] distance = IDistance.getDistanceInstance().distanceMatrix();
     public int customerNr;
     // optimize: new random for each solution
     public Random random = new Random(1004);
     public ArrayList<Node> removeNodes;
     private VRPCategory vrpCate;
-    private double average_dist;
+    public double average_dist;
 
     public ALNSSolution(int customerNr, VRPCategory vrpCate) {
         this.customerNr = customerNr;
         this.vrpCate = vrpCate;
 
-        this.costs = new Expense();
+        this.costs = new Cost();
         this.routes = new ArrayList<>();
         this.removeNodes = new ArrayList<Node>();
         // NOTE: may use it
@@ -49,7 +49,7 @@ public class ALNSSolution {
         this.customerNr = sol.customerNr;
         this.vrpCate = sol.vrpCate;
 
-        this.costs = new Expense(sol.costs);
+        this.costs = new Cost(sol.costs);
         this.routes = new ArrayList<>();
         this.removeNodes = new ArrayList<Node>();
 
@@ -80,11 +80,13 @@ public class ALNSSolution {
         return routes;
     }
 
+    // Only StringRevive use this now
     public void removeRoute(int routePos) {
         pre_do(this.costs, this.routes.get(routePos));
 
-        this.costs.setPrice(this.costs.getPrice() - this.vrpCate.getFare().getVehicleFee());
-        this.costs.total_to_fare();
+        // this.costs.setPrice(this.costs.getPrice() - this.vrpCate.getFare().getVehicleFee());
+        // this.costs.total_to_fare();
+        this.total_plus();
 
         this.routes.remove(routePos);
     }
@@ -97,10 +99,11 @@ public class ALNSSolution {
         }
 
         route.costs.reset();
-        this.costs.total_to_fare();
+        // this.costs.total_to_fare();
+        this.total_plus();
     }
 
-    private void pre_do(Expense fare, Route r) {
+    private void pre_do(Cost fare, Route r) {
         fare.setDist(fare.getDist() - r.costs.getDist());
         fare.setLoad(fare.getLoad() - r.costs.getLoad());
         fare.setTime(fare.getTime() - r.costs.getTime());
@@ -110,13 +113,15 @@ public class ALNSSolution {
         fare.setTimeVio(fare.getTimeVio() - r.costs.getTimeVio());
         fare.setNodeVio(fare.getNodeVio() - r.costs.getNodeVio());
 
-        fare.total_to_arc();
+        // fare.total_to_arc();
+        this.total_del();
+
         // For SpreadRevive
         // fare.setTotal(fare.getTotal() - r.costs.getTotal() * (r.costs.getDist() / average_dist));
         fare.setTotal(fare.getTotal() - r.costs.getTotal());
     }
 
-    private void post_do(Expense fare, Route r) {
+    private void post_do(Cost fare, Route r) {
         fare.setDist(fare.getDist() + r.costs.getDist());
         fare.setLoad(fare.getLoad() + r.costs.getLoad());
         fare.setTime(fare.getTime() + r.costs.getTime());
@@ -129,7 +134,8 @@ public class ALNSSolution {
         // For SpreadRevive
         // fare.setTotal(fare.getTotal() + r.costs.getTotal() * (r.costs.getDist() / average_dist));
         fare.setTotal(fare.getTotal() + r.costs.getTotal());
-        fare.total_to_fare();
+        // fare.total_to_fare();
+        this.total_plus();
     }
 
     public void removeCustomer(int routePosition, int cusPosition) {
@@ -183,9 +189,9 @@ public class ALNSSolution {
         post_do(this.costs, route);
     }
 
-    public Expense evaluateRemoveCustomer(int routePosition, int cusPosition) {
+    public Cost evaluateRemoveCustomer(int routePosition, int cusPosition) {
 
-        Expense newCost = new Expense(this.costs);
+        Cost newCost = new Cost(this.costs);
         Route route = this.routes.get(routePosition).cloneRoute();
         pre_do(newCost, route);
 
@@ -275,9 +281,9 @@ public class ALNSSolution {
         post_do(this.costs, route);
     }
 
-    public Expense evaluateInsertCustomer(int routePosition, int cusPosition, Node customer) {
+    public Cost evaluateInsertCustomer(int routePosition, int cusPosition, Node customer) {
 
-        Expense newCost = new Expense(this.costs);
+        Cost newCost = new Cost(this.costs);
         Route route = this.routes.get(routePosition).cloneRoute();
         pre_do(newCost, route);
 
@@ -360,5 +366,13 @@ public class ALNSSolution {
             }
         }
         return result + time_vio_result + load_vio_result + node_vio_result + route_result + "\n    ]\n}";
+    }
+
+    public void total_del() {
+        this.costs.setTotal(this.costs.getTotal() - this.average_dist * this.routes.size());
+    }
+
+    public void total_plus() {
+        this.costs.setTotal(this.costs.getTotal() + this.average_dist * this.routes.size());
     }
 }

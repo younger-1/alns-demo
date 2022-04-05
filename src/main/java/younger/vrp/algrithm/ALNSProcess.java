@@ -52,6 +52,8 @@ public class ALNSProcess {
         config = c;
 
         s_g = new ALNSSolution(s_);
+        // System.out.println(s_g.average_dist);
+
         prepare_two_stage();
 
         ALNSAbstractOperation.use(s_.getVrpCate());

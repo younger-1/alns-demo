@@ -242,7 +242,7 @@ public class GreedyVRP {
             }
         }
 
-        solution.costs.setPrice(cate.getFare().getVehicleFee() * solution.getRoutes().size());
+        // solution.costs.setPrice(cate.getFare().getVehicleFee() * solution.getRoutes().size());
 
         post_init(solution);
 
@@ -265,7 +265,9 @@ public class GreedyVRP {
             // sol.costs.setTotal(sol.costs.getTotal() + route.costs.getTotal() * (route.costs.getDist() / average_dist));
             sol.costs.setTotal(sol.costs.getTotal() + route.costs.getTotal());
         }
-        sol.costs.total_to_fare();
+        // sol.costs.total_to_fare();
+        sol.update_average_dist();
+        sol.total_plus();
     }
 
     private double calcArc(Route route) {
