@@ -31,7 +31,7 @@ public class ALNSSolution {
         this.costs = new Expense();
         this.routes = new ArrayList<>();
         this.removeNodes = new ArrayList<Node>();
-        // note: may use it
+        // NOTE: may use it
         // this.update_average_dist();
     }
 
@@ -113,6 +113,7 @@ public class ALNSSolution {
         fare.total_to_arc();
         // For SpreadRevive
         // fare.setTotal(fare.getTotal() - r.costs.getTotal() * (r.costs.getDist() / average_dist));
+        fare.setTotal(fare.getTotal() - r.costs.getTotal());
     }
 
     private void post_do(Expense fare, Route r) {
@@ -127,6 +128,7 @@ public class ALNSSolution {
 
         // For SpreadRevive
         // fare.setTotal(fare.getTotal() + r.costs.getTotal() * (r.costs.getDist() / average_dist));
+        fare.setTotal(fare.getTotal() + r.costs.getTotal());
         fare.total_to_fare();
     }
 

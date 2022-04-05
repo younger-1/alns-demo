@@ -13,8 +13,8 @@ import java.io.IOException;
 public class Instance {
 
     /**
-     * This list will keep all the nodes of the problem. NOTE: position 0 of the
-     * list contains the depot.
+     * This list will keep all the nodes of the problem.
+     * NOTE: position 0 of the list contains the depot.
      */
     private List<Node> customers = new ArrayList<Node>();
 

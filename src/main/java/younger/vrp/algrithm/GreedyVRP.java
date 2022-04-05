@@ -92,10 +92,10 @@ public class GreedyVRP {
 
                 overloadedVehicle.costs.calc_total();
 
-                // note: don't arrange the vehicles with such customer
+                // NOTE: don't arrange the vehicles with such customer
                 // sol.addRoute(overloadedVehicle);
 
-                // note: move this to where data is readin and print demands
+                // NOTE: move this to where data is readin and print demands
                 System.err.println("\u001B[45m\u001B[37mCustomer {id:" + n.getId() + ", demand:" + n.getDemand()
                         + "} exceeds the maximum capacity of the vehicle!\u001B[0m");
 
