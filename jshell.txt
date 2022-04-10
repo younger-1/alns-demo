@@ -1,0 +1,6 @@
+/open PRINTING
+
+println("#####################")
+println("Loaded Custom Startup")
+println("#####################")
+println("")
