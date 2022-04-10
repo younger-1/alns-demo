@@ -169,6 +169,9 @@ public class ALNSProcess {
                 ALNSSolution s_t = new ALNSSolution(s_2[s_g.random.nextInt(s_2.length)]);
                 // destroy solution
                 ALNSSolution s_destroy = destroyOperator.ruin(s_t, q);
+                if (s_destroy.removeNodes.size() == s_g.customerNr) {
+                    System.out.println("[young]: remove all customer by " + destroyOperator.getClass().getSimpleName());
+                }
                 // repair solution
                 ALNSSolution s_repair = repairOperator.recreate(s_destroy);
 
@@ -217,6 +220,9 @@ public class ALNSProcess {
                 ALNSSolution s_t = new ALNSSolution(s_1[s_g.random.nextInt(s_1.length)]);
                 // destroy solution
                 ALNSSolution s_destroy = filterOperator.ruin(s_t, q);
+                if (s_destroy.removeNodes.size() == s_g.customerNr) {
+                    System.out.println("[young]: remove all customer by " + filterOperator.getClass().getSimpleName());
+                }
                 // repair solution
                 ALNSSolution s_repair = balanceOperator.recreate(s_destroy);
 

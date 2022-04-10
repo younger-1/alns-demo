@@ -15,7 +15,8 @@ public class Distance implements IDistance {
 
     public synchronized static Distance createInstance(List<Node> nodes) {
         if (dInstance == null) {
-            NUM_OF_NEIGHBOUR = (int) 0.4 * nodes.size();
+            NUM_OF_NEIGHBOUR = (int) (0.4 * nodes.size());
+            // System.out.println(NUM_OF_NEIGHBOUR);
             distanceMatrix = new int[nodes.size()][nodes.size()];
             createDistanceMatrix(nodes);
             createNeighbours();
@@ -55,6 +56,7 @@ public class Distance implements IDistance {
             }
 
             List<Integer> neighbours = new ArrayList<Integer>(closestNeighbours);
+            // System.out.println(neighbours.size());
             for (int i = closestNeighbours.size() - 1; i >= 0; i--) {
                 neighbours.set(i, closestNeighbours.poll());
             }
