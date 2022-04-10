@@ -8,13 +8,14 @@ public class Distance implements IDistance {
     private static int[][] distanceMatrix;
     private static Distance dInstance = null;
     private static Map<Integer, List<Integer>> idToNeighboursMap = new HashMap<>();
-    private static final int NUM_OF_NEIGHBOUR = 150;
+    private static int NUM_OF_NEIGHBOUR;
 
     private Distance() {
     }
 
     public synchronized static Distance createInstance(List<Node> nodes) {
         if (dInstance == null) {
+            NUM_OF_NEIGHBOUR = (int) 0.4 * nodes.size();
             distanceMatrix = new int[nodes.size()][nodes.size()];
             createDistanceMatrix(nodes);
             createNeighbours();
@@ -54,8 +55,9 @@ public class Distance implements IDistance {
             }
 
             List<Integer> neighbours = new ArrayList<Integer>(closestNeighbours);
-            Collections.sort(neighbours, (a, b) -> (distanceMatrix[finalIFrom][a]
-                    - distanceMatrix[finalIFrom][b]));
+            for (int i = closestNeighbours.size() - 1; i >= 0; i--) {
+                neighbours.set(i, closestNeighbours.poll());
+            }
             idToNeighboursMap.put(iFrom, neighbours);
         }
     }
