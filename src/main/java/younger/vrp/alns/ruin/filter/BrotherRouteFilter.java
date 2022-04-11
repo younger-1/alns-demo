@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.PriorityQueue;
 import java.util.Random;
 
 import younger.vrp.algrithm.ALNSSolution;
@@ -32,6 +33,9 @@ public class BrotherRouteFilter extends ALNSAbstractRuin implements IALNSRuin {
     @Override
     public ALNSSolution ruin(ALNSSolution s, int nodes) throws Exception {
 
+        if (s.routes.size() < 4) {
+            return s;
+        }
         int[] routes = random.ints(0, s.routes.size()).distinct().limit((long) Math.sqrt(s.routes.size())).toArray();
         Optional<Route> centerRoute_or_not = Arrays.stream(routes).mapToObj(x -> s.routes.get(x))
                 .filter(r -> r.getSize() > 2)
@@ -49,11 +53,25 @@ public class BrotherRouteFilter extends ALNSAbstractRuin implements IALNSRuin {
             route_num.merge(brother, 1, Integer::sum);
         }
 
+        int valid_route = (int) s.routes.stream().filter(r -> r.getSize() > 2).count();
+        PriorityQueue<Route> brother_routes = new PriorityQueue<>((a, b) -> route_num.get(a) - route_num.get(b));
         for (Route route : route_num.keySet()) {
-            if (route_num.get(route) != 1) {
-                s.removeAllCustomerOfRoute(route);
+            if (route_num.get(route) <= 1) {
+                continue;
+            }
+            brother_routes.offer(route);
+            if (brother_routes.size() > valid_route - 2) {
+                brother_routes.remove();
             }
         }
+        
+        for (Route route : brother_routes) {
+            s.removeAllCustomerOfRoute(route);
+        }
+
+        // System.out.println("[young]: " + s.removeNodes.size());
+        // System.out.println("[young]: " + centerRoute.getSize());
+        // System.out.println("[young]: =========");
 
         s.removeAllCustomerOfRoute(centerRoute);
         return s;
